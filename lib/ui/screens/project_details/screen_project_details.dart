@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+import 'package:gmt_planter/constant/constant.dart';
+import 'package:gmt_planter/controllers/project_detail_controller.dart';
+import 'package:gmt_planter/helper/platform_widgets.dart';
+import 'package:gmt_planter/helper/ui_helper.dart';
+import 'package:gmt_planter/models/enums/notifier_state.dart';
+import 'package:gmt_planter/ui/screens/project_details/tab_ui.dart';
+import 'package:provider/provider.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+class ScreenProjectDetails extends StatelessWidget {
+  static const id = 'project_details';
+  @override
+  Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    final projectName = args['project_name'] as String;
+    final projectId = args['project_id'] as int;
+    return Scaffold(
+      appBar: customAppbar(title: projectName),
+      body: Consumer<ProjectDetailController>(
+        // ignore: missing_return
+        builder: (_, notifier, __) {
+          switch (notifier.state) {
+            case NotifierState.initial:
+              notifier.getProjectDetails(context: context, id: projectId);
+              return getPlatformProgress();
+            case NotifierState.fetching:
+              return getPlatformProgress();
+            case NotifierState.loaded:
+              return VStack([
+                VxBox()
+                    .rounded
+                    .width(double.maxFinite)
+                    .height(context.percentHeight * 26)
+                    .color(kColorPrimary)
+                    .make()
+                    .p12(),
+                Expanded(child: TabUI()),
+              ]);
+              break;
+            case NotifierState.noData:
+              break;
+            case NotifierState.error:
+              return 'Something went wrong!'.text.makeCentered();
+              break;
+          }
+        },
+      ),
+    );
+  }
+}
