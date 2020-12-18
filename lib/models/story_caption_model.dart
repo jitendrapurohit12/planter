@@ -4,7 +4,7 @@ class StoryCaptionModel {
   StoryCaptionModel({this.data});
 
   StoryCaptionModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] == null ? null : json['data'] as List<String>;
+    data = json['data']?.cast<String>();
   }
 
   Map<String, dynamic> toJson() {

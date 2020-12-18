@@ -10,6 +10,7 @@ import 'package:gmt_planter/prefs/shared_prefs.dart';
 import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/style/decorations.dart';
 import 'package:gmt_planter/ui/common_widget/clikable_text.dart';
+import 'package:gmt_planter/ui/common_widget/custom_button.dart';
 import 'package:gmt_planter/ui/common_widget/custom_textfield.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,8 +28,8 @@ class ScreenLogin extends HookWidget {
         SizedBox(height: context.percentHeight * 3 * multiplier);
     String _email, _password;
 
-    RaisedButton _button({@required AuthController controller}) => RaisedButton(
-          onPressed: () {
+    Widget _button({@required AuthController controller}) => CustomButton(
+          callback: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
 
@@ -39,14 +40,7 @@ class ScreenLogin extends HookWidget {
               );
             }
           },
-          child: Text(
-            kButtonSubmit.toUpperCase(),
-            style: Theme.of(context).textTheme.overline.copyWith(
-                  color: Colors.white,
-                  fontSize: 18,
-                  letterSpacing: 4,
-                ),
-          ),
+          title: kButtonSubmit,
         );
 
     return Scaffold(

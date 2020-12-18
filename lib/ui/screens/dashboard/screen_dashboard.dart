@@ -22,7 +22,12 @@ class ScreenDashboard extends HookWidget {
       initialData: 0,
       builder: (context, snapshot) {
         return Scaffold(
-          appBar: customAppbar(title: _titles[snapshot.data]),
+          appBar: customAppbar(title: _titles[snapshot.data], actions: [
+            IconButton(
+              icon: Icon(Icons.person),
+              onPressed: () {},
+            )
+          ]),
           body: _pages[snapshot.data],
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: snapshot.data,

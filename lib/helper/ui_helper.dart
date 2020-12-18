@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import 'platform_widgets.dart';
 
@@ -41,6 +42,17 @@ Widget getSvgImage({
   );
 }
 
+void showSnackbar({
+  @required BuildContext context,
+  @required String message,
+  Color color = Colors.redAccent,
+}) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: color,
+    content: message.text.white.make(),
+  ));
+}
+
 Widget noDataText({@required BuildContext context}) {
   assert(context != null);
   return Center(
@@ -72,4 +84,12 @@ Widget errorText({@required BuildContext context}) {
       style: Theme.of(context).textTheme.headline5,
     ),
   );
+}
+
+Widget getNoDataUI({@required BuildContext context}) {
+  return Center(
+      child: Text(
+    "It's empty here!",
+    style: Theme.of(context).textTheme.headline5,
+  ));
 }

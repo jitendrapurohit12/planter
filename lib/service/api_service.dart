@@ -15,12 +15,12 @@ const kBaseUrl = 'https://grovedev-admin-ui-backend.cfapps.io';
 const kLoginUrl = '/api/tf/user/login';
 const kProjectList = '/v1/planter-project-list';
 const kProjectDetails = '/v1/planter-project-details';
-const kUserProfile = 'v1/planter-user';
-const kGetUnconfirmedFunds = 'v1/planter-logFunds-send';
-const kStoryCaptions = 'v1/planter-captions';
-const kUploadFile = 'v1/file';
-const kUploadPlanterStory = 'v1/planter-story';
-const kUploadRecipt = 'v1/planter-logFunds-arrive';
+const kUserProfile = '/v1/planter-user';
+const kGetUnconfirmedFunds = '/v1/planter-logFunds-send';
+const kStoryCaptions = '/v1/planter-captions';
+const kUploadFile = '/v1/file';
+const kUploadPlanterStory = '/v1/planter-story';
+const kUploadRecipt = '/v1/planter-logFunds-arrive';
 
 final loginHeader = {
   'X-Requested-With': 'XMLHttpRequest',
@@ -136,6 +136,18 @@ class ApiService {
           data: model.toJson(),
         )
         .catchError((e) => throw getFailure(e));
+  }
+
+  Future<void> uploadImage({@required String path}) async {
+    assert(path != null);
+
+    // await _dio
+    //     .post(
+    //       '$kBaseUrl$kUploadFile',
+    //       options: Options(headers: uploadImageHeader),
+    //       data: model.toJson(),
+    //     )
+    //     .catchError((e) => throw getFailure(e));
   }
 
   Failure getFailure(dynamic error) {

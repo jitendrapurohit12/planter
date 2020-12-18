@@ -26,11 +26,12 @@ class PageHome extends StatelessWidget {
           case NotifierState.loaded:
             return ProjectList();
           case NotifierState.noData:
-            return const Center(child: Text('No Projects Found!'));
+            return getNoDataUI(context: context);
           case NotifierState.error:
             performAfterDelay(
-                callback: () => context.showToast(msg: value.error.message));
-            return const Center(child: Text('Something Went Wrong!'));
+              callback: () => context.showToast(msg: value.error.message),
+            );
+            return errorText(context: context);
         }
       },
     );

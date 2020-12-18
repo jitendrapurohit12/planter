@@ -41,5 +41,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Some useless permission</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Some useless permission</string>
 </dict>
 </plist>
