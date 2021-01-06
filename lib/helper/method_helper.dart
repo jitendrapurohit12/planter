@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/controllers/auth_controller.dart';
+import 'package:gmt_planter/controllers/profile_controller.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
 import 'package:gmt_planter/controllers/project_list_controller.dart';
 import 'package:gmt_planter/controllers/story_caption_controller.dart';
@@ -50,6 +51,7 @@ final providers = [
   Provider<ApiService>(create: (_) => ApiService()),
   ChangeNotifierProvider<AuthController>(create: (_) => AuthController()),
   ChangeNotifierProvider<StoryController>(create: (_) => StoryController()),
+  ChangeNotifierProvider<ProfileController>(create: (_) => ProfileController()),
   ChangeNotifierProvider<ProjectListController>(
     create: (_) => ProjectListController(),
   ),

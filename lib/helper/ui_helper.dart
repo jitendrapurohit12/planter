@@ -76,7 +76,7 @@ Widget getCachedImage({@required String path}) {
   );
 }
 
-Widget errorText({@required BuildContext context}) {
+Widget getErrorUI({@required BuildContext context}) {
   assert(context != null);
   return Center(
     child: Text(

@@ -9,18 +9,18 @@ import 'package:gmt_planter/models/story_model.dart';
 import 'package:gmt_planter/models/user_profile_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 
-const kLoginBaseUrl = 'https://grovedev-auth.cfapps.io';
-const kBaseUrl = 'https://grovedev-admin-ui-backend.cfapps.io';
+const kBaseUrl = 'https://staging.handprint.tech/api/';
 
-const kLoginUrl = '/api/tf/user/login';
-const kProjectList = '/v1/planter-project-list';
-const kProjectDetails = '/v1/planter-project-details';
-const kUserProfile = '/v1/planter-user';
-const kGetUnconfirmedFunds = '/v1/planter-logFunds-send';
-const kStoryCaptions = '/v1/planter-captions';
-const kUploadFile = '/v1/file';
-const kUploadPlanterStory = '/v1/planter-story';
-const kUploadRecipt = '/v1/planter-logFunds-arrive';
+const kLoginUrl = 'planter-login';
+const kProjectList = 'project-list';
+const kProjectDetails = 'project-detail';
+const kUserProfile = 'user-profile';
+const kUpdateUserProfile = 'update-user-profile';
+const kGetUnconfirmedFunds = 'v1/planter-logFunds-send';
+const kStoryCaptions = 'project-story-caption';
+const kUploadFile = 'v1/file';
+const kUploadPlanterStory = 'v1/planter-story';
+const kUploadRecipt = 'v1/planter-logFunds-arrive';
 
 final loginHeader = {
   'X-Requested-With': 'XMLHttpRequest',
@@ -60,10 +60,10 @@ class ApiService {
     };
 
     final res = await _dio
-        .post('$kLoginBaseUrl$kLoginUrl',
+        .post('$kBaseUrl$kLoginUrl',
             options: Options(headers: loginHeader), data: map)
         .catchError((e) => throw getFailure(e));
-    return AuthModel.fromJson(res.data['data'] as Map<String, dynamic>);
+    return AuthModel.fromJson(res.data as Map<String, dynamic>);
   }
 
   Future<ProjectListModel> getProjects() async {
@@ -104,25 +104,24 @@ class ApiService {
     final res = await _dio
         .get('$kBaseUrl$kUserProfile', options: Options(headers: headers))
         .catchError((e) => throw getFailure(e));
-    final model = UserProfileModel.fromJson(res.data as Map<String, dynamic>);
+    final model =
+        UserProfileModel.fromJson(res.data['data'] as Map<String, dynamic>);
     return model;
   }
 
-  Future<UserProfileModel> setUserProfile({
+  Future<void> setUserProfile({
     @required UserProfileModel profile,
   }) async {
     assert(profile != null);
     final headers = await getAuthApiHeader();
 
-    final res = await _dio
+    await _dio
         .put(
           '$kBaseUrl$kUserProfile',
           options: Options(headers: headers),
           data: profile.toJson(),
         )
         .catchError((e) => throw getFailure(e));
-    final model = UserProfileModel.fromJson(res.data as Map<String, dynamic>);
-    return model;
   }
 
   Future<void> uploadProjectStory({@required StoryModel model}) async {

@@ -14,7 +14,7 @@ class CustomTextfield extends HookWidget {
   final void Function(String) onSave, onChanged;
   final FocusNode myNode, nextNode;
   final TextAlign align;
-  final bool isEnabled, isMandatory, hide;
+  final bool isEnabled, isMandatory, hide, showTitle;
   final int maxLength, maxLines, minLines;
   final Widget suffixIcon, leadingIcon;
 
@@ -29,7 +29,7 @@ class CustomTextfield extends HookWidget {
     this.onChanged,
     this.nextNode,
     this.maxLength,
-    this.align,
+    this.align = TextAlign.start,
     this.isEnabled = true,
     this.isMandatory = true,
     this.hide = false,
@@ -39,6 +39,7 @@ class CustomTextfield extends HookWidget {
     this.initialValue,
     this.suffixIcon,
     this.leadingIcon,
+    this.showTitle = true,
   }) : assert(context != null ||
             hint != null ||
             inputAction != null ||
@@ -50,14 +51,15 @@ class CustomTextfield extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: context.percentWidth * 4),
-          child: Text(
-            hint,
-            style: hintStyle(context: context),
+        if (showTitle)
+          Padding(
+            padding: EdgeInsets.only(left: context.percentWidth * 4),
+            child: Text(
+              hint,
+              style: hintStyle(context: context),
+            ),
           ),
-        ),
-        SizedBox(height: context.percentHeight),
+        if (showTitle) SizedBox(height: context.percentHeight),
         TextFormField(
           focusNode: myNode,
           enabled: isEnabled,
@@ -77,6 +79,10 @@ class CustomTextfield extends HookWidget {
                 ),
           textInputAction: inputAction,
           obscureText: hide,
+          textAlign: align,
+          style: TextStyle(
+            color: isEnabled ? Colors.black87 : Colors.black26,
+          ),
           decoration: InputDecoration(
             border: _borderDecoration(),
             enabledBorder: _borderDecoration(),
@@ -89,6 +95,7 @@ class CustomTextfield extends HookWidget {
             filled: true,
             suffixIcon: suffixIcon,
             prefixIcon: leadingIcon,
+            prefix: prefilledText != null ? Text(prefilledText) : null,
           ),
         )
       ],

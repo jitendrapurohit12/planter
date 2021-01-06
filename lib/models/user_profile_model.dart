@@ -1,6 +1,6 @@
 class UserProfileModel {
-  int id;
-  String firstName, lastName, email, phoneNo, pic, addr, status, totalFunds;
+  int id, totalFunds;
+  String firstName, lastName, email, phoneNo, pic, addr, status;
   List<BankDetails> bankDetails;
 
   UserProfileModel(
@@ -24,7 +24,7 @@ class UserProfileModel {
     pic = json['pic'] as String;
     addr = json['addr'] as String;
     status = json['status'] as String;
-    totalFunds = json['total_funds'] as String;
+    totalFunds = json['total_funds'] as int;
     if (json['bankDetails'] != null) {
       bankDetails = <BankDetails>[];
       json['bankDetails'].forEach((v) {
@@ -47,7 +47,7 @@ class UserProfileModel {
     if (bankDetails != null) {
       data['bankDetails'] = bankDetails.map((v) => v.toJson()).toList();
     }
-    return data;
+    return {'attributes': data};
   }
 }
 

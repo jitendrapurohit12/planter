@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/ui/screens/dashboard/screen_dashboard.dart';
 import 'package:gmt_planter/ui/screens/login/screen_login.dart';
+import 'package:gmt_planter/ui/screens/profile/screen_profile.dart';
 import 'package:gmt_planter/ui/screens/project_details/screen_project_details.dart';
 
 Future<void> launchLogin({@required BuildContext context}) async {
@@ -20,6 +21,15 @@ Future<void> launchDashboard({@required BuildContext context}) async {
     context,
     ScreenDashboard.id,
     (_) => false,
+  );
+}
+
+Future<void> launchProfile({@required BuildContext context}) async {
+  assert(context != null);
+
+  Navigator.pushNamed(
+    context,
+    ScreenProfile.id,
   );
 }
 
@@ -48,6 +58,7 @@ Future<void> launchProjectDetails({
 
 final Map<String, Widget Function(BuildContext)> routes = {
   ScreenLogin.id: (_) => ScreenLogin(),
+  ScreenProfile.id: (_) => ScreenProfile(),
   ScreenDashboard.id: (_) => ScreenDashboard(),
   ScreenProjectDetails.id: (_) => ScreenProjectDetails(),
 };

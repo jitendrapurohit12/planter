@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/models/auth_model.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/models/failure.dart';
@@ -23,6 +24,7 @@ class AuthController extends ChangeNotifier {
     assert(email != null);
     assert(password != null);
 
+    await zeroDelay();
     _state = NotifierState.fetching;
     notifyListeners();
 

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
-import 'package:gmt_planter/models/project_details_model.dart';
 import 'package:gmt_planter/ui/common_widget/animated_progress.dart';
 import 'package:gmt_planter/ui/common_widget/title_value_column.dart';
 import 'package:gmt_planter/ui/common_widget/title_value_row.dart';
@@ -51,12 +50,4 @@ class TabDetails extends HookWidget {
       const HeightBox(36),
     ]).scrollVertical();
   }
-}
-
-double _getFundRatio(Data model) {
-  final denominator = model.totalFundingTarget + model.conservationBalance;
-  final numerator =
-      model.fundsRaised == 0 ? denominator * 0.8 : model.fundsRaised;
-
-  return (numerator / denominator).toDouble();
 }

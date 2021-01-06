@@ -34,7 +34,7 @@ class PageStory extends StatelessWidget {
           case NotifierState.noData:
             return getNoDataUI(context: context);
           case NotifierState.error:
-            return errorText(context: context);
+            return getErrorUI(context: context);
         }
       },
     );
@@ -51,7 +51,11 @@ class PageStoryContent extends StatelessWidget {
         Provider.of<ProjectListController>(context, listen: false);
     final projects = getProjectNames(projectsController.model);
 
-    final pickimagePH = const Icon(Icons.image_search, size: 60).centered();
+    final pickimagePH = Icon(
+      Icons.add_a_photo_outlined,
+      size: ph * 10,
+      color: Colors.black.withOpacity(0.5),
+    ).centered();
 
     return Consumer<StoryController>(
       builder: (_, storyController, __) {

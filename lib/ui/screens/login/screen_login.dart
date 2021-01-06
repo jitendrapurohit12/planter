@@ -86,7 +86,7 @@ class ScreenLogin extends HookWidget {
                         context: context,
                         hint: kHintPassword,
                         hide: true,
-                        initialValue: 'paswrd',
+                        initialValue: 'qwe321QWE#@!',
                         leadingIcon: const Icon(Icons.lock_open_outlined),
                         inputAction: TextInputAction.done,
                         onSave: (s) => _password = s,
@@ -101,7 +101,7 @@ class ScreenLogin extends HookWidget {
                           case NotifierState.fetching:
                             return getPlatformProgress();
                           case NotifierState.loaded:
-                            saveToken(value: value.model.token);
+                            saveToken(value: value.model.data.token);
                             performAfterDelay(
                                 callback: () =>
                                     launchDashboard(context: context));

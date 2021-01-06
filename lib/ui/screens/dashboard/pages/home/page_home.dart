@@ -31,7 +31,7 @@ class PageHome extends StatelessWidget {
             performAfterDelay(
               callback: () => context.showToast(msg: value.error.message),
             );
-            return errorText(context: context);
+            return getErrorUI(context: context);
         }
       },
     );
