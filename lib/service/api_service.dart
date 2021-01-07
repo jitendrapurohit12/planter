@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/models/auth_model.dart';
@@ -37,7 +39,7 @@ Future<Map<String, dynamic>> getAuthApiHeader() async {
   final token = await getToken();
   final map = {
     'Content-Type': 'application/json;charset=utf-8',
-    'Accept-Encoding': 'gzip,deflate',
+    'Accept-Encoding': 'gzip,deflate,br',
     'Accept': 'application/json',
     'Authorization': 'Bearer $token',
   };
@@ -79,9 +81,11 @@ class ApiService {
   Future<ProjectDetailsModel> getProjectDetails({@required int id}) async {
     final headers = await getAuthApiHeader();
 
+    final data = {'project_id': id};
+
     final res = await _dio
-        .get('$kBaseUrl$kProjectDetails/$id',
-            options: Options(headers: headers))
+        .post('$kBaseUrl$kProjectDetails',
+            options: Options(headers: headers), data: data)
         .catchError((e) => throw getFailure(e));
     final model =
         ProjectDetailsModel.fromJson(res.data as Map<String, dynamic>);
@@ -104,24 +108,39 @@ class ApiService {
     final res = await _dio
         .get('$kBaseUrl$kUserProfile', options: Options(headers: headers))
         .catchError((e) => throw getFailure(e));
-    final model =
-        UserProfileModel.fromJson(res.data['data'] as Map<String, dynamic>);
+    final model = UserProfileModel.fromJson(res.data as Map<String, dynamic>);
     return model;
   }
 
-  Future<void> setUserProfile({
+  Future<UserProfileModel> setUserProfile({
     @required UserProfileModel profile,
+    File file,
   }) async {
     assert(profile != null);
     final headers = await getAuthApiHeader();
 
-    await _dio
-        .put(
-          '$kBaseUrl$kUserProfile',
+    final formData = FormData.fromMap(profile.data.toJson());
+
+    if (file != null) {
+      final multipart = MapEntry(
+        'pic',
+        MultipartFile.fromFileSync(file.path,
+            filename: 'profile${profile.data.id}'),
+      );
+
+      formData.files.add(multipart);
+    }
+
+    final res = await _dio
+        .post(
+          '$kBaseUrl$kUpdateUserProfile',
           options: Options(headers: headers),
-          data: profile.toJson(),
+          data: formData,
         )
         .catchError((e) => throw getFailure(e));
+
+    final model = UserProfileModel.fromJson(res.data as Map<String, dynamic>);
+    return model;
   }
 
   Future<void> uploadProjectStory({@required StoryModel model}) async {

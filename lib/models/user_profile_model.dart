@@ -1,9 +1,35 @@
 class UserProfileModel {
+  bool success;
+  String message;
+  Data data;
+
+  UserProfileModel({this.data, this.message, this.success});
+
+  UserProfileModel.fromJson(Map<String, dynamic> json) {
+    success = json['success'] as bool;
+    message = json['message'] as String;
+    data = json['data'] != null
+        ? Data.fromJson(json['data'] as Map<String, dynamic>)
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data.toJson();
+    }
+    return data;
+  }
+}
+
+class Data {
   int id, totalFunds;
   String firstName, lastName, email, phoneNo, pic, addr, status;
   List<BankDetails> bankDetails;
 
-  UserProfileModel(
+  Data(
       {this.id,
       this.firstName,
       this.lastName,
@@ -15,7 +41,7 @@ class UserProfileModel {
       this.totalFunds,
       this.bankDetails});
 
-  UserProfileModel.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'] as int;
     firstName = json['first_name'] as String;
     lastName = json['last_name'] as String;
@@ -40,14 +66,13 @@ class UserProfileModel {
     data['last_name'] = lastName;
     data['email'] = email;
     data['phone_no'] = phoneNo;
-    data['pic'] = pic;
     data['addr'] = addr;
     data['status'] = status;
     data['total_funds'] = totalFunds;
     if (bankDetails != null) {
       data['bankDetails'] = bankDetails.map((v) => v.toJson()).toList();
     }
-    return {'attributes': data};
+    return data;
   }
 }
 

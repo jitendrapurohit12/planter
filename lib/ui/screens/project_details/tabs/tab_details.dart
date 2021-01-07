@@ -18,9 +18,9 @@ class TabDetails extends HookWidget {
     final femaleEmployment = '${model.femaleEmpTarget} %';
     final fundsForPlanning = '\$ ${model.totalFundingTarget}';
     final fundsForConservation = '\$ ${model.conservationBalance}';
-    final fundDenominator =
-        model.totalFundingTarget + model.conservationBalance;
+    int fundDenominator = model.totalFundingTarget + model.conservationBalance;
     final fundNumerator = model.fundsRaised;
+    if (fundDenominator == 0) fundDenominator = 1;
     final fundsRatio = (fundNumerator / fundDenominator).toDouble();
     final fundsRatioString = '$fundNumerator/$fundDenominator';
 

@@ -1,9 +1,13 @@
 class ProjectDetailsModel {
+  bool success;
+  String message;
   Data data;
 
-  ProjectDetailsModel({this.data});
+  ProjectDetailsModel({this.data, this.message, this.success});
 
   ProjectDetailsModel.fromJson(Map<String, dynamic> json) {
+    success = json['success'] as bool;
+    message = json['message'] as String;
     data = json['data'] != null
         ? Data.fromJson(json['data'] as Map<String, dynamic>)
         : null;
@@ -11,6 +15,8 @@ class ProjectDetailsModel {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data.toJson();
     }

@@ -15,6 +15,12 @@ class ProjectDetailController extends ChangeNotifier {
   Failure get error => _error;
   NotifierState get state => _state;
 
+  void reset() {
+    _model = null;
+    _error = null;
+    _state = NotifierState.initial;
+  }
+
   Future<void> getProjectDetails({
     @required BuildContext context,
     @required int id,

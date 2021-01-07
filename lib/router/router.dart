@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gmt_planter/controllers/project_detail_controller.dart';
 import 'package:gmt_planter/ui/screens/dashboard/screen_dashboard.dart';
 import 'package:gmt_planter/ui/screens/login/screen_login.dart';
 import 'package:gmt_planter/ui/screens/profile/screen_profile.dart';
 import 'package:gmt_planter/ui/screens/project_details/screen_project_details.dart';
+import 'package:provider/provider.dart';
 
 Future<void> launchLogin({@required BuildContext context}) async {
   assert(context != null);
@@ -46,6 +48,12 @@ Future<void> launchProjectDetails({
     'project_name': projectName,
     'project_id': projectId,
   };
+
+  final notifier = Provider.of<ProjectDetailController>(context, listen: false);
+
+  if (notifier?.model?.data?.id != projectId) {
+    notifier.reset();
+  }
 
   Navigator.pushNamed(
     context,

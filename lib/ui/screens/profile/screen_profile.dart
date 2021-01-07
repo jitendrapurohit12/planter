@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -27,8 +30,8 @@ class ScreenProfile extends StatelessWidget {
                         icon: Icon(profileController.isEditing
                             ? Icons.close
                             : Icons.edit),
-                        onPressed: () => profileController
-                            .setIsEditing(!profileController.isEditing),
+                        onPressed: () => profileController.setIsEditing(
+                            value: !profileController.isEditing),
                       )
                     ]),
           body: getBody(
@@ -73,7 +76,7 @@ class _ProfileUI extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<ProfileController>(context, listen: false);
-    final model = controller.model;
+    final model = controller.model.data;
     final ph = context.percentHeight;
     final fundsNode = useFocusNode();
     final nameNode = useFocusNode();
@@ -100,7 +103,7 @@ class _ProfileUI extends HookWidget {
           myNode: fundsNode,
           nextNode: nameNode,
           enabled: controller.isEditing,
-          onSave: (s) => controller.model.totalFunds = int.parse(s),
+          onSave: (s) => controller.model.data.totalFunds = int.parse(s),
         ),
         _getContentRow(
           context: context,
@@ -112,8 +115,8 @@ class _ProfileUI extends HookWidget {
           enabled: controller.isEditing,
           onSave: (s) {
             final names = s?.split(' ');
-            controller.model.firstName = names[0];
-            if (names.length == 2) controller.model.lastName = names[1];
+            controller.model.data.firstName = names[0];
+            if (names.length == 2) controller.model.data.lastName = names[1];
           },
         ),
         _getContentRow(
@@ -125,7 +128,7 @@ class _ProfileUI extends HookWidget {
           myNode: phoneNode,
           nextNode: addressNode,
           enabled: controller.isEditing,
-          onSave: (s) => controller.model.phoneNo = s,
+          onSave: (s) => controller.model.data.phoneNo = s,
         ),
         _getContentRow(
           context: context,
@@ -135,7 +138,7 @@ class _ProfileUI extends HookWidget {
           myNode: addressNode,
           nextNode: bankNameNode,
           enabled: controller.isEditing,
-          onSave: (s) => controller.model..addr = s,
+          onSave: (s) => controller.model.data.addr = s,
         ),
         HeightBox(ph * 4),
         _getTitle(title: 'Bank Details'),
@@ -148,7 +151,7 @@ class _ProfileUI extends HookWidget {
           myNode: bankNameNode,
           nextNode: accNoNode,
           enabled: controller.isEditing,
-          onSave: (s) => controller.model.bankDetails[0].bankName = s,
+          onSave: (s) => controller.model.data.bankDetails[0].bankName = s,
         ),
         _getContentRow(
           context: context,
@@ -159,17 +162,17 @@ class _ProfileUI extends HookWidget {
           myNode: accNoNode,
           nextNode: branchNode,
           enabled: controller.isEditing,
-          onSave: (s) => controller.model.bankDetails[0].accNo = int.parse(s),
+          onSave: (s) =>
+              controller.model.data.bankDetails[0].accNo = int.parse(s),
         ),
         _getContentRow(
           context: context,
           title: 'Branch',
           value: model.bankDetails[0].branch,
-          inputType: TextInputType.number,
           inputAction: TextInputAction.done,
           myNode: branchNode,
           enabled: controller.isEditing,
-          onSave: (s) => controller.model.bankDetails[0].branch = s,
+          onSave: (s) => controller.model.data.bankDetails[0].branch = s,
         ),
         HeightBox(ph * 8),
         if (controller.isEditing)
@@ -232,19 +235,37 @@ class _ProfilePicUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ph = context.percentHeight;
-    final model = Provider.of<ProfileController>(context, listen: false).model;
-    return VxBox(
-            child: model?.pic != null
-                ? VxCard(getCachedImage(path: model.pic)).circular.make().p1()
-                : Icon(
-                    Icons.person,
-                    size: ph * 10,
-                    color: Colors.white,
-                  ).centered())
+    final notifier = Provider.of<ProfileController>(context, listen: false);
+    Widget child;
+    if (notifier.file != null) {
+      child = VxCard(Image.file(notifier.file, fit: BoxFit.cover))
+          .circular
+          .make()
+          .p1();
+    } else if (notifier.model?.data?.pic != null) {
+      child = VxCard(getCachedImage(path: notifier.model.data.pic))
+          .circular
+          .make()
+          .p1();
+    } else {
+      child = Icon(
+        Icons.person,
+        size: ph * 10,
+        color: Colors.white,
+      ).centered();
+    }
+    return VxBox(child: child)
         .roundedFull
         .width(ph * 15)
         .height(ph * 15)
         .color(kColorPrimaryDark)
-        .makeCentered();
+        .makeCentered()
+        .onTap(() async {
+      if (!notifier.isEditing) return;
+      final image = await ImagePicker().getImage(source: ImageSource.gallery);
+      if (image != null) {
+        notifier.changeImage(File(image.path));
+      }
+    });
   }
 }

@@ -1,14 +1,22 @@
 class ProjectListModel {
+  bool success;
+  String message;
   Data data;
 
-  ProjectListModel({this.data});
+  ProjectListModel({this.data, this.message, this.success});
 
   ProjectListModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? Data.fromJson(json['data'] as Map<String, dynamic>) : null;
+    success = json['success'] as bool;
+    message = json['message'] as String;
+    data = json['data'] != null
+        ? Data.fromJson(json['data'] as Map<String, dynamic>)
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data.toJson();
     }
@@ -17,27 +25,35 @@ class ProjectListModel {
 }
 
 class Data {
-  List<ProjectModel> notDeployedProjects, activeFundingProjects, activeManagementProjects;
+  List<ProjectModel> notDeployedProjects,
+      activeFundingProjects,
+      activeManagementProjects;
 
-  Data({this.notDeployedProjects, this.activeFundingProjects, this.activeManagementProjects});
+  Data(
+      {this.notDeployedProjects,
+      this.activeFundingProjects,
+      this.activeManagementProjects});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['NOT_YET_DEPLOYED'] != null) {
       notDeployedProjects = <ProjectModel>[];
       json['NOT_YET_DEPLOYED'].forEach((v) {
-        notDeployedProjects.add(ProjectModel.fromJson(v as Map<String, dynamic>));
+        notDeployedProjects
+            .add(ProjectModel.fromJson(v as Map<String, dynamic>));
       });
     }
     if (json['ACTIVE_FUNDING'] != null) {
       activeFundingProjects = <ProjectModel>[];
       json['ACTIVE_FUNDING'].forEach((v) {
-        activeFundingProjects.add(ProjectModel.fromJson(v as Map<String, dynamic>));
+        activeFundingProjects
+            .add(ProjectModel.fromJson(v as Map<String, dynamic>));
       });
     }
     if (json['ACTIVE_MANAGEMENT'] != null) {
       activeManagementProjects = <ProjectModel>[];
       json['ACTIVE_MANAGEMENT'].forEach((v) {
-        activeManagementProjects.add(ProjectModel.fromJson(v as Map<String, dynamic>));
+        activeManagementProjects
+            .add(ProjectModel.fromJson(v as Map<String, dynamic>));
       });
     }
   }
@@ -45,13 +61,16 @@ class Data {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     if (notDeployedProjects != null) {
-      data['NOT_YET_DEPLOYED'] = notDeployedProjects.map((v) => v.toJson()).toList();
+      data['NOT_YET_DEPLOYED'] =
+          notDeployedProjects.map((v) => v.toJson()).toList();
     }
     if (activeFundingProjects != null) {
-      data['ACTIVE_FUNDING'] = activeFundingProjects.map((v) => v.toJson()).toList();
+      data['ACTIVE_FUNDING'] =
+          activeFundingProjects.map((v) => v.toJson()).toList();
     }
     if (activeManagementProjects != null) {
-      data['ACTIVE_MANAGEMENT'] = activeManagementProjects.map((v) => v.toJson()).toList();
+      data['ACTIVE_MANAGEMENT'] =
+          activeManagementProjects.map((v) => v.toJson()).toList();
     }
     return data;
   }
