@@ -4,6 +4,7 @@ import 'package:gmt_planter/ui/screens/dashboard/screen_dashboard.dart';
 import 'package:gmt_planter/ui/screens/login/screen_login.dart';
 import 'package:gmt_planter/ui/screens/profile/screen_profile.dart';
 import 'package:gmt_planter/ui/screens/project_details/screen_project_details.dart';
+import 'package:gmt_planter/ui/screens/receipt/screen_receipt.dart';
 import 'package:provider/provider.dart';
 
 Future<void> launchLogin({@required BuildContext context}) async {
@@ -67,6 +68,7 @@ Future<void> launchProjectDetails({
 final Map<String, Widget Function(BuildContext)> routes = {
   ScreenLogin.id: (_) => ScreenLogin(),
   ScreenProfile.id: (_) => ScreenProfile(),
+  ScreenReciept.id: (_) => ScreenReciept(),
   ScreenDashboard.id: (_) => ScreenDashboard(),
   ScreenProjectDetails.id: (_) => ScreenProjectDetails(),
 };

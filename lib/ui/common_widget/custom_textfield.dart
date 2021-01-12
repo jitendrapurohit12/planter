@@ -14,7 +14,7 @@ class CustomTextfield extends HookWidget {
   final void Function(String) onSave, onChanged;
   final FocusNode myNode, nextNode;
   final TextAlign align;
-  final bool isEnabled, isMandatory, hide, showTitle;
+  final bool isEnabled, isMandatory, hide, showTitle, showHint;
   final int maxLength, maxLines, minLines;
   final Widget suffixIcon, leadingIcon;
 
@@ -33,6 +33,7 @@ class CustomTextfield extends HookWidget {
     this.isEnabled = true,
     this.isMandatory = true,
     this.hide = false,
+    this.showHint = false,
     this.maxLines = 1,
     this.minLines = 1,
     this.prefilledText,
@@ -48,9 +49,8 @@ class CustomTextfield extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return VStack(
+      [
         if (showTitle)
           Padding(
             padding: EdgeInsets.only(left: context.percentWidth * 4),
@@ -84,6 +84,7 @@ class CustomTextfield extends HookWidget {
             color: isEnabled ? Colors.black87 : Colors.black26,
           ),
           decoration: InputDecoration(
+            hintText: showHint ? hint : null,
             border: _borderDecoration(),
             enabledBorder: _borderDecoration(),
             errorBorder: _borderDecoration(),

@@ -8,7 +8,7 @@ import 'package:gmt_planter/models/story_model.dart';
 import 'package:gmt_planter/service/api_service.dart';
 import 'package:provider/provider.dart';
 
-class StoryController extends ChangeNotifier {
+class ReceiptController extends ChangeNotifier {
   StoryModel _model = StoryModel();
   Failure _error;
   File _file;

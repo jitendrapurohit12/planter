@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
+import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/helper/platform_widgets.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
@@ -42,6 +43,9 @@ class ScreenProjectDetails extends StatelessWidget {
             case NotifierState.noData:
               break;
             case NotifierState.error:
+              if (notifier.error.code == kErrorUnauthorised) {
+                logout(context: context);
+              }
               return 'Something went wrong!'.text.makeCentered();
               break;
           }

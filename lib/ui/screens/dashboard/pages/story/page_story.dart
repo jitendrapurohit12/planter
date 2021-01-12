@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:gmt_planter/ui/common_widget/image_picker_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -30,10 +28,12 @@ class PageStory extends StatelessWidget {
             return getPlatformProgress();
           case NotifierState.loaded:
             return PageStoryContent();
-
           case NotifierState.noData:
             return getNoDataUI(context: context);
           case NotifierState.error:
+            if (captionController.error.code == kErrorUnauthorised) {
+              logout(context: context);
+            }
             return getErrorUI(context: context);
         }
       },
@@ -51,45 +51,25 @@ class PageStoryContent extends StatelessWidget {
         Provider.of<ProjectListController>(context, listen: false);
     final projects = getProjectNames(projectsController.model);
 
-    final pickimagePH = Icon(
-      Icons.add_a_photo_outlined,
-      size: ph * 10,
-      color: Colors.black.withOpacity(0.5),
-    ).centered();
-
     return Consumer<StoryController>(
       builder: (_, storyController, __) {
         return VStack([
           HeightBox(ph * 2),
-          VxCard(
-            storyController.model.attribute.pic == null
-                ? VxBox(child: pickimagePH)
-                    .width(double.maxFinite)
-                    .height(ph * 25)
-                    .make()
-                : Image.file(
-                    File(storyController.model.attribute.pic),
-                    height: ph * 25,
-                    width: double.maxFinite,
-                    fit: BoxFit.cover,
-                  ),
-          ).roundedSM.elevation(8.0).clip(Clip.antiAlias).make().onTap(
-            () async {
-              final image =
-                  await ImagePicker().getImage(source: ImageSource.gallery);
-              storyController.model.attribute.pic = image.path;
-              storyController.refresh();
-            },
-          ),
+          ImagePickerUI(
+              file: storyController.file,
+              callback: (image) {
+                storyController.changeImage(image);
+                storyController.refresh();
+              }),
           HeightBox(ph * 6),
           _getDropdownTitle(title: 'Select My Project'),
           CustomDropdownButton(
             hint: 'Select a Project',
             options: projects.keys.toList(),
-            value: storyController?.model?.attribute?.stName,
+            value: storyController?.model?.stName,
             onChanged: (value) {
-              storyController.model.attribute.stName = value;
-              storyController.model.attribute.pId = projects[value];
+              storyController.model.stName = value;
+              storyController.model.pId = projects[value];
               storyController.refresh();
             },
           ),
@@ -98,9 +78,9 @@ class PageStoryContent extends StatelessWidget {
           CustomDropdownButton(
             hint: 'Select a Caption',
             options: captionController.model.data,
-            value: storyController?.model?.attribute?.caption,
+            value: storyController?.model?.caption,
             onChanged: (value) {
-              storyController.model.attribute.caption = value;
+              storyController.model.caption = value;
               storyController.refresh();
             },
           ),
@@ -128,12 +108,22 @@ class PageStoryContent extends StatelessWidget {
       case NotifierState.fetching:
         return getPlatformProgress();
       case NotifierState.loaded:
+        showSnackbar(
+          context: context,
+          message: 'Story uploaded successfully.',
+          color: Colors.green,
+        );
         storyController.reset();
-        return _button(context: context, storyController: storyController);
+        return Container();
       case NotifierState.noData:
         return _button(context: context, storyController: storyController);
       case NotifierState.error:
-        return _button(context: context, storyController: storyController);
+        showSnackbar(context: context, message: storyController.error.message);
+        storyController.reset();
+        if (storyController.error.code == kErrorUnauthorised) {
+          logout(context: context);
+        }
+        return Container();
     }
   }
 
@@ -143,14 +133,26 @@ class PageStoryContent extends StatelessWidget {
   }) =>
       CustomButton(
         callback: () {
-          final attribute = storyController.model.attribute;
-          if (attribute.caption == null) {
+          if (storyController.model.caption == null) {
             showSnackbar(context: context, message: 'Please select a Caption!');
-          } else if (attribute.pId == null) {
+            return;
+          } else if (storyController.model.pId == null) {
             showSnackbar(context: context, message: 'Please select a Project!');
-          } else if (attribute.pic == null) {
+            return;
+          } else if (storyController.file == null) {
             showSnackbar(context: context, message: 'Please select an Image!');
+            return;
           }
+
+          final size = getFileSize(storyController.file);
+
+          if (size > 5) {
+            showSnackbar(
+                context: context, message: "File size can't exceed 5 MBs!");
+            return;
+          }
+
+          storyController.postStory(context: context);
         },
         title: kButtonSubmit,
       );

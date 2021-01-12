@@ -42,7 +42,6 @@ class Data {
       this.bankDetails});
 
   Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'] as int;
     firstName = json['first_name'] as String;
     lastName = json['last_name'] as String;
     email = json['email'] as String;

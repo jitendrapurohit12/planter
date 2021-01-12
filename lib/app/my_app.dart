@@ -28,9 +28,7 @@ class MyApp extends StatelessWidget {
                       return snapshot.data ? ScreenDashboard() : ScreenLogin();
                     default:
                       return Scaffold(
-                        body: Center(
-                          child: getPlatformProgress(),
-                        ),
+                        body: Center(child: getPlatformProgress()),
                       );
                   }
                 },

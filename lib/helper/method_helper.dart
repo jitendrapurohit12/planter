@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gmt_planter/controllers/auth_controller.dart';
+import 'package:gmt_planter/controllers/login_controller.dart';
 import 'package:gmt_planter/controllers/profile_controller.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
 import 'package:gmt_planter/controllers/project_list_controller.dart';
+import 'package:gmt_planter/controllers/receipt_controller.dart';
 import 'package:gmt_planter/controllers/story_caption_controller.dart';
 import 'package:gmt_planter/controllers/story_controller.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
@@ -47,11 +50,17 @@ Map<String, int> getProjectNames(ProjectListModel model) {
   return value;
 }
 
+double getFileSize(File file) {
+  final bytes = file.readAsBytesSync().lengthInBytes;
+  return bytes / (1024 * 1024);
+}
+
 final providers = [
   Provider<ApiService>(create: (_) => ApiService()),
-  ChangeNotifierProvider<AuthController>(create: (_) => AuthController()),
+  ChangeNotifierProvider<LoginController>(create: (_) => LoginController()),
   ChangeNotifierProvider<StoryController>(create: (_) => StoryController()),
   ChangeNotifierProvider<ProfileController>(create: (_) => ProfileController()),
+  ChangeNotifierProvider<ReceiptController>(create: (_) => ReceiptController()),
   ChangeNotifierProvider<ProjectListController>(
     create: (_) => ProjectListController(),
   ),

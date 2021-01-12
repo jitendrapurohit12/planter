@@ -9,6 +9,19 @@ TextStyle hintStyle({@required BuildContext context}) => Theme.of(context)
 TextStyle buttonStyle({@required BuildContext context}) =>
     Theme.of(context).textTheme.headline6.copyWith(color: Colors.white);
 
+TextStyle whiteTitleStyle({@required BuildContext context}) =>
+    Theme.of(context).textTheme.overline.copyWith(
+          color: Colors.white,
+          fontSize: 19,
+          fontWeight: FontWeight.w700,
+        );
+TextStyle receiptTitleStyle({@required BuildContext context}) =>
+    Theme.of(context).textTheme.overline.copyWith(
+          color: Colors.black54,
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        );
+
 TextStyle primaryHeadTextStyle({@required BuildContext context}) =>
     Theme.of(context).textTheme.headline6.copyWith(color: kColorPrimary);
 
