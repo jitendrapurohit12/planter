@@ -72,9 +72,6 @@ class ScreenProfile extends StatelessWidget {
             ? getNoDataUI(context: context)
             : _ProfileUI(callback: callback);
       case NotifierState.error:
-        if (controller.error.code == kErrorUnauthorised) {
-          logout(context: context);
-        }
         return controller.model == null
             ? getErrorUI(context: context)
             : _ProfileUI(callback: callback);

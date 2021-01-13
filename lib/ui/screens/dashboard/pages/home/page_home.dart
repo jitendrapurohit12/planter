@@ -30,9 +30,6 @@ class PageHome extends StatelessWidget {
             return getNoDataUI(context: context);
           case NotifierState.error:
             showSnackbar(context: context, message: value.error.message);
-            if (value.error.code == kErrorUnauthorised) {
-              logout(context: context);
-            }
             return getErrorUI(context: context);
         }
       },

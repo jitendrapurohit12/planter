@@ -31,9 +31,6 @@ class PageStory extends StatelessWidget {
           case NotifierState.noData:
             return getNoDataUI(context: context);
           case NotifierState.error:
-            if (captionController.error.code == kErrorUnauthorised) {
-              logout(context: context);
-            }
             return getErrorUI(context: context);
         }
       },
@@ -120,10 +117,7 @@ class PageStoryContent extends StatelessWidget {
       case NotifierState.error:
         showSnackbar(context: context, message: storyController.error.message);
         storyController.reset();
-        if (storyController.error.code == kErrorUnauthorised) {
-          logout(context: context);
-        }
-        return Container();
+        return getErrorUI(context: context);
     }
   }
 

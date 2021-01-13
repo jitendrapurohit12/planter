@@ -41,12 +41,10 @@ class ScreenProjectDetails extends StatelessWidget {
               ]);
               break;
             case NotifierState.noData:
+              return noDataText(context: context);
               break;
             case NotifierState.error:
-              if (notifier.error.code == kErrorUnauthorised) {
-                logout(context: context);
-              }
-              return 'Something went wrong!'.text.makeCentered();
+              return getErrorUI(context: context);
               break;
           }
         },

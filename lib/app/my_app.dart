@@ -68,5 +68,6 @@ final ButtonThemeData buttonThemeData = ButtonThemeData(
 );
 
 Future<bool> _getScreen() async {
+  return false;
   return await getToken() != null;
 }
