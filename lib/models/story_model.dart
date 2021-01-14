@@ -1,38 +1,15 @@
 class StoryModel {
-  Attribute attribute;
+  int uId, pId, caption;
+  String pic, stName;
 
-  StoryModel({this.attribute});
+  StoryModel({this.uId, this.pId, this.pic, this.stName, this.caption});
 
   StoryModel.fromJson(Map<String, dynamic> json) {
-    attribute = json['attribute'] != null
-        ? Attribute.fromJson(json['attribute'] as Map<String, dynamic>)
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    if (attribute != null) {
-      data['attribute'] = attribute.toJson();
-    }
-    return data;
-  }
-}
-
-class Attribute {
-  int uId;
-  int pId;
-  String pic;
-  String stName;
-  String caption;
-
-  Attribute({this.uId, this.pId, this.pic, this.stName, this.caption});
-
-  Attribute.fromJson(Map<String, dynamic> json) {
     uId = json['u_id'] as int;
     pId = json['p_id'] as int;
     pic = json['pic'] as String;
     stName = json['st_name'] as String;
-    caption = json['caption'] as String;
+    caption = json['caption'] as int;
   }
 
   Map<String, dynamic> toJson() {

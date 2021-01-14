@@ -50,6 +50,7 @@ class PageStoryContent extends StatelessWidget {
     final projectsController =
         Provider.of<ProjectListController>(context, listen: false);
     final projects = getProjectNames(projectsController.model);
+    final captions = getCaptions(captionController.model);
 
     final pickimagePH = Icon(
       Icons.add_a_photo_outlined,
@@ -62,13 +63,13 @@ class PageStoryContent extends StatelessWidget {
         return VStack([
           HeightBox(ph * 2),
           VxCard(
-            storyController.model.attribute.pic == null
+            storyController.model.pic == null
                 ? VxBox(child: pickimagePH)
                     .width(double.maxFinite)
                     .height(ph * 25)
                     .make()
                 : Image.file(
-                    File(storyController.model.attribute.pic),
+                    File(storyController.model.pic),
                     height: ph * 25,
                     width: double.maxFinite,
                     fit: BoxFit.cover,
@@ -77,7 +78,7 @@ class PageStoryContent extends StatelessWidget {
             () async {
               final image =
                   await ImagePicker().getImage(source: ImageSource.gallery);
-              storyController.model.attribute.pic = image.path;
+              storyController.model.pic = image.path;
               storyController.refresh();
             },
           ),
@@ -86,10 +87,10 @@ class PageStoryContent extends StatelessWidget {
           CustomDropdownButton(
             hint: 'Select a Project',
             options: projects.keys.toList(),
-            value: storyController?.model?.attribute?.stName,
+            value: storyController?.model?.stName,
             onChanged: (value) {
-              storyController.model.attribute.stName = value;
-              storyController.model.attribute.pId = projects[value];
+              storyController.model.stName = value;
+              storyController.model.pId = projects[value];
               storyController.refresh();
             },
           ),
@@ -97,10 +98,10 @@ class PageStoryContent extends StatelessWidget {
           _getDropdownTitle(title: 'Select Caption'),
           CustomDropdownButton(
             hint: 'Select a Caption',
-            options: captionController.model.data,
-            value: storyController?.model?.attribute?.caption,
+            options: captions.keys.toList(),
+            value: getValueFromMap(storyController.model.caption, captions),
             onChanged: (value) {
-              storyController.model.attribute.caption = value;
+              storyController.model.caption = captions[value];
               storyController.refresh();
             },
           ),
@@ -143,7 +144,7 @@ class PageStoryContent extends StatelessWidget {
   }) =>
       CustomButton(
         callback: () {
-          final attribute = storyController.model.attribute;
+          final attribute = storyController.model;
           if (attribute.caption == null) {
             showSnackbar(context: context, message: 'Please select a Caption!');
           } else if (attribute.pId == null) {

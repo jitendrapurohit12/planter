@@ -7,6 +7,7 @@ import 'package:gmt_planter/controllers/project_list_controller.dart';
 import 'package:gmt_planter/controllers/story_caption_controller.dart';
 import 'package:gmt_planter/controllers/story_controller.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
+import 'package:gmt_planter/models/story_caption_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/service/api_service.dart';
@@ -45,6 +46,24 @@ Map<String, int> getProjectNames(ProjectListModel model) {
   }
 
   return value;
+}
+
+Map<String, int> getCaptions(StoryCaptionModel model) {
+  final value = <String, int>{};
+  for (final caption in model.data) {
+    value[caption.caption] = caption.id;
+  }
+
+  return value;
+}
+
+String getValueFromMap(int value, Map<String, int> map) {
+  String result = '';
+  map.forEach((k, v) {
+    if (v == value) result = k;
+  });
+
+  return result;
 }
 
 final providers = [

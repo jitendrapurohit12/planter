@@ -7,7 +7,7 @@ import 'package:gmt_planter/service/api_service.dart';
 import 'package:provider/provider.dart';
 
 class StoryController extends ChangeNotifier {
-  StoryModel _model = StoryModel(attribute: Attribute());
+  StoryModel _model = StoryModel();
   Failure _error;
   NotifierState _state = NotifierState.initial;
 
