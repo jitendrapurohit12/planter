@@ -55,7 +55,12 @@ class Data {
       json['bankDetails'].forEach((v) {
         bankDetails.add(BankDetails.fromJson(v as Map<String, dynamic>));
       });
+    } else {
+      bankDetails = List.empty();
     }
+
+    if (bankDetails.isEmpty) bankDetails.add(BankDetails());
+    print('a');
   }
 
   Map<String, dynamic> toJson() {

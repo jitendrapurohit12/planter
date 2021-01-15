@@ -127,6 +127,19 @@ class ApiService {
 
     final formData = FormData.fromMap(data);
 
+    final StringBuffer details = StringBuffer('[');
+
+    for (int i = 0; i < profile.data.bankDetails.length; i++) {
+      details.write(profile.data.bankDetails[i].toJson().toString());
+      if (i < profile.data.bankDetails.length - 1) {
+        details.write(',');
+      }
+    }
+
+    details.write(']');
+
+    formData.fields.add(MapEntry('bankDetails', details.toString()));
+
     final res = await _dio
         .post(
           '$kBaseUrl$kUpdateUserProfile',
