@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gmt_planter/constant/constant.dart';
-import 'package:gmt_planter/controllers/auth_controller.dart';
+import 'package:gmt_planter/controllers/login_controller.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/helper/platform_widgets.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
@@ -28,7 +28,7 @@ class ScreenLogin extends HookWidget {
         SizedBox(height: context.percentHeight * 3 * multiplier);
     String _email, _password;
 
-    Widget _button({@required AuthController controller}) => CustomButton(
+    Widget _button({@required LoginController controller}) => CustomButton(
           callback: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
@@ -94,7 +94,7 @@ class ScreenLogin extends HookWidget {
                       ),
                       divider(multiplier: 2),
                       // ignore: missing_return
-                      Consumer<AuthController>(builder: (_, value, __) {
+                      Consumer<LoginController>(builder: (_, value, __) {
                         switch (value.state) {
                           case NotifierState.initial:
                             return _button(controller: value);
@@ -103,15 +103,18 @@ class ScreenLogin extends HookWidget {
                           case NotifierState.loaded:
                             saveToken(value: value.model.data.token);
                             performAfterDelay(
-                                callback: () =>
-                                    launchDashboard(context: context));
+                              callback: () => launchDashboard(context: context),
+                            );
                             return Container();
                           case NotifierState.noData:
                             return _button(controller: value);
                           case NotifierState.error:
                             performAfterDelay(
-                                callback: () => context.showToast(
-                                    msg: value.error.message));
+                              callback: () => showSnackbar(
+                                context: context,
+                                message: value.error.message,
+                              ),
+                            );
                             return _button(controller: value);
                         }
                       }),

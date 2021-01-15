@@ -20,8 +20,8 @@ const kUserProfile = 'user-profile';
 const kUpdateUserProfile = 'update-user-profile';
 const kGetUnconfirmedFunds = 'v1/planter-logFunds-send';
 const kStoryCaptions = 'project-story-caption';
+const kUploadPlanterStory = 'project-story-save';
 const kUploadFile = 'v1/file';
-const kUploadPlanterStory = 'v1/planter-story';
 const kUploadRecipt = 'v1/planter-logFunds-arrive';
 
 final loginHeader = {
@@ -38,7 +38,6 @@ final uploadImageHeader = {
 Future<Map<String, dynamic>> getAuthApiHeader() async {
   final token = await getToken();
   final map = {
-    'Content-Type': 'application/json;charset=utf-8',
     'Accept-Encoding': 'gzip,deflate,br',
     'Accept': 'application/json',
     'Authorization': 'Bearer $token',
@@ -119,22 +118,22 @@ class ApiService {
     assert(profile != null);
     final headers = await getAuthApiHeader();
 
-    final formData = FormData.fromMap(profile.data.toJson());
+    final data = profile.data.toJson();
 
     if (file != null) {
-      final multipart = MapEntry(
-        'pic',
-        MultipartFile.fromFileSync(file.path,
-            filename: 'profile${profile.data.id}'),
-      );
-
-      formData.files.add(multipart);
+      data['pic'] = MultipartFile.fromFileSync(file.path,
+          filename: 'profile_image_${profile.data.id}');
     }
+
+    final formData = FormData.fromMap(data);
 
     final res = await _dio
         .post(
           '$kBaseUrl$kUpdateUserProfile',
-          options: Options(headers: headers),
+          options: Options(
+            headers: headers,
+            contentType: Headers.formUrlEncodedContentType,
+          ),
           data: formData,
         )
         .catchError((e) => throw getFailure(e));
@@ -143,17 +142,36 @@ class ApiService {
     return model;
   }
 
-  Future<void> uploadProjectStory({@required StoryModel model}) async {
+  Future<void> uploadProjectStory({
+    @required StoryModel model,
+    @required File file,
+  }) async {
     assert(model != null);
     final headers = await getAuthApiHeader();
 
-    await _dio
+    final data = model.toJson();
+
+    if (file != null) {
+      data['pic'] = MultipartFile.fromFileSync(
+        file.path,
+        filename: 'project_story_${model.caption}',
+      );
+    }
+
+    final formData = FormData.fromMap(data);
+
+    final res = await _dio
         .post(
           '$kBaseUrl$kUploadPlanterStory',
-          options: Options(headers: headers),
-          data: model.toJson(),
+          options: Options(
+            headers: headers,
+            contentType: Headers.formUrlEncodedContentType,
+          ),
+          data: formData,
         )
         .catchError((e) => throw getFailure(e));
+
+    print(res);
   }
 
   Future<void> uploadImage({@required String path}) async {
@@ -172,7 +190,7 @@ class ApiService {
     if (error is DioError) {
       final dioError = error;
       return Failure(
-        code: 404,
+        code: dioError.response.statusCode,
         message: dioError.response.data['message'].toString(),
       );
     } else {

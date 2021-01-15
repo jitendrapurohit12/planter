@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -37,7 +38,18 @@ class ScreenProfile extends StatelessWidget {
           body: getBody(
             context,
             profileController,
-            () => profileController.updateInfo(context: context),
+            () {
+              if (profileController.file != null) {
+                final size = getFileSize(profileController.file);
+                if (size > 5) {
+                  showSnackbar(
+                      context: context,
+                      message: "File size can't exceed 5 MBs!");
+                  return;
+                }
+              }
+              profileController.updateInfo(context: context);
+            },
           ),
         );
       },

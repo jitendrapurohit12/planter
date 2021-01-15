@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/controllers/project_list_controller.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/helper/platform_widgets.dart';
@@ -28,9 +29,7 @@ class PageHome extends StatelessWidget {
           case NotifierState.noData:
             return getNoDataUI(context: context);
           case NotifierState.error:
-            performAfterDelay(
-              callback: () => context.showToast(msg: value.error.message),
-            );
+            showSnackbar(context: context, message: value.error.message);
             return getErrorUI(context: context);
         }
       },
@@ -94,7 +93,7 @@ class ProjectUnit extends StatelessWidget {
                 left: context.percentWidth * 4, bottom: context.percentHeight),
         for (final project in projects)
           SizedBox(
-            height: context.percentHeight * 22,
+            height: context.percentHeight * 27,
             width: double.infinity,
             child: VxCard(
               ZStack(
@@ -114,7 +113,7 @@ class ProjectUnit extends StatelessWidget {
                       .make(),
                   VxBox(
                     child: project.name.text
-                        .textStyle(buttonStyle(context: context))
+                        .textStyle(whiteTitleStyle(context: context))
                         .make()
                         .pOnly(
                             left: context.percentWidth * 4,

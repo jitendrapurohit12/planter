@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import 'platform_widgets.dart';
@@ -47,10 +48,14 @@ void showSnackbar({
   @required String message,
   Color color = Colors.redAccent,
 }) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    backgroundColor: color,
-    content: message.text.white.make(),
-  ));
+  performAfterDelay(
+    callback: () => ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: color,
+        content: message.text.white.make(),
+      ),
+    ),
+  );
 }
 
 Widget noDataText({@required BuildContext context}) {

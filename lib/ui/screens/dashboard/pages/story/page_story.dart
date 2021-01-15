@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:gmt_planter/ui/common_widget/image_picker_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -30,7 +28,6 @@ class PageStory extends StatelessWidget {
             return getPlatformProgress();
           case NotifierState.loaded:
             return PageStoryContent();
-
           case NotifierState.noData:
             return getNoDataUI(context: context);
           case NotifierState.error:
@@ -52,36 +49,16 @@ class PageStoryContent extends StatelessWidget {
     final projects = getProjectNames(projectsController.model);
     final captions = getCaptions(captionController.model);
 
-    final pickimagePH = Icon(
-      Icons.add_a_photo_outlined,
-      size: ph * 10,
-      color: Colors.black.withOpacity(0.5),
-    ).centered();
-
     return Consumer<StoryController>(
       builder: (_, storyController, __) {
         return VStack([
           HeightBox(ph * 2),
-          VxCard(
-            storyController.model.pic == null
-                ? VxBox(child: pickimagePH)
-                    .width(double.maxFinite)
-                    .height(ph * 25)
-                    .make()
-                : Image.file(
-                    File(storyController.model.pic),
-                    height: ph * 25,
-                    width: double.maxFinite,
-                    fit: BoxFit.cover,
-                  ),
-          ).roundedSM.elevation(8.0).clip(Clip.antiAlias).make().onTap(
-            () async {
-              final image =
-                  await ImagePicker().getImage(source: ImageSource.gallery);
-              storyController.model.pic = image.path;
-              storyController.refresh();
-            },
-          ),
+          ImagePickerUI(
+              file: storyController.file,
+              callback: (image) {
+                storyController.changeImage(image);
+                storyController.refresh();
+              }),
           HeightBox(ph * 6),
           _getDropdownTitle(title: 'Select My Project'),
           CustomDropdownButton(
@@ -129,12 +106,19 @@ class PageStoryContent extends StatelessWidget {
       case NotifierState.fetching:
         return getPlatformProgress();
       case NotifierState.loaded:
+        showSnackbar(
+          context: context,
+          message: 'Story uploaded successfully.',
+          color: Colors.green,
+        );
         storyController.reset();
-        return _button(context: context, storyController: storyController);
+        return Container();
       case NotifierState.noData:
         return _button(context: context, storyController: storyController);
       case NotifierState.error:
-        return _button(context: context, storyController: storyController);
+        showSnackbar(context: context, message: storyController.error.message);
+        storyController.reset();
+        return getErrorUI(context: context);
     }
   }
 
@@ -144,14 +128,26 @@ class PageStoryContent extends StatelessWidget {
   }) =>
       CustomButton(
         callback: () {
-          final attribute = storyController.model;
-          if (attribute.caption == null) {
+          if (storyController.model.caption == null) {
             showSnackbar(context: context, message: 'Please select a Caption!');
-          } else if (attribute.pId == null) {
+            return;
+          } else if (storyController.model.pId == null) {
             showSnackbar(context: context, message: 'Please select a Project!');
-          } else if (attribute.pic == null) {
+            return;
+          } else if (storyController.file == null) {
             showSnackbar(context: context, message: 'Please select an Image!');
+            return;
           }
+
+          final size = getFileSize(storyController.file);
+
+          if (size > 5) {
+            showSnackbar(
+                context: context, message: "File size can't exceed 5 MBs!");
+            return;
+          }
+
+          storyController.postStory(context: context);
         },
         title: kButtonSubmit,
       );

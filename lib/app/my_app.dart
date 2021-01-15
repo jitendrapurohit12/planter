@@ -28,9 +28,7 @@ class MyApp extends StatelessWidget {
                       return snapshot.data ? ScreenDashboard() : ScreenLogin();
                     default:
                       return Scaffold(
-                        body: Center(
-                          child: getPlatformProgress(),
-                        ),
+                        body: Center(child: getPlatformProgress()),
                       );
                   }
                 },
@@ -70,5 +68,6 @@ final ButtonThemeData buttonThemeData = ButtonThemeData(
 );
 
 Future<bool> _getScreen() async {
+  return false;
   return await getToken() != null;
 }

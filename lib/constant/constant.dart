@@ -15,6 +15,9 @@ const kImageNotification = '$imageBasePath/ic_notification.svg';
 // Button Labels
 const kButtonSubmit = 'Submit';
 
+// Error Codes
+const kErrorUnauthorised = 401;
+
 // String Constants
 const kDonthaveAccount = "Dont't have account? ";
 const kSignUp = 'Signup';
