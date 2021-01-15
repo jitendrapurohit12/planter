@@ -76,14 +76,13 @@ class Data {
 }
 
 class BankDetails {
-  String bankName, branch, iban;
-  int accNo;
+  String bankName, branch, iban, accNo;
 
   BankDetails({this.bankName, this.accNo, this.branch, this.iban});
 
   BankDetails.fromJson(Map<String, dynamic> json) {
     bankName = json['bank_name'] as String;
-    accNo = json['acc_no'] as int;
+    accNo = json['acc_no'] as String;
     branch = json['branch'] as String;
     iban = json['iban'] as String;
   }

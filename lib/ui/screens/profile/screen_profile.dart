@@ -174,8 +174,7 @@ class _ProfileUI extends HookWidget {
           myNode: accNoNode,
           nextNode: branchNode,
           enabled: controller.isEditing,
-          onSave: (s) =>
-              controller.model.data.bankDetails[0].accNo = int.parse(s),
+          onSave: (s) => controller.model.data.bankDetails[0].accNo = s,
         ),
         _getContentRow(
           context: context,
