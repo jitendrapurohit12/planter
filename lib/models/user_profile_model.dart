@@ -100,4 +100,13 @@ class BankDetails {
     data['iban'] = iban;
     return data;
   }
+
+  Map<String, dynamic> toJsonFormData() {
+    final data = <String, dynamic>{};
+    if (bankName != null) data['"bank_name"'] = '"$bankName"';
+    if (accNo != null) data['"acc_no"'] = '"$accNo"';
+    if (branch != null) data['"branch"'] = '"$branch"';
+    if (iban != null) data['"iban"'] = '"$iban"';
+    return data;
+  }
 }

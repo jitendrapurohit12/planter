@@ -130,7 +130,7 @@ class ApiService {
     final StringBuffer details = StringBuffer('[');
 
     for (int i = 0; i < profile.data.bankDetails.length; i++) {
-      details.write(profile.data.bankDetails[i].toJson().toString());
+      details.write(profile.data.bankDetails[i].toJsonFormData().toString());
       if (i < profile.data.bankDetails.length - 1) {
         details.write(',');
       }
@@ -138,7 +138,7 @@ class ApiService {
 
     details.write(']');
 
-    formData.fields.add(MapEntry('bankDetails', details.toString()));
+    formData.fields.add(MapEntry('bank_details', details.toString()));
 
     final res = await _dio
         .post(
