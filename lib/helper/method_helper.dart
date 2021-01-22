@@ -9,6 +9,7 @@ import 'package:gmt_planter/controllers/project_list_controller.dart';
 import 'package:gmt_planter/controllers/receipt_controller.dart';
 import 'package:gmt_planter/controllers/story_caption_controller.dart';
 import 'package:gmt_planter/controllers/story_controller.dart';
+import 'package:gmt_planter/controllers/unconfirmed_funds_controller.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
 import 'package:gmt_planter/models/story_caption_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
@@ -30,7 +31,7 @@ void performAfterDelay({VoidCallback callback}) {
 }
 
 Future<void> printToken() async {
-  print(await getToken());
+  //print(await getToken());
 }
 
 Map<String, int> getProjectNames(ProjectListModel model) {
@@ -76,17 +77,12 @@ double getFileSize(File file) {
 
 final providers = [
   Provider<ApiService>(create: (_) => ApiService()),
-  ChangeNotifierProvider<LoginController>(create: (_) => LoginController()),
-  ChangeNotifierProvider<StoryController>(create: (_) => StoryController()),
-  ChangeNotifierProvider<ProfileController>(create: (_) => ProfileController()),
-  ChangeNotifierProvider<ReceiptController>(create: (_) => ReceiptController()),
-  ChangeNotifierProvider<ProjectListController>(
-    create: (_) => ProjectListController(),
-  ),
-  ChangeNotifierProvider<ProjectDetailController>(
-    create: (_) => ProjectDetailController(),
-  ),
-  ChangeNotifierProvider<StoryCaptionController>(
-    create: (_) => StoryCaptionController(),
-  ),
+  ChangeNotifierProvider(create: (_) => LoginController()),
+  ChangeNotifierProvider(create: (_) => StoryController()),
+  ChangeNotifierProvider(create: (_) => ProfileController()),
+  ChangeNotifierProvider(create: (_) => ReceiptController()),
+  ChangeNotifierProvider(create: (_) => ProjectListController()),
+  ChangeNotifierProvider(create: (_) => ProjectDetailController()),
+  ChangeNotifierProvider(create: (_) => StoryCaptionController()),
+  ChangeNotifierProvider(create: (_) => UnconfirmedFundsController()),
 ];

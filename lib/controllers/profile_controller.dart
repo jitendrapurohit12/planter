@@ -44,6 +44,7 @@ class ProfileController extends ChangeNotifier {
         .setUserProfile(profile: model, file: _file)
         .then((value) {
       setIsEditing();
+      _model = value;
       _file = null;
       _state = NotifierState.loaded;
       notifyListeners();

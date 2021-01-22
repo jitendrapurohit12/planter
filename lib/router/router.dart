@@ -64,7 +64,6 @@ Future<void> launchProjectDetails({
 }
 
 // Available Routes
-
 final Map<String, Widget Function(BuildContext)> routes = {
   ScreenLogin.id: (_) => ScreenLogin(),
   ScreenProfile.id: (_) => ScreenProfile(),

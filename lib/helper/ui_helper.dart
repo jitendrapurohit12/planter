@@ -10,7 +10,6 @@ AppBar customAppbar({@required String title, List<Widget> actions}) {
   return AppBar(
     title: Text(title),
     actions: actions,
-    centerTitle: true,
   );
 }
 

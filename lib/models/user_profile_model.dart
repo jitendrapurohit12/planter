@@ -50,9 +50,9 @@ class Data {
     addr = json['addr'] as String;
     status = json['status'] as String;
     totalFunds = json['total_funds'] as int;
-    if (json['bankDetails'] != null) {
+    if (json['bank_details'] != null) {
       bankDetails = <BankDetails>[];
-      json['bankDetails'].forEach((v) {
+      json['bank_details'].forEach((v) {
         bankDetails.add(BankDetails.fromJson(v as Map<String, dynamic>));
       });
     } else {
@@ -60,7 +60,6 @@ class Data {
     }
 
     if (bankDetails.isEmpty) bankDetails.add(BankDetails());
-    print('a');
   }
 
   Map<String, dynamic> toJson() {
@@ -74,8 +73,9 @@ class Data {
     data['status'] = status;
     data['total_funds'] = totalFunds;
     if (bankDetails != null) {
-      data['bankDetails'] = bankDetails.map((v) => v.toJson()).toList();
+      data['bank_details'] = bankDetails.map((v) => v.toJson()).toList();
     }
+
     return data;
   }
 }

@@ -75,23 +75,30 @@ class ScreenLogin extends HookWidget {
                         hint: kHintEmail,
                         inputAction: TextInputAction.next,
                         inputType: TextInputType.emailAddress,
-                        initialValue: 'j.purohit198@gmail.com',
                         leadingIcon: const Icon(Icons.email_outlined),
                         onSave: (s) => _email = s,
                         myNode: _emailNode,
                         nextNode: _passwordNode,
                       ),
                       divider(),
-                      CustomTextfield(
-                        context: context,
-                        hint: kHintPassword,
-                        hide: true,
-                        initialValue: 'qwe321QWE#@!',
-                        leadingIcon: const Icon(Icons.lock_open_outlined),
-                        inputAction: TextInputAction.done,
-                        onSave: (s) => _password = s,
-                        myNode: _passwordNode,
-                      ),
+                      Consumer<LoginController>(builder: (_, value, __) {
+                        final icon = value.showPassowrd
+                            ? const Icon(Icons.visibility)
+                            : const Icon(Icons.visibility_off);
+                        return CustomTextfield(
+                          context: context,
+                          hint: kHintPassword,
+                          hide: !value.showPassowrd,
+                          leadingIcon: const Icon(Icons.lock_open_outlined),
+                          inputAction: TextInputAction.done,
+                          onSave: (s) => _password = s,
+                          myNode: _passwordNode,
+                          suffixIcon: GestureDetector(
+                            onTap: () => value.changeVisibility(),
+                            child: icon,
+                          ),
+                        );
+                      }),
                       divider(multiplier: 2),
                       // ignore: missing_return
                       Consumer<LoginController>(builder: (_, value, __) {

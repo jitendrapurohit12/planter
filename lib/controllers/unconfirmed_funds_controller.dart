@@ -1,44 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
-import 'package:gmt_planter/models/auth_model.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/models/failure.dart';
+import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
 import 'package:gmt_planter/service/api_service.dart';
 import 'package:provider/provider.dart';
 
-class LoginController extends ChangeNotifier {
-  AuthModel _model;
+class UnconfirmedFundsController extends ChangeNotifier {
+  UnconfirmedFundsModel _model;
+  int _selectedPage = 0;
   Failure _error;
   NotifierState _state = NotifierState.initial;
-  bool _showPassword = false;
 
-  AuthModel get model => _model;
+  UnconfirmedFundsModel get model => _model;
+  int get selectedpage => _selectedPage;
   Failure get error => _error;
   NotifierState get state => _state;
-  bool get showPassowrd => _showPassword;
 
-  Future<void> changeVisibility() async {
-    _showPassword = !_showPassword;
+  Future<void> changepage(int newPage) async {
+    _selectedPage = newPage;
     await zeroDelay();
     notifyListeners();
   }
 
-  Future<void> login({
-    @required BuildContext context,
-    @required String email,
-    @required String password,
-  }) async {
-    assert(context != null);
-    assert(email != null);
-    assert(password != null);
-
-    await zeroDelay();
+  Future<void> getUnconfirmedFunds({@required BuildContext context}) async {
     _state = NotifierState.fetching;
+    await zeroDelay();
     notifyListeners();
 
-    Provider.of<ApiService>(context, listen: false)
-        .login(email: email, password: password)
-        .then((value) {
+    Provider.of<ApiService>(context, listen: false).getUnconfirmedFunds().then((value) {
       _model = value;
       _state = NotifierState.loaded;
       notifyListeners();
