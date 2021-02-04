@@ -6,6 +6,7 @@ import 'package:gmt_planter/models/auth_model.dart';
 import 'package:gmt_planter/models/failure.dart';
 import 'package:gmt_planter/models/project_details_model.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
+import 'package:gmt_planter/models/receipt_model.dart';
 import 'package:gmt_planter/models/story_caption_model.dart';
 import 'package:gmt_planter/models/story_model.dart';
 import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
@@ -22,7 +23,7 @@ const kUpdateUserProfile = 'update-user-profile';
 const kGetUnconfirmedFunds = 'project-unconfirmed-fund';
 const kStoryCaptions = 'project-story-caption';
 const kUploadPlanterStory = 'project-story-save';
-const kUploadRecipt = 'v1/planter-logFunds-arrive';
+const kUploadRecipt = 'project-fund-update';
 
 final loginHeader = {
   'X-Requested-With': 'XMLHttpRequest',
@@ -55,8 +56,7 @@ class ApiService {
     };
 
     final res = await _dio
-        .post('$kBaseUrl$kLoginUrl',
-            options: Options(headers: loginHeader), data: map)
+        .post('$kBaseUrl$kLoginUrl', options: Options(headers: loginHeader), data: map)
         .catchError((e) => throw getFailure(e));
     return AuthModel.fromJson(res.data as Map<String, dynamic>);
   }
@@ -77,11 +77,9 @@ class ApiService {
     final data = {'project_id': id};
 
     final res = await _dio
-        .post('$kBaseUrl$kProjectDetails',
-            options: Options(headers: headers), data: data)
+        .post('$kBaseUrl$kProjectDetails', options: Options(headers: headers), data: data)
         .catchError((e) => throw getFailure(e));
-    final model =
-        ProjectDetailsModel.fromJson(res.data as Map<String, dynamic>);
+    final model = ProjectDetailsModel.fromJson(res.data as Map<String, dynamic>);
     return model;
   }
 
@@ -116,8 +114,7 @@ class ApiService {
 
     if (file != null) {
       final time = DateTime.now().second;
-      data['pic'] = MultipartFile.fromFileSync(file.path,
-          filename: 'profile_image_$time');
+      data['pic'] = MultipartFile.fromFileSync(file.path, filename: 'profile_image_$time');
     }
 
     final formData = FormData.fromMap(data);
@@ -171,12 +168,40 @@ class ApiService {
     final headers = await getAuthApiHeader();
 
     final res = await _dio
-        .get('$kBaseUrl$kGetUnconfirmedFunds',
-            options: Options(headers: headers))
+        .get('$kBaseUrl$kGetUnconfirmedFunds', options: Options(headers: headers))
         .catchError((e) => throw getFailure(e));
-    final model =
-        UnconfirmedFundsModel.fromJson(res.data as Map<String, dynamic>);
+    final model = UnconfirmedFundsModel.fromJson(res.data as Map<String, dynamic>);
     return model;
+  }
+
+  Future<void> postReceipt({
+    @required ReceiptModel receipt,
+    @required File file,
+  }) async {
+    final headers = await getAuthApiHeader();
+
+    final data = receipt.toJson();
+
+    if (file != null) {
+      final time = DateTime.now().second;
+      data['pic'] = MultipartFile.fromFileSync(
+        file.path,
+        filename: 'receipt_$time',
+      );
+    }
+
+    final formData = FormData.fromMap(data);
+
+    await _dio
+        .post(
+          '$kBaseUrl$kUploadRecipt',
+          options: Options(
+            headers: headers,
+            contentType: Headers.formUrlEncodedContentType,
+          ),
+          data: formData,
+        )
+        .catchError((e) => throw getFailure(e));
   }
 
   Failure getFailure(dynamic error) {

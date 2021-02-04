@@ -9,24 +9,39 @@ import 'package:provider/provider.dart';
 class UnconfirmedFundsController extends ChangeNotifier {
   UnconfirmedFundsModel _model;
   int _selectedPage = 0;
+  bool _isListShown = false;
   Failure _error;
   NotifierState _state = NotifierState.initial;
 
   UnconfirmedFundsModel get model => _model;
   int get selectedpage => _selectedPage;
+  bool get isListShown => _isListShown;
   Failure get error => _error;
   NotifierState get state => _state;
 
-  Future<void> changepage(int newPage) async {
-    _selectedPage = newPage;
+  Future<void> changeListShown({bool value = false}) async {
+    _isListShown = value;
+    await refresh();
+  }
+
+  Future<void> refresh() async {
     await zeroDelay();
     notifyListeners();
   }
 
+  Future<void> changePage(int newPage) async {
+    _selectedPage = newPage;
+    await refresh();
+  }
+
+  Future<void> removeItem(int index) async {
+    model.data.removeAt(index);
+    refresh();
+  }
+
   Future<void> getUnconfirmedFunds({@required BuildContext context}) async {
     _state = NotifierState.fetching;
-    await zeroDelay();
-    notifyListeners();
+    await refresh();
 
     Provider.of<ApiService>(context, listen: false).getUnconfirmedFunds().then((value) {
       _model = value;

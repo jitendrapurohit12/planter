@@ -26,3 +26,7 @@ BoxDecoration loginDecoration({
     ),
   );
 }
+
+RoundedRectangleBorder listTileShape({double radius = 8.0}) => RoundedRectangleBorder(
+      borderRadius: getRadius(radius: radius),
+    );

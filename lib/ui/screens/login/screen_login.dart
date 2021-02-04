@@ -11,7 +11,7 @@ import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/style/decorations.dart';
 import 'package:gmt_planter/ui/common_widget/clikable_text.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
-import 'package:gmt_planter/ui/common_widget/custom_textfield.dart';
+import 'package:gmt_planter/ui/common_widget/custom_text_form_field.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -62,15 +62,14 @@ class ScreenLogin extends HookWidget {
                 radius: 32,
               ),
               child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: context.percentWidth * 6),
+                padding: EdgeInsets.symmetric(horizontal: context.percentWidth * 6),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       divider(multiplier: 3),
-                      CustomTextfield(
+                      CustomTextFormField(
                         context: context,
                         hint: kHintEmail,
                         inputAction: TextInputAction.next,
@@ -85,7 +84,7 @@ class ScreenLogin extends HookWidget {
                         final icon = value.showPassowrd
                             ? const Icon(Icons.visibility)
                             : const Icon(Icons.visibility_off);
-                        return CustomTextfield(
+                        return CustomTextFormField(
                           context: context,
                           hint: kHintPassword,
                           hide: !value.showPassowrd,

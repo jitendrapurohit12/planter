@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
+import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
+import 'package:gmt_planter/ui/screens/camera/screen_camera.dart';
 import 'package:gmt_planter/ui/screens/dashboard/screen_dashboard.dart';
 import 'package:gmt_planter/ui/screens/login/screen_login.dart';
 import 'package:gmt_planter/ui/screens/profile/screen_profile.dart';
@@ -63,9 +65,39 @@ Future<void> launchProjectDetails({
   );
 }
 
+Future<bool> launchReceipt({
+  @required BuildContext context,
+  @required Data data,
+}) async {
+  assert(data != null);
+  assert(context != null);
+
+  final args = {'data': data};
+
+  final result = await Navigator.pushNamed(
+    context,
+    ScreenReciept.id,
+    arguments: args,
+  );
+
+  return result as bool;
+}
+
+Future<String> launchCamera({@required BuildContext context}) async {
+  assert(context != null);
+
+  final result = await Navigator.pushNamed(
+    context,
+    ScreenCamera.id,
+  );
+
+  return result as String;
+}
+
 // Available Routes
 final Map<String, Widget Function(BuildContext)> routes = {
   ScreenLogin.id: (_) => ScreenLogin(),
+  ScreenCamera.id: (_) => ScreenCamera(),
   ScreenProfile.id: (_) => ScreenProfile(),
   ScreenReciept.id: (_) => ScreenReciept(),
   ScreenDashboard.id: (_) => ScreenDashboard(),

@@ -1,22 +1,21 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ImagePickerUI extends StatelessWidget {
   final File file;
   final String subtitle;
-  final ImageSource source;
   final bool infiniteHeight;
-  final Function(File) callback;
+  final double elevation;
+  final VoidCallback callback;
 
   const ImagePickerUI({
     @required this.file,
     this.subtitle,
     this.infiniteHeight = false,
-    this.source = ImageSource.gallery,
     @required this.callback,
+    this.elevation = 8.0,
   });
   @override
   Widget build(BuildContext context) {
@@ -48,11 +47,6 @@ class ImagePickerUI extends StatelessWidget {
               width: double.maxFinite,
               fit: BoxFit.cover,
             ),
-    ).roundedSM.elevation(8.0).clip(Clip.antiAlias).make().onTap(
-      () async {
-        final image = await ImagePicker().getImage(source: source);
-        if (image != null) callback(File(image.path));
-      },
-    );
+    ).roundedSM.elevation(elevation).clip(Clip.antiAlias).make().onTap(callback);
   }
 }

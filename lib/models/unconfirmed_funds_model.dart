@@ -32,13 +32,7 @@ class Data {
   String pic, createdAt;
   Project project;
 
-  Data(
-      {this.id,
-      this.amount,
-      this.pic,
-      this.createdAt,
-      this.projectId,
-      this.project});
+  Data({this.id, this.amount, this.pic, this.createdAt, this.projectId, this.project});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'] as int;
@@ -46,9 +40,8 @@ class Data {
     pic = json['pic'] as String;
     createdAt = json['created_at'] as String;
     projectId = json['project_id'] as int;
-    project = json['project'] != null
-        ? Project.fromJson(json['project'] as Map<String, dynamic>)
-        : null;
+    project =
+        json['project'] != null ? Project.fromJson(json['project'] as Map<String, dynamic>) : null;
   }
 
   Map<String, dynamic> toJson() {

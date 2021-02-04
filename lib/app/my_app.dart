@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
                   switch (snapshot.connectionState) {
                     case ConnectionState.done:
                       return snapshot.data ? ScreenDashboard() : ScreenLogin();
+                    //return ScreenCamera();
                     default:
                       return Scaffold(
                         body: Center(child: getPlatformProgress()),
@@ -50,10 +51,8 @@ ThemeData getThemeData({@required BuildContext context}) {
       primaryColorDark: kColorPrimaryDark,
       accentColor: kColorAccent,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        selectedLabelStyle:
-            Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.black),
-        unselectedLabelStyle:
-            Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.grey),
+        selectedLabelStyle: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.black),
+        unselectedLabelStyle: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.grey),
       ));
 }
 

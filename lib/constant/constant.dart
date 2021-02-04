@@ -14,6 +14,11 @@ const kImageNotification = '$imageBasePath/ic_notification.svg';
 
 // Button Labels
 const kButtonSubmit = 'Submit';
+const kButtonConfirm = 'Confirm';
+const kButtonReject = 'Reject';
+const kButtonDeny = 'Deny';
+const kButtonOpenSettings = 'Open Settings';
+const kButtonGrantPermission = 'Grant Permission';
 
 // Error Codes
 const kErrorUnauthorised = 401;
@@ -30,6 +35,10 @@ const kPlantingArea = 'Planting Area';
 const kDensity = 'Density';
 const kTotalTrees = 'Total Trees';
 
+// Errors
+const kErrorCameraScreen =
+    "App can't take image without Camera and Microphone Permissions. Please grant Permissions from device Settings!";
+
 // Font Families
 
 // Hints
@@ -42,19 +51,26 @@ const kColorPrimaryDark = Color(0xFF1F4949);
 const kColorTabIndicator = Color(0xFF55B2C8);
 const kColorAccent = Color(0xFFD81B60);
 const kColorTextfieldBackground = Color(0xFFF5F9FC);
+const kColorBottomsheetBackground = Color(0xFFE0E0E0);
+
+// Dialog Titles
+const kTitleCameraPermissionDenied = 'Enable Camera Permission';
+const kTitleAudioPermissionDenied = 'Enable Microphone Permission';
+
+// Dialog Descriptions
+const kDescriptionCameraPermissionDenied = 'Enable Camera permission from settings to use the app!';
+const kDescriptionMicrohonePermissionDenied =
+    'Enable Microphone permission from settings to use the app!';
 
 //Regex
-const kRegexEmail =
-    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+const kRegexEmail = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 
 // URLs
 const kUrlSignup = 'https://grovedev.globalmangrove.org/congrats-funding';
 
 // Array
 const kArraySignin = [kDonthaveAccount, kSignUp];
-List<BottomNavigationBarItem> kArrayDashboardBottomNavigationItems(
-        {@required double iconSize}) =>
-    [
+List<BottomNavigationBarItem> kArrayDashboardBottomNavigationItems({@required double iconSize}) => [
       getBottomNavigationBarItem(
         icon: getSvgImage(
           path: kImageHomeInacitve,

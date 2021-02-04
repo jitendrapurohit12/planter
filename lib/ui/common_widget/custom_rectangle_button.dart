@@ -1,34 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:gmt_planter/style/decorations.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class CustomRectangleButton extends StatelessWidget {
   final String title;
   final VoidCallback callback;
   final Color color;
-  final double radius;
+  final double radius, padding, fontSize, letterSpacing;
 
   const CustomRectangleButton({
     this.title,
     this.callback,
-    this.color,
+    this.color = Colors.red,
     this.radius = 0,
+    this.padding = 12,
+    this.fontSize = 20,
+    this.letterSpacing = 4,
   });
   @override
   Widget build(BuildContext context) {
     return FlatButton(
       onPressed: callback,
-      color: Colors.red,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+      color: color,
+      shape: listTileShape(radius: radius),
       child: title.text
           .textStyle(
             Theme.of(context).textTheme.overline.copyWith(
                   color: Colors.white,
-                  fontSize: 20,
-                  letterSpacing: 4,
+                  fontSize: fontSize,
+                  letterSpacing: letterSpacing,
                 ),
           )
           .make()
-          .py12(),
+          .pOnly(top: padding, bottom: padding),
     );
   }
 }

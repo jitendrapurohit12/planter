@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
+import 'package:gmt_planter/style/decorations.dart';
+import 'package:gmt_planter/ui/common_widget/image_option_ui.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import 'platform_widgets.dart';
@@ -96,4 +100,17 @@ Widget getNoDataUI({@required BuildContext context}) {
     "It's empty here!",
     style: Theme.of(context).textTheme.headline5,
   ));
+}
+
+void showImageSourceBottomSheet({
+  BuildContext context,
+  Function(ImageSource) callback,
+}) {
+  Scaffold.of(context).showBottomSheet(
+    (context) => ImageOptionUI(
+      callback: callback,
+    ),
+    backgroundColor: kColorBottomsheetBackground,
+    shape: listTileShape(radius: 12),
+  );
 }

@@ -13,7 +13,7 @@ import 'package:gmt_planter/helper/platform_widgets.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
-import 'package:gmt_planter/ui/common_widget/custom_textfield.dart';
+import 'package:gmt_planter/ui/common_widget/custom_text_form_field.dart';
 
 class ScreenProfile extends StatelessWidget {
   static const id = 'profile';
@@ -28,11 +28,9 @@ class ScreenProfile extends StatelessWidget {
                   ? null
                   : [
                       IconButton(
-                        icon: Icon(profileController.isEditing
-                            ? Icons.close
-                            : Icons.edit),
-                        onPressed: () => profileController.setIsEditing(
-                            value: !profileController.isEditing),
+                        icon: Icon(profileController.isEditing ? Icons.close : Icons.edit),
+                        onPressed: () =>
+                            profileController.setIsEditing(value: !profileController.isEditing),
                       )
                     ]),
           body: getBody(
@@ -42,9 +40,7 @@ class ScreenProfile extends StatelessWidget {
               if (profileController.file != null) {
                 final size = getFileSize(profileController.file);
                 if (size > 5) {
-                  showSnackbar(
-                      context: context,
-                      message: "File size can't exceed 5 MBs!");
+                  showSnackbar(context: context, message: "File size can't exceed 5 MBs!");
                   return;
                 }
               }
@@ -57,8 +53,7 @@ class ScreenProfile extends StatelessWidget {
   }
 
   // ignore: missing_return
-  Widget getBody(BuildContext context, ProfileController controller,
-      VoidCallback callback) {
+  Widget getBody(BuildContext context, ProfileController controller, VoidCallback callback) {
     switch (controller.state) {
       case NotifierState.initial:
         controller.getInfo(context: context);
@@ -223,7 +218,7 @@ class _ProfileUI extends HookWidget {
       Expanded(child: title.text.center.gray600.light.make()),
       Expanded(
         flex: 2,
-        child: CustomTextfield(
+        child: CustomTextFormField(
           context: context,
           hint: 'Enter $title',
           align: TextAlign.center,
@@ -254,15 +249,9 @@ class _ProfilePicUI extends StatelessWidget {
     final notifier = Provider.of<ProfileController>(context, listen: false);
     Widget child;
     if (notifier.file != null) {
-      child = VxCard(Image.file(notifier.file, fit: BoxFit.cover))
-          .circular
-          .make()
-          .p1();
+      child = VxCard(Image.file(notifier.file, fit: BoxFit.cover)).circular.make().p1();
     } else if (notifier.model?.data?.pic != null) {
-      child = VxCard(getCachedImage(path: notifier.model.data.pic))
-          .circular
-          .make()
-          .p1();
+      child = VxCard(getCachedImage(path: notifier.model.data.pic)).circular.make().p1();
     } else {
       child = Icon(
         Icons.person,
@@ -276,12 +265,19 @@ class _ProfilePicUI extends StatelessWidget {
         .height(ph * 15)
         .color(kColorPrimaryDark)
         .makeCentered()
-        .onTap(() async {
+        .onTap(() {
       if (!notifier.isEditing) return;
-      final image = await ImagePicker().getImage(source: ImageSource.gallery);
-      if (image != null) {
-        notifier.changeImage(File(image.path));
-      }
+      showImageSourceBottomSheet(
+        context: context,
+        callback: (source) async {
+          if (source != null) {
+            final image = await ImagePicker().getImage(source: source);
+            if (image != null) {
+              notifier.changeImage(File(image.path));
+            }
+          }
+        },
+      );
     });
   }
 }

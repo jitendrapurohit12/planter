@@ -5,7 +5,7 @@ import 'package:gmt_planter/style/text_styles.dart';
 import 'package:gmt_planter/validator/validator.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class CustomTextfield extends HookWidget {
+class CustomTextFormField extends HookWidget {
   final BuildContext context;
   final String hint, prefilledText, initialValue;
   final TextInputType inputType;
@@ -18,7 +18,7 @@ class CustomTextfield extends HookWidget {
   final int maxLength, maxLines, minLines;
   final Widget suffixIcon, leadingIcon;
 
-  const CustomTextfield({
+  const CustomTextFormField({
     @required this.context,
     @required this.hint,
     @required this.inputAction,

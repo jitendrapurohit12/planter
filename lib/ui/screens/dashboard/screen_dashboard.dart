@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gmt_planter/constant/constant.dart';
@@ -11,7 +9,7 @@ import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/ui/screens/dashboard/pages/home/page_home.dart';
 import 'package:gmt_planter/ui/screens/dashboard/pages/inbox/page_inbox.dart';
 import 'package:gmt_planter/ui/screens/dashboard/pages/story/page_story.dart';
-import 'package:gmt_planter/ui/screens/dashboard/unconfirmed_sheet/unconfirmed_sheet.dart';
+import 'package:gmt_planter/ui/screens/dashboard/unconfirmed_dialog/unconfirmed_dialog.dart';
 import 'package:provider/provider.dart';
 
 class ScreenDashboard extends HookWidget {
@@ -34,28 +32,31 @@ class ScreenDashboard extends HookWidget {
         ]),
         body: Builder(builder: (_) {
           if (notifier.state == NotifierState.initial) {
-            //notifier.getUnconfirmedFunds(context: context);
+            notifier.getUnconfirmedFunds(context: context);
+          } else if (notifier.state == NotifierState.loaded &&
+              notifier.model.data.isNotEmpty &&
+              !notifier.isListShown) {
             performAfterDelay(
-              callback: () => showModalBottomSheet(
-                isScrollControlled: true,
-                isDismissible: false,
-                enableDrag: false,
-                backgroundColor: Colors.black.withOpacity(0.3),
-                context: context,
-                builder: (_) => Padding(
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top,
-                  ),
-                  child: UnconfirmedSheet(),
-                ),
-              ),
+              callback: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  isDismissible: false,
+                  enableDrag: false,
+                  backgroundColor: Colors.black.withOpacity(0.3),
+                  context: context,
+                  builder: (_) => UnconfirmedDialog(() {
+                    if (Navigator.canPop(context)) Navigator.pop(context);
+                    notifier.changeListShown(value: true);
+                  }),
+                );
+              },
             );
-          } else if (notifier.state == NotifierState.loaded) {}
+          }
           return _pages[notifier.selectedpage];
         }),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: notifier.selectedpage,
-          onTap: (index) => notifier.changepage(index),
+          onTap: (index) => notifier.changePage(index),
           items: kArrayDashboardBottomNavigationItems(iconSize: _iconSize),
         ),
       );

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/constant/constant.dart';
+import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
 import 'package:gmt_planter/ui/common_widget/image_picker_ui.dart';
 import 'package:provider/provider.dart';
@@ -42,10 +45,8 @@ class PageStoryContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ph = context.percentHeight;
-    final captionController =
-        Provider.of<StoryCaptionController>(context, listen: false);
-    final projectsController =
-        Provider.of<ProjectListController>(context, listen: false);
+    final captionController = Provider.of<StoryCaptionController>(context, listen: false);
+    final projectsController = Provider.of<ProjectListController>(context, listen: false);
     final projects = getProjectNames(projectsController.model);
     final captions = getCaptions(captionController.model);
 
@@ -55,9 +56,11 @@ class PageStoryContent extends StatelessWidget {
           HeightBox(ph * 2),
           ImagePickerUI(
               file: storyController.file,
-              callback: (image) {
-                storyController.changeImage(image);
-                storyController.refresh();
+              callback: () async {
+                final path = await launchCamera(context: context);
+                if (path != null) {
+                  storyController.changeImage(File(path));
+                }
               }),
           HeightBox(ph * 6),
           _getDropdownTitle(title: 'Select My Project'),
@@ -142,8 +145,7 @@ class PageStoryContent extends StatelessWidget {
           final size = getFileSize(storyController.file);
 
           if (size > 5) {
-            showSnackbar(
-                context: context, message: "File size can't exceed 5 MBs!");
+            showSnackbar(context: context, message: "File size can't exceed 5 MBs!");
             return;
           }
 
