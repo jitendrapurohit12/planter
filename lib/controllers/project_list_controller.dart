@@ -22,6 +22,14 @@ class ProjectListController extends ChangeNotifier {
 
     Provider.of<ApiService>(context, listen: false).getProjects().then((value) {
       _model = value;
+      final noActiveFunding = value?.data?.activeFundingProjects?.isEmpty ?? true;
+      final noActiveManagement = value?.data?.activeManagementProjects?.isEmpty ?? true;
+      final noActiveDeployed = value?.data?.notDeployedProjects?.isEmpty ?? true;
+      if (noActiveFunding && noActiveManagement && noActiveDeployed) {
+        _state = NotifierState.noData;
+        notifyListeners();
+        return;
+      }
       _state = NotifierState.loaded;
       notifyListeners();
     }).catchError((e) {
