@@ -47,7 +47,7 @@ class ScreenReciept extends StatelessWidget {
                 subtitle: 'Add Receipt',
                 infiniteHeight: true,
                 elevation: 0.0,
-                callback: () async {
+                callback: (context) async {
                   showImageSourceBottomSheet(
                       context: context,
                       callback: (source) async {

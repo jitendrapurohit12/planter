@@ -56,7 +56,7 @@ class PageStoryContent extends StatelessWidget {
           HeightBox(ph * 2),
           ImagePickerUI(
               file: storyController.file,
-              callback: () async {
+              callback: (_) async {
                 final path = await launchCamera(context: context);
                 if (path != null) {
                   storyController.changeImage(File(path));

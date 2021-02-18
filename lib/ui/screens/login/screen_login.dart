@@ -108,18 +108,19 @@ class ScreenLogin extends HookWidget {
                             return getPlatformProgress();
                           case NotifierState.loaded:
                             saveToken(value: value.model.data.token);
-                            performAfterDelay(
-                              callback: () => launchDashboard(context: context),
-                            );
+                            performAfterDelay(callback: () => launchDashboard(context: context));
                             return Container();
                           case NotifierState.noData:
                             return _button(controller: value);
                           case NotifierState.error:
                             performAfterDelay(
-                              callback: () => showSnackbar(
-                                context: context,
-                                message: value.error.message,
-                              ),
+                              callback: () {
+                                showSnackbar(
+                                  context: context,
+                                  message: value.error.message,
+                                );
+                                value.reset();
+                              },
                             );
                             return _button(controller: value);
                         }

@@ -40,10 +40,8 @@ class ProjectList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final projectListController = Provider.of<ProjectListController>(context);
-    final activeFundings =
-        projectListController.model.data.activeFundingProjects;
-    final activeManagement =
-        projectListController.model.data.activeManagementProjects;
+    final activeFundings = projectListController.model.data.activeFundingProjects;
+    final activeManagement = projectListController.model.data.activeManagementProjects;
     final notDeployed = projectListController.model.data.notDeployedProjects;
     return SingleChildScrollView(
       child: Column(
@@ -88,8 +86,7 @@ class ProjectUnit extends StatelessWidget {
         title.text
             .textStyle(primaryHeadTextStyle(context: context))
             .make()
-            .pOnly(
-                left: context.percentWidth * 4, bottom: context.percentHeight),
+            .pOnly(left: context.percentWidth * 4, bottom: context.percentHeight),
         for (final project in projects)
           SizedBox(
             height: context.percentHeight * 27,
@@ -101,10 +98,7 @@ class ProjectUnit extends StatelessWidget {
                   VxBox()
                       .withGradient(
                         LinearGradient(
-                          colors: [
-                            Colors.black.withOpacity(0.8),
-                            Colors.black.withOpacity(0)
-                          ],
+                          colors: [Colors.black.withOpacity(0.8), Colors.black.withOpacity(0)],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                         ),
@@ -114,9 +108,7 @@ class ProjectUnit extends StatelessWidget {
                     child: project.name.text
                         .textStyle(whiteTitleStyle(context: context))
                         .make()
-                        .pOnly(
-                            left: context.percentWidth * 4,
-                            bottom: context.percentWidth * 4),
+                        .pOnly(left: context.percentWidth * 4, bottom: context.percentWidth * 4),
                   ).alignBottomLeft.make(),
                 ],
                 fit: StackFit.expand,

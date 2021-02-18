@@ -16,6 +16,7 @@ import 'package:gmt_planter/prefs/shared_prefs.dart';
 import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/service/api_service.dart';
 import 'package:provider/provider.dart';
+import 'package:image/image.dart' as img;
 
 Future<void> logout({@required BuildContext context}) async {
   await clearPrefs();
@@ -73,6 +74,12 @@ String getValueFromMap(int value, Map<String, int> map) {
 double getFileSize(File file) {
   final bytes = file.readAsBytesSync().lengthInBytes;
   return bytes / (1024 * 1024);
+}
+
+Future<void> rotateimage(String path) async {
+  final img.Image capturedImage = img.decodeImage(await File(path).readAsBytes());
+  final img.Image orientedImage = img.bakeOrientation(capturedImage);
+  await File(path).writeAsBytes(img.encodeJpg(orientedImage));
 }
 
 final providers = [

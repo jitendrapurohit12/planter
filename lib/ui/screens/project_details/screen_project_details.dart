@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
 import 'package:gmt_planter/helper/platform_widgets.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
@@ -12,8 +11,7 @@ class ScreenProjectDetails extends StatelessWidget {
   static const id = 'project_details';
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    final args = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     final projectName = args['project_name'] as String;
     final projectId = args['project_id'] as int;
     return Scaffold(
@@ -29,11 +27,13 @@ class ScreenProjectDetails extends StatelessWidget {
               return getPlatformProgress();
             case NotifierState.loaded:
               return VStack([
-                VxBox()
+                VxBox(
+                        child: VxCard(
+                  getCachedImage(path: notifier.model.data.thumbnailUrl),
+                ).clip(Clip.antiAlias).rounded.make())
                     .rounded
                     .width(double.maxFinite)
                     .height(context.percentHeight * 26)
-                    .color(kColorPrimary)
                     .make()
                     .p12(),
                 Expanded(child: TabUI()),

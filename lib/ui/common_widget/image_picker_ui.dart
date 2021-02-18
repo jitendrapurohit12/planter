@@ -8,7 +8,7 @@ class ImagePickerUI extends StatelessWidget {
   final String subtitle;
   final bool infiniteHeight;
   final double elevation;
-  final VoidCallback callback;
+  final Function(BuildContext context) callback;
 
   const ImagePickerUI({
     @required this.file,
@@ -47,6 +47,6 @@ class ImagePickerUI extends StatelessWidget {
               width: double.maxFinite,
               fit: BoxFit.cover,
             ),
-    ).roundedSM.elevation(elevation).clip(Clip.antiAlias).make().onTap(callback);
+    ).roundedSM.elevation(elevation).clip(Clip.antiAlias).make().onTap(() => callback(context));
   }
 }

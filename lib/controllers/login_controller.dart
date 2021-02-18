@@ -17,6 +17,13 @@ class LoginController extends ChangeNotifier {
   NotifierState get state => _state;
   bool get showPassowrd => _showPassword;
 
+  Future<void> reset() async {
+    _model = null;
+    _error = null;
+    await zeroDelay();
+    notifyListeners();
+  }
+
   Future<void> changeVisibility() async {
     _showPassword = !_showPassword;
     await zeroDelay();
