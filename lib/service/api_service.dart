@@ -13,7 +13,7 @@ import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
 import 'package:gmt_planter/models/user_profile_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 
-const kBaseUrl = 'https://staging.handprint.tech/api/';
+const kBaseUrl = 'https://staging.handprint.tech/pltr/api/v1/';
 
 const kLoginUrl = 'planter-login';
 const kProjectList = 'project-list';
