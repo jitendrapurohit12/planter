@@ -73,7 +73,7 @@ String getValueFromMap(int value, Map<String, int> map) {
 
 double getFileSize(File file) {
   final bytes = file.readAsBytesSync().lengthInBytes;
-  return bytes / (1024 * 1024);
+  return bytes / 1000000;
 }
 
 Future<void> rotateimage(String path) async {

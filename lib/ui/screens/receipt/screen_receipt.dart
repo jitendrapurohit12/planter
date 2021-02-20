@@ -136,6 +136,13 @@ class _SubmitUI extends HookWidget {
               return;
             }
 
+            final size = getFileSize(notifier.file);
+
+            if (size > 5) {
+              showSnackbar(context: context, message: "File size can't exceed 5 MBs!");
+              return;
+            }
+
             notifier.postReceipt(context: context);
           },
           icon: const Icon(Icons.done_all),

@@ -13,7 +13,7 @@ import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
 import 'package:gmt_planter/models/user_profile_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 
-const kBaseUrl = 'https://staging.handprint.tech/pltr/api/v1/';
+const kBaseUrl = 'https://dashboard.handprint.tech/pltr/api/v1/';
 
 const kLoginUrl = 'planter-login';
 const kProjectList = 'project-list';
@@ -207,9 +207,16 @@ class ApiService {
   Failure getFailure(dynamic error) {
     if (error is DioError) {
       final dioError = error;
+      String message;
+      try {
+        message = dioError?.response?.data['message'].toString();
+      } catch (e) {
+        message = dioError.message;
+      }
+      final code = dioError?.response?.statusCode ?? 404;
       return Failure(
-        code: dioError.response.statusCode,
-        message: dioError.response.data['message'].toString(),
+        code: code,
+        message: message,
       );
     } else {
       return Failure(
