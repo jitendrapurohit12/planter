@@ -33,19 +33,34 @@ class ScreenProfile extends StatelessWidget {
                             profileController.setIsEditing(value: !profileController.isEditing),
                       )
                     ]),
-          body: getBody(
-            context,
-            profileController,
-            () {
-              if (profileController.file != null) {
-                final size = getFileSize(profileController.file);
-                if (size > 5) {
-                  showSnackbar(context: context, message: "File size can't exceed 5 MBs!");
-                  return;
+          body: Builder(
+            builder: (ctx) => getBody(
+              ctx,
+              profileController,
+              () {
+                if (profileController.file != null) {
+                  final size = getFileSize(profileController.file);
+                  if (size > 5) {
+                    showSnackbar(context: ctx, message: "File size can't exceed 5 MBs!");
+                    return;
+                  }
                 }
-              }
-              profileController.updateInfo(context: context);
-            },
+                profileController.updateInfo(context: context).then((value) {
+                  if (value) {
+                    showSnackbar(
+                      context: ctx,
+                      message: 'Profile updated successfully.',
+                      color: Colors.green,
+                    );
+                  } else {
+                    showSnackbar(
+                      context: ctx,
+                      message: 'Unable to update profile! Please try again.',
+                    );
+                  }
+                });
+              },
+            ),
           ),
         );
       },
@@ -215,13 +230,12 @@ class _ProfileUI extends HookWidget {
     bool enabled = true,
   }) {
     return HStack([
-      Expanded(child: title.text.center.gray600.light.make()),
+      Expanded(child: title.text.center.gray800.make()),
       Expanded(
         flex: 2,
         child: CustomTextFormField(
           context: context,
           hint: 'Enter $title',
-          align: TextAlign.center,
           initialValue: value,
           inputAction: inputAction,
           myNode: myNode,

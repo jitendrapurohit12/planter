@@ -68,7 +68,7 @@ class ScreenReciept extends StatelessWidget {
             right: 0,
             child: Builder(
               // ignore: missing_return
-              builder: (_) {
+              builder: (ctx) {
                 switch (notifier.state) {
                   case NotifierState.initial:
                     return VxBox(child: _SubmitUI()).height(ph * 8).make();
@@ -78,7 +78,7 @@ class ScreenReciept extends StatelessWidget {
                     performAfterDelay(callback: () => notifier.reset());
                     performAfterDelay(callback: () async {
                       showSnackbar(
-                        context: context,
+                        context: ctx,
                         message: 'Receipt uploaded successfully',
                         color: Colors.green,
                       );
@@ -91,7 +91,7 @@ class ScreenReciept extends StatelessWidget {
                   case NotifierState.noData:
                     performAfterDelay(
                       callback: () => showSnackbar(
-                        context: context,
+                        context: ctx,
                         message: 'Some error occured! Please try again.',
                       ),
                     );
@@ -133,6 +133,13 @@ class _SubmitUI extends HookWidget {
               return;
             } else if (notifier.model.amount == null) {
               showSnackbar(context: context, message: 'Please enter amount to submit!');
+              return;
+            }
+
+            final size = getFileSize(notifier.file);
+
+            if (size > 5) {
+              showSnackbar(context: context, message: "File size can't exceed 5 MBs!");
               return;
             }
 

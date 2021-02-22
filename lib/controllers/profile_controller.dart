@@ -33,26 +33,31 @@ class ProfileController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateInfo({@required BuildContext context}) async {
+  Future<bool> updateInfo({@required BuildContext context}) async {
     assert(context != null);
+
+    bool success = false;
 
     await zeroDelay();
     _state = NotifierState.fetching;
     notifyListeners();
 
-    Provider.of<ApiService>(context, listen: false)
+    await Provider.of<ApiService>(context, listen: false)
         .setUserProfile(profile: model, file: _file)
         .then((value) {
       setIsEditing();
       _model = value;
       _file = null;
       _state = NotifierState.loaded;
+      success = true;
       notifyListeners();
     }).catchError((e) {
       _error = e as Failure;
       _state = NotifierState.error;
       notifyListeners();
     });
+
+    return success;
   }
 
   Future<void> getInfo({@required BuildContext context}) async {
@@ -62,9 +67,7 @@ class ProfileController extends ChangeNotifier {
     _state = NotifierState.fetching;
     notifyListeners();
 
-    Provider.of<ApiService>(context, listen: false)
-        .getUserProfile()
-        .then((value) {
+    Provider.of<ApiService>(context, listen: false).getUserProfile().then((value) {
       _model = value;
       _state = NotifierState.loaded;
       notifyListeners();

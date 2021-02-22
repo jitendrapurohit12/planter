@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
+import 'package:gmt_planter/helper/ui_helper.dart';
 import 'package:gmt_planter/ui/common_widget/title_value_column.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -8,20 +9,23 @@ import 'package:velocity_x/velocity_x.dart';
 class TabLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model =
-        Provider.of<ProjectDetailController>(context, listen: false).model.data;
+    final model = Provider.of<ProjectDetailController>(context, listen: false).model.data;
     final plantingArea = '${model.plantationSize} Hectare(s)';
     final density = '${model.plantingDensity} Trees/Hectare';
     return VStack(
       [
-        VxCard(VxBox()
-                .height(100)
-                .width(context.screenWidth * 0.5)
-                .color(kColorPrimary)
-                .make())
-            .elevation(8.0)
-            .roundedSM
-            .make(),
+        if (model.mapImage.isNotEmpty)
+          VxBox(
+                  child: VxCard(
+            getCachedImage(path: model.mapImage),
+          ).clip(Clip.antiAlias).make())
+              .rounded
+              .width(context.screenWidth)
+              .height(context.screenHeight * 0.3)
+              .make()
+              .p12()
+        else
+          Container(),
         const HeightBox(16),
         TitleValueColumn(
           title: kPlantingArea,

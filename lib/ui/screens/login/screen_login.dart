@@ -45,18 +45,20 @@ class ScreenLogin extends HookWidget {
 
     return Scaffold(
       backgroundColor: kColorPrimary,
-      body: Column(
-        children: [
-          divider(multiplier: 4),
-          getSvgImage(
-            path: kImageIcon,
-            width: context.percentWidth * 12,
-            height: context.percentHeight * 5,
-          ),
-          divider(multiplier: 4),
-          Expanded(
-            child: Container(
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            divider(multiplier: 4),
+            getSvgImage(
+              path: kImageIcon,
+              width: context.percentWidth * 12,
+              height: context.percentHeight * 5,
+            ),
+            divider(multiplier: 4),
+            Container(
               width: double.maxFinite,
+              height: context.percentHeight * 71,
               decoration: loginDecoration(
                 color: Colors.white,
                 radius: 32,
@@ -100,7 +102,7 @@ class ScreenLogin extends HookWidget {
                       }),
                       divider(multiplier: 2),
                       // ignore: missing_return
-                      Consumer<LoginController>(builder: (_, value, __) {
+                      Consumer<LoginController>(builder: (ctx, value, __) {
                         switch (value.state) {
                           case NotifierState.initial:
                             return _button(controller: value);
@@ -115,10 +117,7 @@ class ScreenLogin extends HookWidget {
                           case NotifierState.error:
                             performAfterDelay(
                               callback: () {
-                                showSnackbar(
-                                  context: context,
-                                  message: value.error.message,
-                                );
+                                showSnackbar(context: ctx, message: value.error.message);
                                 value.reset();
                               },
                             );
@@ -134,9 +133,9 @@ class ScreenLogin extends HookWidget {
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

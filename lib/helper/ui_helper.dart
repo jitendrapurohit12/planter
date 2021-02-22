@@ -52,7 +52,7 @@ void showSnackbar({
   Color color = Colors.redAccent,
 }) {
   performAfterDelay(
-    callback: () => ScaffoldMessenger.of(context).showSnackBar(
+    callback: () => Scaffold.of(context).showSnackBar(
       SnackBar(
         backgroundColor: color,
         content: message.text.white.make(),

@@ -16,7 +16,7 @@ class PageHome extends StatelessWidget {
     printToken();
     return Consumer<ProjectListController>(
       // ignore: missing_return
-      builder: (_, value, __) {
+      builder: (ctx, value, __) {
         switch (value.state) {
           case NotifierState.initial:
             value.getProjects(context: context);
@@ -28,7 +28,7 @@ class PageHome extends StatelessWidget {
           case NotifierState.noData:
             return getNoDataUI(context: context);
           case NotifierState.error:
-            showSnackbar(context: context, message: value.error.message);
+            showSnackbar(context: ctx, message: value.error.message);
             return getErrorUI(context: context);
         }
       },

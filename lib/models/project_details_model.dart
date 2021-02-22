@@ -8,9 +8,7 @@ class ProjectDetailsModel {
   ProjectDetailsModel.fromJson(Map<String, dynamic> json) {
     success = json['success'] as bool;
     message = json['message'] as String;
-    data = json['data'] != null
-        ? Data.fromJson(json['data'] as Map<String, dynamic>)
-        : null;
+    data = json['data'] != null ? Data.fromJson(json['data'] as Map<String, dynamic>) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -25,7 +23,7 @@ class ProjectDetailsModel {
 }
 
 class Data {
-  String name, thumbnailUrl, plantationSize, plantingDensity, community;
+  String name, thumbnailUrl, plantationSize, plantingDensity, community, mapImage;
   int totalNoOfTrees, id, femaleEmpTarget, plantingBalance;
   int conservationBalance, fundsRaised, totalFundingTarget;
   List<MapSegmentation> mapSegmentation;
@@ -33,6 +31,7 @@ class Data {
   Data(
       {this.id,
       this.name,
+      this.mapImage,
       this.thumbnailUrl,
       this.mapSegmentation,
       this.plantationSize,
@@ -48,12 +47,12 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'] as int;
     name = json['name'] as String;
+    mapImage = json['map_image'] as String;
     thumbnailUrl = json['thumbnail_url'] as String;
     if (json['map_segmentation'] != null) {
       mapSegmentation = <MapSegmentation>[];
       json['map_segmentation'].forEach((v) {
-        mapSegmentation
-            .add(MapSegmentation.fromJson(v as Map<String, dynamic>));
+        mapSegmentation.add(MapSegmentation.fromJson(v as Map<String, dynamic>));
       });
     }
     plantationSize = json['plantation_size'] as String;
@@ -71,10 +70,10 @@ class Data {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    data['map_image'] = mapImage;
     data['thumbnail_url'] = thumbnailUrl;
     if (mapSegmentation != null) {
-      data['map_segmentation'] =
-          mapSegmentation.map((v) => v.toJson()).toList();
+      data['map_segmentation'] = mapSegmentation.map((v) => v.toJson()).toList();
     }
     data['plantation_size'] = plantationSize;
     data['planting_density'] = plantingDensity;
@@ -95,8 +94,7 @@ class MapSegmentation {
   List<Coordinates> coordinates;
   double plantingArea;
 
-  MapSegmentation(
-      {this.id, this.type, this.color, this.coordinates, this.plantingArea});
+  MapSegmentation({this.id, this.type, this.color, this.coordinates, this.plantingArea});
 
   MapSegmentation.fromJson(Map<String, dynamic> json) {
     id = json['id'] as int;
