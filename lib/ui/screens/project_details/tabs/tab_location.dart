@@ -9,6 +9,7 @@ import 'package:velocity_x/velocity_x.dart';
 class TabLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('asd');
     final model = Provider.of<ProjectDetailController>(context, listen: false).model.data;
     final plantingArea = '${model.plantationSize} Hectare(s)';
     final density = '${model.plantingDensity} Trees/Hectare';
