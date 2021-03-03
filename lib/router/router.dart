@@ -3,6 +3,7 @@ import 'package:gmt_planter/controllers/project_detail_controller.dart';
 import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
 import 'package:gmt_planter/ui/screens/camera/screen_camera.dart';
 import 'package:gmt_planter/ui/screens/dashboard/screen_dashboard.dart';
+import 'package:gmt_planter/ui/screens/language/screen_language.dart';
 import 'package:gmt_planter/ui/screens/login/screen_login.dart';
 import 'package:gmt_planter/ui/screens/profile/screen_profile.dart';
 import 'package:gmt_planter/ui/screens/project_details/screen_project_details.dart';
@@ -35,6 +36,15 @@ Future<void> launchProfile({@required BuildContext context}) async {
   Navigator.pushNamed(
     context,
     ScreenProfile.id,
+  );
+}
+
+Future<void> launchLanguage({@required BuildContext context}) async {
+  assert(context != null);
+
+  Navigator.pushNamed(
+    context,
+    ScreenLanguage.id,
   );
 }
 
@@ -100,6 +110,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   ScreenCamera.id: (_) => ScreenCamera(),
   ScreenProfile.id: (_) => ScreenProfile(),
   ScreenReciept.id: (_) => ScreenReciept(),
+  ScreenLanguage.id: (_) => ScreenLanguage(),
   ScreenDashboard.id: (_) => ScreenDashboard(),
   ScreenProjectDetails.id: (_) => ScreenProjectDetails(),
 };

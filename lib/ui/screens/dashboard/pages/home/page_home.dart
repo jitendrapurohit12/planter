@@ -29,7 +29,10 @@ class PageHome extends StatelessWidget {
             return getNoDataUI(context: context);
           case NotifierState.error:
             showSnackbar(context: ctx, message: value.error.message);
-            return getErrorUI(context: context);
+            return getErrorUI(
+              context: context,
+              callback: () => value.getProjects(context: context),
+            );
         }
       },
     );

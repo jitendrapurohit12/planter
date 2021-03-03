@@ -13,12 +13,11 @@ import 'package:velocity_x/velocity_x.dart';
 class TabDetails extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final model =
-        Provider.of<ProjectDetailController>(context, listen: false).model.data;
+    final model = Provider.of<ProjectDetailController>(context, listen: false).model.data;
     final femaleEmployment = '${model.femaleEmpTarget} %';
     final fundsForPlanning = '\$ ${model.totalFundingTarget}';
     final fundsForConservation = '\$ ${model.conservationBalance}';
-    int fundDenominator = model.totalFundingTarget + model.conservationBalance;
+    num fundDenominator = model.totalFundingTarget + model.conservationBalance;
     final fundNumerator = model.fundsRaised;
     if (fundDenominator == 0) fundDenominator = 1;
     final fundsRatio = (fundNumerator / fundDenominator).toDouble();

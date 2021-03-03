@@ -21,6 +21,14 @@ class ProfileController extends ChangeNotifier {
   bool get isEditing => _isEditMode;
   File get file => _file;
 
+  Future<void> reset() async {
+    _model = null;
+    _isEditMode = false;
+    _error = null;
+    _file = null;
+    _state = NotifierState.initial;
+  }
+
   Future<void> setIsEditing({bool value = false}) async {
     _isEditMode = value;
     await zeroDelay();

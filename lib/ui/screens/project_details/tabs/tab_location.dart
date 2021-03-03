@@ -9,24 +9,15 @@ import 'package:velocity_x/velocity_x.dart';
 class TabLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('asd');
     final model = Provider.of<ProjectDetailController>(context, listen: false).model.data;
     final plantingArea = '${model.plantationSize} Hectare(s)';
     final density = '${model.plantingDensity} Trees/Hectare';
     return VStack(
       [
-        if (model.mapImage.isNotEmpty)
-          VxBox(
-                  child: VxCard(
-            getCachedImage(path: model.mapImage),
-          ).clip(Clip.antiAlias).make())
-              .rounded
-              .width(context.screenWidth)
-              .height(context.screenHeight * 0.3)
-              .make()
-              .p12()
-        else
-          Container(),
+        VxBox(child: VxCard(getImage(path: kimageMap)).clip(Clip.antiAlias).rounded.make().p24())
+            .width(context.screenWidth)
+            .height(context.screenHeight * 0.3)
+            .make(),
         const HeightBox(16),
         TitleValueColumn(
           title: kPlantingArea,

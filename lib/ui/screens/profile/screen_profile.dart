@@ -83,7 +83,7 @@ class ScreenProfile extends StatelessWidget {
             : _ProfileUI(callback: callback);
       case NotifierState.error:
         return controller.model == null
-            ? getErrorUI(context: context)
+            ? getErrorUI(context: context, callback: callback)
             : _ProfileUI(callback: callback);
     }
   }

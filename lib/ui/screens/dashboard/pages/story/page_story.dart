@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/constant/constant.dart';
+import 'package:gmt_planter/internationalization/app_localization.dart';
 import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
 import 'package:gmt_planter/ui/common_widget/image_picker_ui.dart';
@@ -9,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import 'package:gmt_planter/controllers/project_list_controller.dart';
-import 'package:gmt_planter/controllers/story_caption_controller.dart';
 import 'package:gmt_planter/controllers/story_controller.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/helper/platform_widgets.dart';
@@ -20,24 +20,7 @@ import 'package:gmt_planter/ui/common_widget/custom_dropdown_button.dart';
 class PageStory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<StoryCaptionController>(
-      // ignore: missing_return
-      builder: (_, captionController, __) {
-        switch (captionController.state) {
-          case NotifierState.initial:
-            captionController.getStoryCaptions(context: context);
-            return getPlatformProgress();
-          case NotifierState.fetching:
-            return getPlatformProgress();
-          case NotifierState.loaded:
-            return PageStoryContent();
-          case NotifierState.noData:
-            return getNoDataUI(context: context);
-          case NotifierState.error:
-            return getErrorUI(context: context);
-        }
-      },
-    );
+    return PageStoryContent();
   }
 }
 
@@ -45,10 +28,10 @@ class PageStoryContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ph = context.percentHeight;
-    final captionController = Provider.of<StoryCaptionController>(context, listen: false);
     final projectsController = Provider.of<ProjectListController>(context, listen: false);
     final projects = getProjectNames(projectsController.model);
-    final captions = getCaptions(captionController.model);
+    final localizer = AppLocalizations.of(context).model;
+    final captions = getCaptions(localizer);
 
     return Consumer<StoryController>(
       builder: (_, storyController, __) {

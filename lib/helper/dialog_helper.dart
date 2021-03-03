@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:gmt_planter/ui/dialogs/progress_dialog.dart';
 import 'package:meta/meta.dart';
 
 Future<String> showActionDialog({
@@ -60,4 +61,8 @@ Future<String> showActionDialog({
   );
 
   return value as String;
+}
+
+Future<void> showProgressDialog(BuildContext context) async {
+  showDialog(context: context, builder: (context) => ProgressDialog());
 }

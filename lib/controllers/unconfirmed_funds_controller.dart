@@ -24,6 +24,14 @@ class UnconfirmedFundsController extends ChangeNotifier {
     await refresh();
   }
 
+  Future<void> reset() async {
+    _model = null;
+    _selectedPage = 0;
+    _isListShown = false;
+    _error = null;
+    _state = NotifierState.initial;
+  }
+
   Future<void> refresh() async {
     await zeroDelay();
     notifyListeners();

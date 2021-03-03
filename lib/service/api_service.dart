@@ -7,13 +7,13 @@ import 'package:gmt_planter/models/failure.dart';
 import 'package:gmt_planter/models/project_details_model.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
 import 'package:gmt_planter/models/receipt_model.dart';
-import 'package:gmt_planter/models/story_caption_model.dart';
 import 'package:gmt_planter/models/story_model.dart';
 import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
 import 'package:gmt_planter/models/user_profile_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 
-const kBaseUrl = 'https://staging.handprint.tech/pltr/api/v1/';
+const kBaseUrl = 'https://dashboard.handprint.tech/pltr/api/v1/';
+//const kBaseUrl = 'https://staging.handprint.tech/pltr/api/v1/';
 
 const kLoginUrl = 'planter-login';
 const kProjectList = 'project-list';
@@ -24,6 +24,7 @@ const kGetUnconfirmedFunds = 'project-unconfirmed-fund';
 const kStoryCaptions = 'project-story-caption';
 const kUploadPlanterStory = 'project-story-save';
 const kUploadRecipt = 'project-fund-update';
+const kLogout = 'user-logout';
 
 final loginHeader = {
   'X-Requested-With': 'XMLHttpRequest',
@@ -80,16 +81,6 @@ class ApiService {
         .post('$kBaseUrl$kProjectDetails', options: Options(headers: headers), data: data)
         .catchError((e) => throw getFailure(e));
     final model = ProjectDetailsModel.fromJson(res.data as Map<String, dynamic>);
-    return model;
-  }
-
-  Future<StoryCaptionModel> getStoryCaptions() async {
-    final headers = await getAuthApiHeader();
-
-    final res = await _dio
-        .get('$kBaseUrl$kStoryCaptions', options: Options(headers: headers))
-        .catchError((e) => throw getFailure(e));
-    final model = StoryCaptionModel.fromJson(res.data as Map<String, dynamic>);
     return model;
   }
 
@@ -202,6 +193,15 @@ class ApiService {
           data: formData,
         )
         .catchError((e) => throw getFailure(e));
+  }
+
+  Future<bool> logout() async {
+    final headers = await getAuthApiHeader();
+
+    await _dio
+        .get('$kBaseUrl$kLogout', options: Options(headers: headers))
+        .catchError((e) => throw getFailure(e));
+    return true;
   }
 
   Failure getFailure(dynamic error) {

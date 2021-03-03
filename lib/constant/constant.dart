@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
 
 const imageBasePath = 'assets/images';
+const kimageMap = '$imageBasePath/map.jpeg';
 const kImageIcon = '$imageBasePath/logo.svg';
 const kImageHome = '$imageBasePath/ic_home.svg';
 const kImageMessage = '$imageBasePath/ic_message.svg';
 const kImageProject = '$imageBasePath/ic_project.svg';
+const kImageFlagId = '$imageBasePath/flag_id.png';
+const kImageFlagEn = '$imageBasePath/flag_en.png';
 const kImageHomeInacitve = '$imageBasePath/ic_home_inactive.svg';
+const kImageNotification = '$imageBasePath/ic_notification.svg';
 const kImageMessageInacitve = '$imageBasePath/ic_message_inactive.svg';
 const kImageProjectInactive = '$imageBasePath/ic_project_inactive.svg';
-const kImageNotification = '$imageBasePath/ic_notification.svg';
 
 // Button Labels
 const kButtonSubmit = 'Submit';
@@ -39,7 +42,15 @@ const kTotalTrees = 'Total Trees';
 const kErrorCameraScreen =
     "App can't take image without Camera and Microphone Permissions. Please grant Permissions from device Settings!";
 
-// Font Families
+//Language Codes
+const kLangIn = 'id';
+const kLangEn = 'en';
+const kCountryIn = '';
+const kCountryEn = 'US';
+
+// App Locales
+const kLocaleIn = Locale(kLangIn, kCountryIn);
+const kLocaleEn = Locale(kLangEn, kCountryEn);
 
 // Hints
 const kHintEmail = 'Email';
@@ -97,17 +108,22 @@ List<BottomNavigationBarItem> kArrayDashboardBottomNavigationItems({@required do
           width: iconSize,
         ),
       ),
+      // getBottomNavigationBarItem(
+      //   icon: getSvgImage(
+      //     path: kImageMessageInacitve,
+      //     height: iconSize,
+      //     width: iconSize,
+      //   ),
+      //   title: 'Inbox',
+      //   activeIcon: getSvgImage(
+      //     path: kImageMessage,
+      //     height: iconSize,
+      //     width: iconSize,
+      //   ),
+      // ),
       getBottomNavigationBarItem(
-        icon: getSvgImage(
-          path: kImageMessageInacitve,
-          height: iconSize,
-          width: iconSize,
-        ),
+        icon: Icon(Icons.message_outlined, color: Colors.grey.shade400, size: iconSize - 4),
         title: 'Inbox',
-        activeIcon: getSvgImage(
-          path: kImageMessage,
-          height: iconSize,
-          width: iconSize,
-        ),
+        activeIcon: Icon(Icons.message_outlined, color: kColorPrimary, size: iconSize - 4),
       ),
     ];

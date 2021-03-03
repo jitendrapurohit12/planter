@@ -20,6 +20,7 @@ class LoginController extends ChangeNotifier {
   Future<void> reset() async {
     _model = null;
     _error = null;
+    _state = NotifierState.initial;
     await zeroDelay();
     notifyListeners();
   }

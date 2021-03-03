@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/style/decorations.dart';
+import 'package:gmt_planter/ui/common_widget/custom_button.dart';
 import 'package:gmt_planter/ui/common_widget/image_option_ui.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -37,13 +38,22 @@ Widget getSvgImage({
   double width = 24,
   double height = 24,
   Color color,
+  BoxFit fit = BoxFit.cover,
 }) {
   return SvgPicture.asset(
     path,
     width: width,
     height: height,
     color: color,
+    fit: fit,
   );
+}
+
+Widget getImage({
+  @required String path,
+  BoxFit fit = BoxFit.cover,
+}) {
+  return Image.asset(path, fit: fit);
 }
 
 void showSnackbar({
@@ -52,7 +62,7 @@ void showSnackbar({
   Color color = Colors.redAccent,
 }) {
   performAfterDelay(
-    callback: () => Scaffold.of(context).showSnackBar(
+    callback: () => ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: color,
         content: message.text.white.make(),
@@ -84,12 +94,16 @@ Widget getCachedImage({@required String path}) {
   );
 }
 
-Widget getErrorUI({@required BuildContext context}) {
+Widget getErrorUI({@required BuildContext context, VoidCallback callback}) {
   assert(context != null);
   return Center(
-    child: Text(
-      'SOMETHING WENT WRONG',
-      style: Theme.of(context).textTheme.headline5,
+    child: VStack(
+      [
+        'SOMETHING WENT WRONG'.text.red500.xl3.center.semiBold.make(),
+        if (callback != null) const SizedBox(height: 24),
+        if (callback != null) CustomButton(title: 'RETRY', callback: callback)
+      ],
+      crossAlignment: CrossAxisAlignment.center,
     ),
   );
 }

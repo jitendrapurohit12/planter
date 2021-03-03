@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gmt_planter/constant/constant.dart';
+import 'package:gmt_planter/controllers/language_controller.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/helper/platform_widgets.dart';
+import 'package:gmt_planter/internationalization/app_localization.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/ui/screens/dashboard/screen_dashboard.dart';
@@ -14,29 +17,42 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: providers,
       builder: (_, __) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: getThemeData(context: context),
-          darkTheme: getThemeData(context: context),
-          home: Builder(
-            builder: (context) {
-              return FutureBuilder<bool>(
-                future: _getScreen(),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.done:
-                      return snapshot.data ? ScreenDashboard() : ScreenLogin();
-                    //return ScreenCamera();
-                    default:
-                      return Scaffold(
-                        body: Center(child: getPlatformProgress()),
-                      );
-                  }
-                },
-              );
-            },
+        return Consumer<LanguageNotifier>(
+          builder: (_, notifier, __) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: getThemeData(context: context),
+            darkTheme: getThemeData(context: context),
+            locale: notifier.appLocale,
+            supportedLocales: const [
+              kLocaleIn,
+              kLocaleEn,
+            ],
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            home: Builder(
+              builder: (context) {
+                return FutureBuilder<bool>(
+                  future: _getScreen(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.done:
+                        return snapshot.data ? ScreenDashboard() : ScreenLogin();
+                      //return ScreenCamera();
+                      default:
+                        return Scaffold(
+                          body: Center(child: getPlatformProgress()),
+                        );
+                    }
+                  },
+                );
+              },
+            ),
+            routes: routes,
           ),
-          routes: routes,
         );
       },
     );

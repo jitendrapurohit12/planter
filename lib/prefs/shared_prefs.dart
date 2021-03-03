@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const kSharedToken = 'token';
-const kSharedRefreshToken = 'refresh_token';
 const kSharedName = 'name';
+const kSharedToken = 'token';
+const kSharedCountryCode = 'country_code';
+const kSharedRefreshToken = 'refresh_token';
+const kSharedLanguageCode = 'language_code';
 
 Future<SharedPreferences> getPrefs() async => SharedPreferences.getInstance();
 
@@ -41,6 +43,26 @@ Future<void> saveRefreshToken({
 Future<String> getRefreshToken() async {
   final prefs = await getPrefs();
   return prefs.getString(kSharedRefreshToken);
+}
+
+Future<void> saveLanguageCode({@required String value}) async {
+  final prefs = await getPrefs();
+  prefs.setString(kSharedLanguageCode, value);
+}
+
+Future<String> getLanguageCode() async {
+  final prefs = await getPrefs();
+  return prefs.getString(kSharedLanguageCode);
+}
+
+Future<void> saveCountryCode({@required String value}) async {
+  final prefs = await getPrefs();
+  prefs.setString(kSharedCountryCode, value);
+}
+
+Future<String> getCountryCode() async {
+  final prefs = await getPrefs();
+  return prefs.getString(kSharedCountryCode);
 }
 
 Future<void> clearPrefs() async {

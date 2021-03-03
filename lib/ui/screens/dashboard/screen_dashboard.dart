@@ -28,6 +28,21 @@ class ScreenDashboard extends HookWidget {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () => launchProfile(context: context),
+          ),
+          IconButton(
+            icon: const Icon(Icons.language),
+            onPressed: () => launchLanguage(context: context),
+          ),
+          Builder(
+            builder: (ctx) {
+              return IconButton(
+                icon: const Icon(Icons.login_outlined),
+                onPressed: () => logout(
+                  context,
+                  (e) => showSnackbar(context: ctx, message: e.message),
+                ),
+              );
+            },
           )
         ]),
         body: Builder(builder: (_) {

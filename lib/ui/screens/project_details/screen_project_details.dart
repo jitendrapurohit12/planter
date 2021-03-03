@@ -43,7 +43,10 @@ class ScreenProjectDetails extends StatelessWidget {
               return noDataText(context: context);
               break;
             case NotifierState.error:
-              return getErrorUI(context: context);
+              return getErrorUI(
+                context: context,
+                callback: () => notifier.getProjectDetails(context: context, id: projectId),
+              );
               break;
           }
         },

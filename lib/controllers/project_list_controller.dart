@@ -15,6 +15,12 @@ class ProjectListController extends ChangeNotifier {
   Failure get error => _error;
   NotifierState get state => _state;
 
+  Future<void> reset() async {
+    _model = null;
+    _error = null;
+    _state = NotifierState.initial;
+  }
+
   Future<void> getProjects({@required BuildContext context}) async {
     _state = NotifierState.fetching;
     await zeroDelay();
