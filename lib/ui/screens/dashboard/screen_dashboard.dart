@@ -17,8 +17,6 @@ class ScreenDashboard extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _iconSize = 30.0;
-
     final _pages = [PageHome(), PageStory(), PageInbox()];
     final _titles = ['Home', 'Project Story', 'Inbox'];
 
@@ -72,7 +70,7 @@ class ScreenDashboard extends HookWidget {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: notifier.selectedpage,
           onTap: (index) => notifier.changePage(index),
-          items: kArrayDashboardBottomNavigationItems(iconSize: _iconSize),
+          items: kArrayDashboardBottomNavigationItems(),
         ),
       );
     });

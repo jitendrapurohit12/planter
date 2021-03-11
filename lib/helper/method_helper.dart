@@ -21,6 +21,8 @@ import 'package:gmt_planter/service/api_service.dart';
 import 'package:provider/provider.dart';
 import 'package:image/image.dart' as img;
 
+import '../prefs/shared_prefs.dart';
+
 Future<void> logout(BuildContext context, Function(Failure) error) async {
   final confirm = await showActionDialog(
     context: context,
@@ -110,6 +112,11 @@ Future<void> rotateimage(String path) async {
   final img.Image capturedImage = img.decodeImage(await File(path).readAsBytes());
   final img.Image orientedImage = img.bakeOrientation(capturedImage);
   await File(path).writeAsBytes(img.encodeJpg(orientedImage));
+}
+
+Future<void> increasePostStoryCounter() async {
+  final currentCount = await getStoryCounter();
+  await saveStoryCounter(value: currentCount + 1);
 }
 
 final providers = [

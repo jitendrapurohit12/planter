@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
 ThemeData getThemeData({@required BuildContext context}) {
   return ThemeData(
       brightness: Brightness.light,
-      buttonTheme: buttonThemeData,
+      elevatedButtonTheme: buttonThemeData,
       primaryColor: kColorPrimary,
       primaryColorDark: kColorPrimaryDark,
       accentColor: kColorAccent,
@@ -72,7 +72,21 @@ ThemeData getThemeData({@required BuildContext context}) {
       ));
 }
 
-final ButtonThemeData buttonThemeData = ButtonThemeData(
+final buttonThemeData = ElevatedButtonThemeData(
+  style: ButtonStyle(
+    shape: MaterialStateProperty.resolveWith(
+      (states) => RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(36),
+      ),
+    ),
+    padding: MaterialStateProperty.resolveWith(
+      (states) => const EdgeInsets.symmetric(vertical: 16, horizontal: 46),
+    ),
+    backgroundColor: MaterialStateColor.resolveWith((states) => kColorPrimary),
+  ),
+);
+
+final ButtonThemeData buttonThemeData2 = ButtonThemeData(
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(36),
   ),

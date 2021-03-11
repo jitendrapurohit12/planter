@@ -17,6 +17,8 @@ import 'package:gmt_planter/helper/ui_helper.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/ui/common_widget/custom_dropdown_button.dart';
 
+import '../../../../../helper/method_helper.dart';
+
 class PageStory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -35,42 +37,44 @@ class PageStoryContent extends StatelessWidget {
 
     return Consumer<StoryController>(
       builder: (_, storyController, __) {
-        return VStack([
-          HeightBox(ph * 2),
-          ImagePickerUI(
-              file: storyController.file,
-              callback: (_) async {
-                final path = await launchCamera(context: context);
-                if (path != null) {
-                  storyController.changeImage(File(path));
-                }
-              }),
-          HeightBox(ph * 6),
-          _getDropdownTitle(title: 'Select My Project'),
-          CustomDropdownButton(
-            hint: 'Select a Project',
-            options: projects.keys.toList(),
-            value: storyController?.model?.stName,
-            onChanged: (value) {
-              storyController.model.stName = value;
-              storyController.model.pId = projects[value];
-              storyController.refresh();
-            },
-          ),
-          HeightBox(ph * 4),
-          _getDropdownTitle(title: 'Select Caption'),
-          CustomDropdownButton(
-            hint: 'Select a Caption',
-            options: captions.keys.toList(),
-            value: getValueFromMap(storyController.model.caption, captions),
-            onChanged: (value) {
-              storyController.model.caption = captions[value];
-              storyController.refresh();
-            },
-          ),
-          HeightBox(ph * 5),
-          getButtonUI(context: context, storyController: storyController),
-        ]).p12();
+        return SingleChildScrollView(
+          child: VStack([
+            HeightBox(ph * 2),
+            ImagePickerUI(
+                file: storyController.file,
+                callback: (_) async {
+                  final path = await launchCamera(context: context);
+                  if (path != null) {
+                    storyController.changeImage(File(path));
+                  }
+                }),
+            HeightBox(ph * 6),
+            _getDropdownTitle(title: 'Select My Project'),
+            CustomDropdownButton(
+              hint: 'Select a Project',
+              options: projects.keys.toList(),
+              value: storyController?.model?.stName,
+              onChanged: (value) {
+                storyController.model.stName = value;
+                storyController.model.pId = projects[value];
+                storyController.refresh();
+              },
+            ),
+            HeightBox(ph * 4),
+            _getDropdownTitle(title: 'Select Caption'),
+            CustomDropdownButton(
+              hint: 'Select a Caption',
+              options: captions.keys.toList(),
+              value: getValueFromMap(storyController.model.caption, captions),
+              onChanged: (value) {
+                storyController.model.caption = captions[value];
+                storyController.refresh();
+              },
+            ),
+            HeightBox(ph * 5),
+            getButtonUI(context: context, storyController: storyController),
+          ]).p12(),
+        );
       },
     );
   }
@@ -92,6 +96,7 @@ class PageStoryContent extends StatelessWidget {
       case NotifierState.fetching:
         return getPlatformProgress();
       case NotifierState.loaded:
+        increasePostStoryCounter();
         showSnackbar(
           context: context,
           message: 'Story uploaded successfully.',

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:gmt_planter/helper/method_helper.dart';
+import 'package:gmt_planter/prefs/shared_prefs.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -14,6 +14,8 @@ import 'package:gmt_planter/helper/ui_helper.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
 import 'package:gmt_planter/ui/common_widget/custom_text_form_field.dart';
+
+import '../../../prefs/shared_prefs.dart';
 
 class ScreenProfile extends StatelessWidget {
   static const id = 'profile';
@@ -38,13 +40,13 @@ class ScreenProfile extends StatelessWidget {
               ctx,
               profileController,
               () {
-                if (profileController.file != null) {
-                  final size = getFileSize(profileController.file);
-                  if (size > 5) {
-                    showSnackbar(context: ctx, message: "File size can't exceed 5 MBs!");
-                    return;
-                  }
-                }
+                // if (profileController.file != null) {
+                //   final size = getFileSize(profileController.file);
+                //   if (size > 5) {
+                //     showSnackbar(context: ctx, message: "File size can't exceed 5 MBs!");
+                //     return;
+                //   }
+                // }
                 profileController.updateInfo(context: context).then((value) {
                   if (value) {
                     showSnackbar(
@@ -83,7 +85,7 @@ class ScreenProfile extends StatelessWidget {
             : _ProfileUI(callback: callback);
       case NotifierState.error:
         return controller.model == null
-            ? getErrorUI(context: context, callback: callback)
+            ? getErrorUI(context: context, callback: () => controller.getInfo(context: context))
             : _ProfileUI(callback: callback);
     }
   }
@@ -100,47 +102,42 @@ class _ProfileUI extends HookWidget {
     final controller = Provider.of<ProfileController>(context, listen: false);
     final model = controller.model.data;
     final ph = context.percentHeight;
-    final fundsNode = useFocusNode();
-    final nameNode = useFocusNode();
     final phoneNode = useFocusNode();
-    final addressNode = useFocusNode();
-    final bankNameNode = useFocusNode();
-    final accNoNode = useFocusNode();
-    final branchNode = useFocusNode();
     return Form(
       key: _formKey,
       child: VStack([
         HeightBox(ph * 2),
         _ProfilePicUI(),
         HeightBox(ph * 4),
-        _getTitle(title: 'Personal Info'),
+        _CounterUI(),
+        HeightBox(ph * 4),
+        _getContentRow(
+          context: context,
+          title: 'Username',
+          value: model.email,
+        ),
+        HeightBox(ph * 2),
+        FutureBuilder<String>(
+          future: getPassword(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return _getContentRow(
+                context: context,
+                title: 'Password',
+                value: snapshot?.data ?? '',
+              );
+            } else {
+              return Container(height: 50);
+            }
+          },
+        ),
         HeightBox(ph * 2),
         _getContentRow(
           context: context,
-          title: 'Funds',
+          title: 'Total Funds',
           value: model.totalFunds.toString(),
-          prefix: '\$ ',
-          inputType: TextInputType.number,
-          inputAction: TextInputAction.next,
-          myNode: fundsNode,
-          nextNode: nameNode,
-          enabled: controller.isEditing,
-          onSave: (s) => controller.model.data.totalFunds = int.parse(s),
         ),
-        _getContentRow(
-          context: context,
-          title: 'Name',
-          value: '${model.firstName} ${model.lastName}',
-          inputAction: TextInputAction.next,
-          myNode: nameNode,
-          nextNode: phoneNode,
-          enabled: controller.isEditing,
-          onSave: (s) {
-            final names = s?.split(' ');
-            controller.model.data.firstName = names[0];
-            if (names.length == 2) controller.model.data.lastName = names[1];
-          },
-        ),
+        HeightBox(ph * 2),
         _getContentRow(
           context: context,
           title: 'Phone',
@@ -148,58 +145,10 @@ class _ProfileUI extends HookWidget {
           inputType: TextInputType.number,
           inputAction: TextInputAction.next,
           myNode: phoneNode,
-          nextNode: addressNode,
           enabled: controller.isEditing,
+          isMandatory: true,
           onSave: (s) => controller.model.data.phoneNo = s,
         ),
-        _getContentRow(
-          context: context,
-          title: 'Address',
-          value: model.addr,
-          inputAction: TextInputAction.next,
-          myNode: addressNode,
-          nextNode: bankNameNode,
-          enabled: controller.isEditing,
-          onSave: (s) => controller.model.data.addr = s,
-        ),
-        for (int i = 0; i < model.bankDetails.length; i++)
-          VStack([
-            if (i == 0) HeightBox(ph * 4),
-            if (i == 0) _getTitle(title: 'Bank Details'),
-            HeightBox(ph * 2),
-            _getContentRow(
-              context: context,
-              title: 'Name',
-              value: model.bankDetails[i].bankName,
-              inputAction: TextInputAction.next,
-              myNode: bankNameNode,
-              nextNode: accNoNode,
-              enabled: controller.isEditing,
-              onSave: (s) => controller.model.data.bankDetails[0].bankName = s,
-            ),
-            _getContentRow(
-              context: context,
-              title: 'Acc. No.',
-              value: model.bankDetails[i].accNo,
-              inputType: TextInputType.number,
-              inputAction: TextInputAction.next,
-              myNode: accNoNode,
-              nextNode: branchNode,
-              enabled: controller.isEditing,
-              onSave: (s) => controller.model.data.bankDetails[0].accNo = s,
-            ),
-            _getContentRow(
-              context: context,
-              title: 'Branch',
-              value: model.bankDetails[i].branch,
-              inputAction: TextInputAction.done,
-              myNode: branchNode,
-              enabled: controller.isEditing,
-              onSave: (s) => controller.model.data.bankDetails[0].branch = s,
-            ),
-            HeightBox(ph * 2),
-            if (i < model.bankDetails.length - 1) const Divider(),
-          ]),
         HeightBox(ph * 8),
         if (controller.isEditing)
           CustomButton(
@@ -222,12 +171,12 @@ class _ProfileUI extends HookWidget {
     @required String value,
     String prefix,
     TextInputType inputType,
-    @required TextInputAction inputAction,
-    @required FocusNode myNode,
+    TextInputAction inputAction,
+    FocusNode myNode,
     FocusNode nextNode,
-    @required Function(String) onSave,
-    bool isMandatory = true,
-    bool enabled = true,
+    Function(String) onSave,
+    bool isMandatory = false,
+    bool enabled = false,
   }) {
     return HStack([
       Expanded(child: title.text.center.gray800.make()),
@@ -250,10 +199,6 @@ class _ProfileUI extends HookWidget {
       )
     ]);
   }
-
-  Widget _getTitle({@required String title}) {
-    return title.text.color(kColorPrimary).xl.make();
-  }
 }
 
 class _ProfilePicUI extends StatelessWidget {
@@ -261,25 +206,21 @@ class _ProfilePicUI extends StatelessWidget {
   Widget build(BuildContext context) {
     final ph = context.percentHeight;
     final notifier = Provider.of<ProfileController>(context, listen: false);
-    Widget child;
-    if (notifier.file != null) {
-      child = VxCard(Image.file(notifier.file, fit: BoxFit.cover)).circular.make().p1();
-    } else if (notifier.model?.data?.pic != null) {
-      child = VxCard(getCachedImage(path: notifier.model.data.pic)).circular.make().p1();
-    } else {
-      child = Icon(
-        Icons.person,
-        size: ph * 10,
-        color: Colors.white,
-      ).centered();
-    }
-    return VxBox(child: child)
-        .roundedFull
-        .width(ph * 15)
-        .height(ph * 15)
-        .color(kColorPrimaryDark)
-        .makeCentered()
-        .onTap(() {
+    return VxBox(
+        child: FutureBuilder<String>(
+      future: getProfileImage(),
+      builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return Icon(
+            Icons.person,
+            size: ph * 10,
+            color: Colors.white,
+          ).centered();
+        } else {
+          return VxCard(Image.file(File(snapshot.data), fit: BoxFit.cover)).circular.make().p1();
+        }
+      },
+    )).roundedFull.width(ph * 15).height(ph * 15).color(kColorPrimaryDark).makeCentered().onTap(() {
       if (!notifier.isEditing) return;
       showImageSourceBottomSheet(
         context: context,
@@ -295,3 +236,27 @@ class _ProfilePicUI extends StatelessWidget {
     });
   }
 }
+
+class _CounterUI extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<int>(
+      future: getStoryCounter(),
+      builder: (context, snapshot) {
+        final count = snapshot.data ?? 0;
+        return VStack(
+          [
+            count.toString().text.xl6.bold.green400.make(),
+            4.heightBox,
+            'stories posted'.text.xl2.semiBold.letterSpacing(1.2).green400.make(),
+          ],
+          crossAlignment: CrossAxisAlignment.center,
+        ).centered();
+      },
+    );
+  }
+}
+
+// total tree
+// planning
+//

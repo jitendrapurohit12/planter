@@ -53,7 +53,7 @@ class UnconfirmedDialog extends HookWidget {
                     title: kButtonConfirm.toUpperCase(),
                     fontSize: 13,
                     letterSpacing: 1,
-                    padding: 4,
+                    padding: 10,
                     callback: () async {
                       final result = await launchReceipt(context: context, data: model);
                       if (result) notifier.removeItem(index);
@@ -63,7 +63,7 @@ class UnconfirmedDialog extends HookWidget {
                     title: kButtonReject.toUpperCase(),
                     fontSize: 13,
                     letterSpacing: 1,
-                    padding: 4,
+                    padding: 10,
                     callback: () => notifier.removeItem(index),
                   ).expand(),
                 ])

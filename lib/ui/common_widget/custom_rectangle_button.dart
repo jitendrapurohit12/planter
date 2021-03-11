@@ -19,10 +19,14 @@ class CustomRectangleButton extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateColor.resolveWith((states) => color),
+        shape: MaterialStateProperty.resolveWith(
+          (states) => listTileShape(radius: radius),
+        ),
+      ),
       onPressed: callback,
-      color: color,
-      shape: listTileShape(radius: radius),
       child: title.text
           .textStyle(
             Theme.of(context).textTheme.overline.copyWith(

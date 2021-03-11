@@ -9,11 +9,9 @@ import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/style/decorations.dart';
-import 'package:gmt_planter/ui/common_widget/clikable_text.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
 import 'package:gmt_planter/ui/common_widget/custom_text_form_field.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ScreenLogin extends HookWidget {
@@ -52,8 +50,9 @@ class ScreenLogin extends HookWidget {
             divider(multiplier: 4),
             getSvgImage(
               path: kImageIcon,
-              width: context.percentWidth * 12,
+              width: context.percentWidth * 50,
               height: context.percentHeight * 5,
+              fit: BoxFit.contain,
             ),
             divider(multiplier: 4),
             Container(
@@ -110,6 +109,7 @@ class ScreenLogin extends HookWidget {
                             return getPlatformProgress();
                           case NotifierState.loaded:
                             saveToken(value: value.model.data.token);
+                            savePassword(value: _password);
                             performAfterDelay(callback: () => launchDashboard(context: context));
                             return Container();
                           case NotifierState.noData:
@@ -124,11 +124,6 @@ class ScreenLogin extends HookWidget {
                             return _button(controller: value);
                         }
                       }),
-                      divider(),
-                      ClikableText(
-                        texts: kArraySignin,
-                        callback: (text, index) => launch(kUrlSignup),
-                      )
                     ],
                   ),
                 ),

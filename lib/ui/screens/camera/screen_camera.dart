@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/helper/dialog_helper.dart';
+import 'package:gmt_planter/helper/ui_helper.dart';
 import 'package:gmt_planter/ui/common_widget/action_error.dart';
 import 'package:gmt_planter/ui/screens/camera/shutter_button_ui.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,7 +20,8 @@ class _ScreenCameraState extends State<ScreenCamera> with WidgetsBindingObserver
   CameraController controller;
   bool isCameraPerimssionGranted = false,
       isAudioPermissionGranted = false,
-      isSettingsOpened = false;
+      isSettingsOpened = false,
+      isTreeToggleOn = false;
 
   @override
   void initState() {
@@ -92,16 +94,37 @@ class _ScreenCameraState extends State<ScreenCamera> with WidgetsBindingObserver
     return ZStack(
       [
         AspectRatio(aspectRatio: controller.value.aspectRatio, child: CameraPreview(controller)),
-        const VerticalDivider(color: kColorPrimaryDark, thickness: 4),
-        const Divider(color: kColorPrimaryDark, thickness: 4),
+        if (isTreeToggleOn) const VerticalDivider(color: kColorPrimaryDark, thickness: 4),
+        if (isTreeToggleOn) const Divider(color: kColorPrimaryDark, thickness: 4),
         Align(
           alignment: Alignment.bottomCenter,
-          child: ShutterButtonUI(() async {
-            final file = await controller.takePicture();
-            if (file != null) {
-              Navigator.pop(context, file.path);
-            }
-          }),
+          child: HStack(
+            [
+              const SizedBox(
+                width: 36,
+                height: 36,
+              ),
+              ShutterButtonUI(
+                () async {
+                  final file = await controller.takePicture();
+                  if (file != null) {
+                    Navigator.pop(context, file.path);
+                  }
+                },
+              ),
+              getSvgImage(
+                path: kImageTree,
+                color: isTreeToggleOn ? Colors.green : Colors.grey,
+                height: 36,
+                width: 36,
+              ).onTap(() {
+                isTreeToggleOn = !isTreeToggleOn;
+                setState(() {});
+              })
+            ],
+            axisSize: MainAxisSize.max,
+            alignment: MainAxisAlignment.spaceEvenly,
+          ),
         ).pOnly(bottom: 24),
       ],
       fit: StackFit.expand,

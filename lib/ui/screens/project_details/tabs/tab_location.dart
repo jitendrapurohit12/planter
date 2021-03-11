@@ -27,10 +27,10 @@ class TabLocation extends StatelessWidget {
           title: kDensity,
           value: density,
         ),
-        TitleValueColumn(
-          title: kTotalTrees,
-          value: model.totalNoOfTrees.toString(),
-        ),
+        // TitleValueColumn(
+        //   title: kTotalTrees,
+        //   value: model.totalNoOfTrees.toString(),
+        // ),
         const HeightBox(36),
       ],
       crossAlignment: CrossAxisAlignment.center,

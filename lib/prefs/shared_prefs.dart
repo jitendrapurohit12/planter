@@ -3,7 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const kSharedName = 'name';
 const kSharedToken = 'token';
+const kSharedCounter = 'counter';
+const kSharedPassword = 'password';
 const kSharedCountryCode = 'country_code';
+const kSharedProfileImage = 'profile_image';
 const kSharedRefreshToken = 'refresh_token';
 const kSharedLanguageCode = 'language_code';
 
@@ -63,6 +66,36 @@ Future<void> saveCountryCode({@required String value}) async {
 Future<String> getCountryCode() async {
   final prefs = await getPrefs();
   return prefs.getString(kSharedCountryCode);
+}
+
+Future<void> savePassword({@required String value}) async {
+  final prefs = await getPrefs();
+  prefs.setString(kSharedPassword, value);
+}
+
+Future<String> getPassword() async {
+  final prefs = await getPrefs();
+  return prefs.getString(kSharedPassword);
+}
+
+Future<void> saveProfileImage({@required String value}) async {
+  final prefs = await getPrefs();
+  prefs.setString(kSharedProfileImage, value);
+}
+
+Future<String> getProfileImage() async {
+  final prefs = await getPrefs();
+  return prefs.getString(kSharedProfileImage);
+}
+
+Future<void> saveStoryCounter({@required int value}) async {
+  final prefs = await getPrefs();
+  prefs.setInt(kSharedCounter, value);
+}
+
+Future<int> getStoryCounter() async {
+  final prefs = await getPrefs();
+  return prefs.getInt(kSharedCounter) ?? 0;
 }
 
 Future<void> clearPrefs() async {

@@ -5,8 +5,11 @@ import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/models/failure.dart';
 import 'package:gmt_planter/models/user_profile_model.dart';
+import 'package:gmt_planter/prefs/shared_prefs.dart';
 import 'package:gmt_planter/service/api_service.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:path/path.dart' as path;
 
 class ProfileController extends ChangeNotifier {
   UserProfileModel _model;
@@ -29,6 +32,11 @@ class ProfileController extends ChangeNotifier {
     _state = NotifierState.initial;
   }
 
+  Future<void> refresh() async {
+    await zeroDelay();
+    notifyListeners();
+  }
+
   Future<void> setIsEditing({bool value = false}) async {
     _isEditMode = value;
     await zeroDelay();
@@ -37,6 +45,19 @@ class ProfileController extends ChangeNotifier {
 
   Future<void> changeImage(File file) async {
     _file = file;
+    final fileName = path.basename(file.path);
+    final appDir = await getApplicationDocumentsDirectory();
+    final profileDir = Directory('${appDir.path}/profile');
+    if (await profileDir.exists()) {
+      for (final image in profileDir.listSync()) {
+        await image.delete();
+      }
+    } else {
+      await profileDir.create();
+    }
+    final newFile = await file.copy('${appDir.path}/profile/$fileName');
+    await saveProfileImage(value: newFile.path);
+
     await zeroDelay();
     notifyListeners();
   }
@@ -51,7 +72,8 @@ class ProfileController extends ChangeNotifier {
     notifyListeners();
 
     await Provider.of<ApiService>(context, listen: false)
-        .setUserProfile(profile: model, file: _file)
+        //.setUserProfile(profile: model, file: _file)
+        .setUserProfile(profile: model)
         .then((value) {
       setIsEditing();
       _model = value;

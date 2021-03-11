@@ -206,23 +206,34 @@ class ApiService {
 
   Failure getFailure(dynamic error) {
     if (error is DioError) {
-      final dioError = error;
-      String message;
-      try {
-        message = dioError?.response?.data['message'].toString();
-      } catch (e) {
-        message = dioError.message ?? 'Something went wrong!';
+      switch (error.type) {
+        case DioErrorType.receiveTimeout:
+        case DioErrorType.connectTimeout:
+        case DioErrorType.sendTimeout:
+          throw timeoutException;
+        case DioErrorType.other:
+          if (error.error is SocketException) throw socketException;
+          throw getDioFailure(error);
+        default:
+          throw getDioFailure(error);
       }
-      final code = dioError?.response?.statusCode ?? 404;
-      return Failure(
-        code: code,
-        message: message,
-      );
     } else {
-      return Failure(
-        code: 404,
-        message: 'Something went wrong!',
-      );
+      return Failure();
     }
+  }
+
+  Failure getDioFailure(DioError error) {
+    final dioError = error;
+    String message;
+    try {
+      message = dioError?.response?.data['message'].toString();
+    } catch (e) {
+      message = dioError.message ?? 'Something went wrong!';
+    }
+    final code = dioError?.response?.statusCode ?? 404;
+    return Failure(
+      code: code,
+      message: message,
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
 
 const imageBasePath = 'assets/images';
+const kImageTree = '$imageBasePath/tree.svg';
 const kimageMap = '$imageBasePath/map.jpeg';
 const kImageIcon = '$imageBasePath/logo.svg';
 const kImageHome = '$imageBasePath/ic_home.svg';
@@ -30,7 +31,7 @@ const kErrorUnauthorised = 401;
 const kDonthaveAccount = "Dont't have account? ";
 const kSignUp = 'Signup';
 const kFemaleEmpTArget = 'Female Employment Target';
-const kTargetFundsForPlanning = 'Target funds for Planning';
+const kTargetFundsForPlanning = 'Target funds for Planting';
 const kTargetFundsForConservation = 'Target funds for Conservation';
 const kFundRaised = 'Funds raised';
 const kCommunity = 'Community';
@@ -41,6 +42,8 @@ const kTotalTrees = 'Total Trees';
 // Errors
 const kErrorCameraScreen =
     "App can't take image without Camera and Microphone Permissions. Please grant Permissions from device Settings!";
+const kErrorSocket = 'Please check your Internet Connection!';
+const kErrorTimeout = 'Request Timeout! Please check your Internet Connection!';
 
 //Language Codes
 const kLangIn = 'id';
@@ -81,49 +84,15 @@ const kUrlSignup = 'https://grovedev.globalmangrove.org/congrats-funding';
 
 // Array
 const kArraySignin = [kDonthaveAccount, kSignUp];
-List<BottomNavigationBarItem> kArrayDashboardBottomNavigationItems({@required double iconSize}) => [
+List<BottomNavigationBarItem> kArrayDashboardBottomNavigationItems() => [
       getBottomNavigationBarItem(
-        icon: getSvgImage(
-          path: kImageHomeInacitve,
-          height: iconSize,
-          width: iconSize,
-        ),
+        icon: getSvgImage(path: kImageHomeInacitve),
         title: 'Home',
-        activeIcon: getSvgImage(
-          path: kImageHome,
-          height: iconSize,
-          width: iconSize,
-        ),
+        activeIcon: getSvgImage(path: kImageHome),
       ),
       getBottomNavigationBarItem(
-        icon: getSvgImage(
-          path: kImageProjectInactive,
-          height: iconSize,
-          width: iconSize,
-        ),
+        icon: getSvgImage(path: kImageProjectInactive),
         title: 'Project',
-        activeIcon: getSvgImage(
-          path: kImageProject,
-          height: iconSize,
-          width: iconSize,
-        ),
-      ),
-      // getBottomNavigationBarItem(
-      //   icon: getSvgImage(
-      //     path: kImageMessageInacitve,
-      //     height: iconSize,
-      //     width: iconSize,
-      //   ),
-      //   title: 'Inbox',
-      //   activeIcon: getSvgImage(
-      //     path: kImageMessage,
-      //     height: iconSize,
-      //     width: iconSize,
-      //   ),
-      // ),
-      getBottomNavigationBarItem(
-        icon: Icon(Icons.message_outlined, color: Colors.grey.shade400, size: iconSize - 4),
-        title: 'Inbox',
-        activeIcon: Icon(Icons.message_outlined, color: kColorPrimary, size: iconSize - 4),
+        activeIcon: getSvgImage(path: kImageProject),
       ),
     ];

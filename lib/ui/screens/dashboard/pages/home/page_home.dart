@@ -51,7 +51,7 @@ class ProjectList extends StatelessWidget {
         children: [
           if (activeFundings.isNotEmpty)
             ProjectUnit(
-              title: 'Active Funding',
+              title: 'Active Planting',
               projects: activeFundings,
             )
           else
