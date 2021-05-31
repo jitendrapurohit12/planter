@@ -24,7 +24,7 @@ class UnconfirmedFundsController extends ChangeNotifier {
     await refresh();
   }
 
-  Future<void> reset() async {
+  void reset() {
     _model = null;
     _selectedPage = 0;
     _isListShown = false;
@@ -44,6 +44,8 @@ class UnconfirmedFundsController extends ChangeNotifier {
 
   Future<void> removeItem(int index) async {
     model.data.removeAt(index);
+    _selectedPage = 0;
+    _error = null;
     refresh();
   }
 

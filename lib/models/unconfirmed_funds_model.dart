@@ -8,9 +8,9 @@ class UnconfirmedFundsModel {
   UnconfirmedFundsModel.fromJson(Map<String, dynamic> json) {
     success = json['success'] as bool;
     message = json['message'] as String;
-    if (json['data'] != null) {
+    if (json['data']['items'] != null) {
       data = <Data>[];
-      json['data'].forEach((v) {
+      json['data']['items'].forEach((v) {
         data.add(Data.fromJson(v as Map<String, dynamic>));
       });
     }
@@ -28,15 +28,15 @@ class UnconfirmedFundsModel {
 }
 
 class Data {
-  int id, amount, projectId;
-  String pic, createdAt;
+  int id, projectId;
+  String pic, createdAt, amount;
   Project project;
 
   Data({this.id, this.amount, this.pic, this.createdAt, this.projectId, this.project});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'] as int;
-    amount = json['amount'] as int;
+    amount = json['amount'] as String;
     pic = json['pic'] as String;
     createdAt = json['created_at'] as String;
     projectId = json['project_id'] as int;

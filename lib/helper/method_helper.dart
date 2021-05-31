@@ -28,11 +28,11 @@ Future<void> logout(BuildContext context, Function(Failure) error) async {
     context: context,
     title: 'Logout?',
     content: 'Confirm Logout?',
-    button1: kButtonConfirm,
-    button2: kButtonDeny,
+    button1: kButtonYes,
+    button2: kButtonNo,
   );
 
-  if (confirm == null || confirm == kButtonDeny) return;
+  if (confirm == null || confirm == kButtonNo) return;
 
   await showProgressDialog(context);
 
@@ -117,6 +117,20 @@ Future<void> rotateimage(String path) async {
 Future<void> increasePostStoryCounter() async {
   final currentCount = await getStoryCounter();
   await saveStoryCounter(value: currentCount + 1);
+}
+
+bool isZero(String str) {
+  final d = double.parse(str);
+  return d == 0.0;
+}
+
+String getPaymentButtonTitle(String status) {
+  switch (status) {
+    case kStatusRejected:
+      return 'Reject Fund';
+    default:
+      return 'Accept Fund';
+  }
 }
 
 final providers = [

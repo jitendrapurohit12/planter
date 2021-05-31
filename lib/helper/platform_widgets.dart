@@ -8,5 +8,3 @@ Widget getPlatformProgress() => Center(
         cupertino: (_, __) => const CupertinoActivityIndicator(),
       ),
     );
-
-

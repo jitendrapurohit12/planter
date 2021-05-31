@@ -94,14 +94,15 @@ Widget getCachedImage({@required String path}) {
   );
 }
 
-Widget getErrorUI({@required BuildContext context, VoidCallback callback}) {
+Widget getErrorUI(
+    {@required BuildContext context, VoidCallback callback, String action = 'RETRY'}) {
   assert(context != null);
   return Center(
     child: VStack(
       [
         'SOMETHING WENT WRONG'.text.red500.xl3.center.semiBold.make(),
         if (callback != null) const SizedBox(height: 24),
-        if (callback != null) CustomButton(title: 'RETRY', callback: callback)
+        if (callback != null) CustomButton(title: action, callback: callback)
       ],
       crossAlignment: CrossAxisAlignment.center,
     ),
@@ -121,9 +122,7 @@ void showImageSourceBottomSheet({
   Function(ImageSource) callback,
 }) {
   Scaffold.of(context).showBottomSheet(
-    (context) => ImageOptionUI(
-      callback: callback,
-    ),
+    (context) => ImageOptionUI(callback: callback),
     backgroundColor: kColorBottomsheetBackground,
     shape: listTileShape(radius: 12),
   );

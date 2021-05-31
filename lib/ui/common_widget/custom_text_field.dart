@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -14,6 +15,7 @@ class CustomTextfield extends HookWidget {
   final bool isEnabled, isMandatory, hide;
   final int maxLength, maxLines, minLines;
   final Widget suffixIcon, leadingIcon;
+  final List<TextInputFormatter> formatters;
 
   const CustomTextfield({
     @required this.context,
@@ -24,6 +26,7 @@ class CustomTextfield extends HookWidget {
     this.onChanged,
     this.nextNode,
     this.maxLength,
+    this.formatters,
     this.align = TextAlign.start,
     this.isEnabled = true,
     this.isMandatory = true,
@@ -46,15 +49,17 @@ class CustomTextfield extends HookWidget {
           keyboardType: inputType,
           maxLength: maxLength,
           minLines: minLines,
+          maxLines: maxLines,
           onChanged: onChanged,
           textInputAction: inputAction,
           obscureText: hide,
           textAlign: align,
+          inputFormatters: formatters,
           style: TextStyle(
             color: isEnabled ? Colors.black87 : Colors.black26,
           ),
           decoration: InputDecoration(
-            hintText: hint,
+            hintText: initialValue ?? hint,
             border: _borderDecoration(),
             enabledBorder: _borderDecoration(),
             errorBorder: _borderDecoration(),

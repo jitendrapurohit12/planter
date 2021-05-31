@@ -1,5 +1,6 @@
 // Image Paths
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
 
 const imageBasePath = 'assets/images';
@@ -21,11 +22,14 @@ const kButtonSubmit = 'Submit';
 const kButtonConfirm = 'Confirm';
 const kButtonReject = 'Reject';
 const kButtonDeny = 'Deny';
+const kButtonYes = 'Yes';
+const kButtonNo = 'No';
 const kButtonOpenSettings = 'Open Settings';
 const kButtonGrantPermission = 'Grant Permission';
 
 // Error Codes
 const kErrorUnauthorised = 401;
+const kErrorUnauthorisedFund = 400;
 
 // String Constants
 const kDonthaveAccount = "Dont't have account? ";
@@ -79,6 +83,9 @@ const kDescriptionMicrohonePermissionDenied =
 //Regex
 const kRegexEmail = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 
+// formatters
+final doubleFormatter = FilteringTextInputFormatter.allow(RegExp("[0-9]"));
+
 // URLs
 const kUrlSignup = 'https://grovedev.globalmangrove.org/congrats-funding';
 
@@ -96,3 +103,7 @@ List<BottomNavigationBarItem> kArrayDashboardBottomNavigationItems() => [
         activeIcon: getSvgImage(path: kImageProject),
       ),
     ];
+
+// Status
+const kStatusAccepted = 'accepted';
+const kStatusRejected = 'rejected';

@@ -6,6 +6,7 @@ import 'package:gmt_planter/internationalization/app_localization.dart';
 import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
 import 'package:gmt_planter/ui/common_widget/image_picker_ui.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -36,17 +37,30 @@ class PageStoryContent extends StatelessWidget {
     final captions = getCaptions(localizer);
 
     return Consumer<StoryController>(
-      builder: (_, storyController, __) {
+      builder: (ctx, storyController, __) {
         return SingleChildScrollView(
           child: VStack([
             HeightBox(ph * 2),
             ImagePickerUI(
                 file: storyController.file,
                 callback: (_) async {
-                  final path = await launchCamera(context: context);
-                  if (path != null) {
-                    storyController.changeImage(File(path));
-                  }
+                  showImageSourceBottomSheet(
+                      context: context,
+                      callback: (source) async {
+                        if (ImageSource.camera == source) {
+                          performAfterDelay(callback: () async {
+                            final path = await launchCamera(context: context);
+                            if (path != null) {
+                              storyController.changeImage(File(path));
+                            }
+                          });
+                        } else if (ImageSource.gallery == source) {
+                          final image = await ImagePicker().getImage(source: source);
+                          if (image != null) {
+                            storyController.changeImage(File(image.path));
+                          }
+                        }
+                      });
                 }),
             HeightBox(ph * 6),
             _getDropdownTitle(title: 'Select My Project'),
@@ -142,3 +156,21 @@ class PageStoryContent extends StatelessWidget {
         title: kButtonSubmit,
       );
 }
+
+// showImageSourceBottomSheet(
+//                       context: context,
+//                       callback: (source) async {
+//                         if (source != null) {
+//                           File file;
+//                           if (source == ImageSource.gallery) {
+//                             final image = await ImagePicker().getImage(source: source);
+//                             if (image != null) file = File(image.path);
+//                           } else {
+//                             final path = await launchCamera(context: context);
+//                             if (path != null) file = File(path);
+//                           }
+//                           if (file != null) {
+//                             storyController.changeImage(file);
+//                           }
+//                         }
+//                       });

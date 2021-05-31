@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
+import 'package:gmt_planter/controllers/receipt_controller.dart';
 import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
 import 'package:gmt_planter/ui/screens/camera/screen_camera.dart';
 import 'package:gmt_planter/ui/screens/dashboard/screen_dashboard.dart';
@@ -13,7 +14,7 @@ import 'package:provider/provider.dart';
 Future<void> launchLogin({@required BuildContext context}) async {
   assert(context != null);
 
-  Navigator.pushNamedAndRemoveUntil(
+  return Navigator.pushNamedAndRemoveUntil(
     context,
     ScreenLogin.id,
     (_) => false,
@@ -23,7 +24,7 @@ Future<void> launchLogin({@required BuildContext context}) async {
 Future<void> launchDashboard({@required BuildContext context}) async {
   assert(context != null);
 
-  Navigator.pushNamedAndRemoveUntil(
+  return Navigator.pushNamedAndRemoveUntil(
     context,
     ScreenDashboard.id,
     (_) => false,
@@ -33,7 +34,7 @@ Future<void> launchDashboard({@required BuildContext context}) async {
 Future<void> launchProfile({@required BuildContext context}) async {
   assert(context != null);
 
-  Navigator.pushNamed(
+  return Navigator.pushNamed(
     context,
     ScreenProfile.id,
   );
@@ -42,7 +43,7 @@ Future<void> launchProfile({@required BuildContext context}) async {
 Future<void> launchLanguage({@required BuildContext context}) async {
   assert(context != null);
 
-  Navigator.pushNamed(
+  return Navigator.pushNamed(
     context,
     ScreenLanguage.id,
   );
@@ -68,7 +69,7 @@ Future<void> launchProjectDetails({
     notifier.reset();
   }
 
-  Navigator.pushNamed(
+  return Navigator.pushNamed(
     context,
     ScreenProjectDetails.id,
     arguments: args,
@@ -78,17 +79,21 @@ Future<void> launchProjectDetails({
 Future<bool> launchReceipt({
   @required BuildContext context,
   @required Data data,
+  @required String status,
 }) async {
   assert(data != null);
   assert(context != null);
+  assert(status != null);
 
-  final args = {'data': data};
+  final args = {'data': data, 'status': status};
 
   final result = await Navigator.pushNamed(
     context,
     ScreenReciept.id,
     arguments: args,
   );
+
+  Provider.of<ReceiptController>(context, listen: false).reset();
 
   return result as bool;
 }

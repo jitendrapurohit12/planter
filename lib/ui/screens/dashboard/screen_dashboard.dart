@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/controllers/unconfirmed_funds_controller.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
@@ -12,7 +11,7 @@ import 'package:gmt_planter/ui/screens/dashboard/pages/story/page_story.dart';
 import 'package:gmt_planter/ui/screens/dashboard/unconfirmed_dialog/unconfirmed_dialog.dart';
 import 'package:provider/provider.dart';
 
-class ScreenDashboard extends HookWidget {
+class ScreenDashboard extends StatelessWidget {
   static const id = 'dashboard';
 
   @override
@@ -25,11 +24,19 @@ class ScreenDashboard extends HookWidget {
         appBar: customAppbar(title: _titles[notifier.selectedpage], actions: [
           IconButton(
             icon: const Icon(Icons.person),
-            onPressed: () => launchProfile(context: context),
+            onPressed: () async {
+              await launchProfile(context: context);
+              notifier.reset();
+              notifier.refresh();
+            },
           ),
           IconButton(
             icon: const Icon(Icons.language),
-            onPressed: () => launchLanguage(context: context),
+            onPressed: () async {
+              await launchLanguage(context: context);
+              notifier.reset();
+              notifier.refresh();
+            },
           ),
           Builder(
             builder: (ctx) {
@@ -51,6 +58,7 @@ class ScreenDashboard extends HookWidget {
               !notifier.isListShown) {
             performAfterDelay(
               callback: () {
+                notifier.changeListShown(value: true);
                 showModalBottomSheet(
                   isScrollControlled: true,
                   isDismissible: false,
@@ -69,7 +77,12 @@ class ScreenDashboard extends HookWidget {
         }),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: notifier.selectedpage,
-          onTap: (index) => notifier.changePage(index),
+          onTap: (index) {
+            if (index == 0) {
+              notifier.reset();
+            }
+            notifier.changePage(index);
+          },
           items: kArrayDashboardBottomNavigationItems(),
         ),
       );

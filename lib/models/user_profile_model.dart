@@ -8,9 +8,7 @@ class UserProfileModel {
   UserProfileModel.fromJson(Map<String, dynamic> json) {
     success = json['success'] as bool;
     message = json['message'] as String;
-    data = json['data'] != null
-        ? Data.fromJson(json['data'] as Map<String, dynamic>)
-        : null;
+    data = json['data'] != null ? Data.fromJson(json['data'] as Map<String, dynamic>) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -25,8 +23,8 @@ class UserProfileModel {
 }
 
 class Data {
-  int id, totalFunds;
-  String firstName, lastName, email, phoneNo, pic, addr, status;
+  int id;
+  String firstName, lastName, email, phoneNo, pic, addr, status, totalFunds;
   List<BankDetails> bankDetails;
 
   Data(
@@ -49,7 +47,7 @@ class Data {
     pic = json['pic'] as String;
     addr = json['addr'] as String;
     status = json['status'] as String;
-    totalFunds = json['total_funds'] as int;
+    totalFunds = json['total_funds'] as String;
     if (json['bank_details'] != null) {
       bankDetails = <BankDetails>[];
       json['bank_details'].forEach((v) {

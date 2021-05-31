@@ -135,7 +135,7 @@ class _ProfileUI extends HookWidget {
         _getContentRow(
           context: context,
           title: 'Total Funds',
-          value: model.totalFunds.toString(),
+          value: model.totalFunds,
         ),
         HeightBox(ph * 2),
         _getContentRow(
