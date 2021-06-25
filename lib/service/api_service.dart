@@ -11,6 +11,7 @@ import 'package:gmt_planter/models/receipt_model.dart';
 import 'package:gmt_planter/models/story_model.dart';
 import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
 import 'package:gmt_planter/models/user_profile_model.dart';
+import 'package:gmt_planter/models/version_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 
 const kBaseUrl = kReleaseMode
@@ -21,6 +22,7 @@ const kLoginUrl = 'planter-login';
 const kProjectList = 'project-list';
 const kProjectDetails = 'project-detail';
 const kUserProfile = 'user-profile';
+const kVersions = 'get-planter-version';
 const kUpdateUserProfile = 'update-user-profile';
 const kGetUnconfirmedFunds = 'project-unconfirmed-fund';
 const kStoryCaptions = 'project-story-caption';
@@ -93,6 +95,12 @@ class ApiService {
         .get('$kBaseUrl$kUserProfile', options: Options(headers: headers))
         .catchError((e) => throw getFailure(e));
     final model = UserProfileModel.fromJson(res.data as Map<String, dynamic>);
+    return model;
+  }
+
+  Future<VersionModel> getVersions() async {
+    final res = await _dio.get('$kBaseUrl$kVersions').catchError((e) => throw getFailure(e));
+    final model = VersionModel.fromJson(res.data as Map<String, dynamic>);
     return model;
   }
 

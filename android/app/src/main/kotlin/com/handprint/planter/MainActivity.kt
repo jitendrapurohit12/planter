@@ -1,4 +1,4 @@
-package com.example.gmt_planter
+package com.handprint.planter
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1068798385536",
+    "project_id": "planter-61cc7",
+    "storage_bucket": "planter-61cc7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068798385536:android:fe7e6eae5882e2bb47f565",
+        "android_client_info": {
+          "package_name": "com.handprint.planter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068798385536-phplhn75njn0h9ks3laa2jv8kjf39qb1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.handprint.planter",
+            "certificate_hash": "287097b3802d5ade1c61d3d27908a7b6f442d711"
+          }
+        },
+        {
+          "client_id": "1068798385536-5mdj6fl450neafsnmbqde241ck090jn8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGLiV34APWcHHXmtT9Q196Di2pvThTFO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1068798385536-5mdj6fl450neafsnmbqde241ck090jn8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

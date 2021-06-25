@@ -12,7 +12,7 @@ class ShutterButtonUI extends HookWidget {
     const _initialRadius = 90.0;
     const _finalRadius = 85.0;
     final _controller = useAnimationController(
-      duration: 100.milliseconds,
+      duration: const Duration(milliseconds: 100),
       lowerBound: _finalRadius,
       upperBound: _initialRadius,
     );
@@ -29,7 +29,7 @@ class ShutterButtonUI extends HookWidget {
         child: GestureDetector(
           onTap: () async {
             _controller.forward();
-            await Future.delayed(100.milliseconds);
+            await Future.delayed(const Duration(milliseconds: 100));
             _controller.reverse();
             callback();
           },

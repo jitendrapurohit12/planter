@@ -94,13 +94,17 @@ Widget getCachedImage({@required String path}) {
   );
 }
 
-Widget getErrorUI(
-    {@required BuildContext context, VoidCallback callback, String action = 'RETRY'}) {
+Widget getErrorUI({
+  @required BuildContext context,
+  String message = 'SOMETHING WENT WRONG',
+  VoidCallback callback,
+  String action = 'RETRY',
+}) {
   assert(context != null);
   return Center(
     child: VStack(
       [
-        'SOMETHING WENT WRONG'.text.red500.xl3.center.semiBold.make(),
+        message.text.red500.xl3.center.semiBold.make(),
         if (callback != null) const SizedBox(height: 24),
         if (callback != null) CustomButton(title: action, callback: callback)
       ],

@@ -17,6 +17,10 @@ const kImageNotification = '$imageBasePath/ic_notification.svg';
 const kImageMessageInacitve = '$imageBasePath/ic_message_inactive.svg';
 const kImageProjectInactive = '$imageBasePath/ic_project_inactive.svg';
 
+// FCM Topics
+const kTopicDev = 'planter_dev';
+const kTopicProd = 'planter_prod';
+
 // Button Labels
 const kButtonSubmit = 'Submit';
 const kButtonConfirm = 'Confirm';
@@ -24,6 +28,8 @@ const kButtonReject = 'Reject';
 const kButtonDeny = 'Deny';
 const kButtonYes = 'Yes';
 const kButtonNo = 'No';
+const kButtonUpdate = 'Update';
+const kButtonRetry = 'Retry';
 const kButtonOpenSettings = 'Open Settings';
 const kButtonGrantPermission = 'Grant Permission';
 
@@ -74,11 +80,13 @@ const kColorBottomsheetBackground = Color(0xFFE0E0E0);
 // Dialog Titles
 const kTitleCameraPermissionDenied = 'Enable Camera Permission';
 const kTitleAudioPermissionDenied = 'Enable Microphone Permission';
+const kTitleUpdateApp = 'Update App';
 
 // Dialog Descriptions
 const kDescriptionCameraPermissionDenied = 'Enable Camera permission from settings to use the app!';
 const kDescriptionMicrohonePermissionDenied =
     'Enable Microphone permission from settings to use the app!';
+const kDescriptionUpdateApp = 'Please update to latest version to continue using the Planter App!';
 
 //Regex
 const kRegexEmail = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";

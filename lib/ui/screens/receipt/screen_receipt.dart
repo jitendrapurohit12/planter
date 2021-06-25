@@ -77,7 +77,7 @@ class ScreenReciept extends StatelessWidget {
                       message: 'Receipt uploaded successfully',
                       color: Colors.green,
                     );
-                    await Future.delayed(2.seconds);
+                    await Future.delayed(const Duration(seconds: 2));
                     performAfterDelay(callback: () => Navigator.pop(context, true));
                   });
 

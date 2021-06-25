@@ -11,15 +11,19 @@ import 'package:gmt_planter/controllers/project_list_controller.dart';
 import 'package:gmt_planter/controllers/receipt_controller.dart';
 import 'package:gmt_planter/controllers/story_controller.dart';
 import 'package:gmt_planter/controllers/unconfirmed_funds_controller.dart';
+import 'package:gmt_planter/controllers/version_controller.dart';
 import 'package:gmt_planter/helper/dialog_helper.dart';
 import 'package:gmt_planter/models/failure.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
 import 'package:gmt_planter/models/translation_model.dart';
+import 'package:gmt_planter/models/version_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/service/api_service.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info/package_info.dart';
 import 'package:image/image.dart' as img;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../prefs/shared_prefs.dart';
 
@@ -133,10 +137,34 @@ String getPaymentButtonTitle(String status) {
   }
 }
 
+Future<bool> letUserIn(VersionModel model) async {
+  final packageInfo = await PackageInfo.fromPlatform();
+
+  final buildNumber = int.parse(packageInfo.buildNumber);
+
+  bool result = true;
+  for (final data in model.data) {
+    if (data.version > buildNumber && data.isMandatory == 'yes' && result) {
+      result = false;
+    }
+  }
+
+  return result;
+}
+
+Future gotoStores() async {
+  final packageInfo = await PackageInfo.fromPlatform();
+
+  final packageName = packageInfo.packageName;
+
+  launch('https://play.google.com/store/apps/details?id=$packageName');
+}
+
 final providers = [
-  Provider<ApiService>(create: (_) => ApiService()),
+  Provider(create: (_) => ApiService()),
   ChangeNotifierProvider(create: (_) => LoginController()),
   ChangeNotifierProvider(create: (_) => StoryController()),
+  ChangeNotifierProvider(create: (_) => VersionControler()),
   ChangeNotifierProvider(create: (_) => LanguageNotifier()),
   ChangeNotifierProvider(create: (_) => ProfileController()),
   ChangeNotifierProvider(create: (_) => ReceiptController()),

@@ -22,7 +22,7 @@ class TabDetails extends HookWidget {
     //final fundsRatioString = '$fundNumerator/$fundDenominator';
 
     final controller = useStreamController<double>();
-    Future.delayed(500.milliseconds, () => controller.add(fundsRatio));
+    Future.delayed(const Duration(milliseconds: 500), () => controller.add(fundsRatio));
 
     return VStack([
       //TitleValueRow(title: 'Fund Raised', value: fundsRatioString),

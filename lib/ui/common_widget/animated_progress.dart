@@ -12,18 +12,13 @@ class AnimatedProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = context.screenWidth - 32;
     return ZStack([
-      VxBox()
-          .width(width)
-          .height(16)
-          .color(Colors.grey.withOpacity(0.3))
-          .rounded
-          .make(),
+      VxBox().width(width).height(16).color(Colors.grey.withOpacity(0.3)).rounded.make(),
       StreamBuilder<double>(
         stream: controller.stream,
         initialData: 0,
         builder: (context, snapshot) {
           return VxAnimatedBox()
-              .animDuration(1.seconds)
+              .animDuration(const Duration(seconds: 1))
               .color(kColorPrimary)
               .width(snapshot.data * width)
               .height(16)
