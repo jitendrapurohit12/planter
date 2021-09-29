@@ -3,20 +3,20 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/models/auth_model.dart';
 import 'package:gmt_planter/models/failure.dart';
 import 'package:gmt_planter/models/project_details_model.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
 import 'package:gmt_planter/models/receipt_model.dart';
 import 'package:gmt_planter/models/story_model.dart';
+import 'package:gmt_planter/models/translation_model.dart';
 import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
 import 'package:gmt_planter/models/user_profile_model.dart';
 import 'package:gmt_planter/models/version_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 
-const kBaseUrl = kReleaseMode
-    ? 'https://dashboard.handprint.tech/pltr/api/v1/'
-    : 'https://staging.handprint.tech/pltr/api/v1/';
+const kBaseUrl = 'https://staging.handprint.tech/pltr/api/v1/';
 
 const kLoginUrl = 'planter-login';
 const kProjectList = 'project-list';
@@ -104,6 +104,15 @@ class ApiService {
     return model;
   }
 
+  Future<CaptionModel> getCaptions() async {
+    final headers = await getAuthApiHeader();
+    final res = await _dio
+        .get('$kBaseUrl$kStoryCaptions', options: Options(headers: headers))
+        .catchError((e) => throw getFailure(e));
+    final model = CaptionModel.fromJson(res.data as Map<String, dynamic>);
+    return model;
+  }
+
   Future<UserProfileModel> setUserProfile({
     @required UserProfileModel profile,
     File file,
@@ -135,18 +144,16 @@ class ApiService {
     return model;
   }
 
-  Future<void> uploadProjectStory({
-    @required StoryModel model,
-    @required File file,
-  }) async {
+  Future<void> uploadProjectStory({@required StoryModel model, @required File file}) async {
     assert(model != null);
     final headers = await getAuthApiHeader();
 
     final data = model.toJson();
 
     if (file != null) {
-      data['pic'] = MultipartFile.fromFileSync(
-        file.path,
+      final wmImage = await addWatermark(file);
+      data['pic'] = MultipartFile.fromBytes(
+        wmImage,
         filename: 'project_story_${model.caption}',
       );
     }

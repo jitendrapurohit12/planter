@@ -43,6 +43,34 @@
         {
             "id": 11,
             "name": "Childrens are our future"
+        },
+        {
+            "id": 12,
+            "name": "Beach Clean-Up"
+        },
+        {
+            "id": 13,
+            "name": "Freshwater Supply"
+        },
+        {
+            "id": 14,
+            "name": "Waste Management"
+        },
+        {
+            "id": 15,
+            "name": "Skills-Based Workshops"
+        },
+        {
+            "id": 16,
+            "name": "Counselling Workshop"
+        },
+        {
+            "id": 17,
+            "name": "Creating Handmade Products"
+        },
+        {
+            "id": 18,
+            "name": "Building Skills for Life"
         }
     ]
 }

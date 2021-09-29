@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmt_planter/controllers/profile_controller.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
 import 'package:gmt_planter/controllers/receipt_controller.dart';
 import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
@@ -33,6 +34,7 @@ Future<void> launchDashboard({@required BuildContext context}) async {
 
 Future<void> launchProfile({@required BuildContext context}) async {
   assert(context != null);
+  await Provider.of<ProfileController>(context, listen: false).reset();
 
   return Navigator.pushNamed(
     context,

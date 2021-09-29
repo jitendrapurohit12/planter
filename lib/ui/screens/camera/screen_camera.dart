@@ -39,11 +39,17 @@ class _ScreenCameraState extends State<ScreenCamera> with WidgetsBindingObserver
   }
 
   Future<void> getStarted() async {
-    isCameraPerimssionGranted = await Permission.camera.request().isGranted;
-    isAudioPermissionGranted = await Permission.microphone.request().isGranted;
+    final camera = await Permission.camera.request();
+    final microphone = await Permission.microphone.request();
+    isCameraPerimssionGranted = camera.isGranted;
+    isAudioPermissionGranted = microphone.isGranted;
 
     if (isCameraPerimssionGranted && isAudioPermissionGranted) {
-      controller = CameraController(cameras[0], ResolutionPreset.ultraHigh);
+      controller = CameraController(
+        cameras[0],
+        ResolutionPreset.ultraHigh,
+        imageFormatGroup: ImageFormatGroup.bgra8888,
+      );
       controller.initialize().then((_) {
         if (!mounted) {
           return;

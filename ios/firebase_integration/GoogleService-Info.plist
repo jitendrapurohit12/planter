@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1068798385536-e1gvce1u4vigp6hsg28gk0fh6tljb9cj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1068798385536-e1gvce1u4vigp6hsg28gk0fh6tljb9cj</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1068798385536-phplhn75njn0h9ks3laa2jv8kjf39qb1.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCF092UH39r31zsXHMVeMQen4QCcnlF8gw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1068798385536</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.handprint.planterhp</string>
+	<key>PROJECT_ID</key>
+	<string>planter-61cc7</string>
+	<key>STORAGE_BUCKET</key>
+	<string>planter-61cc7.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1068798385536:ios:bc9c1f116ec60b5e47f565</string>
+</dict>
+</plist>

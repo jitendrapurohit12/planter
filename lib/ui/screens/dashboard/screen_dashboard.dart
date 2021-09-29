@@ -16,8 +16,8 @@ class ScreenDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _pages = [PageHome(), PageStory(), PageInbox()];
-    final _titles = ['Home', 'Project Story', 'Inbox'];
+    final _pages = [PageHome(), PageStory(), ContactUs()];
+    final _titles = ['Home', 'Project Story', 'Contact'];
 
     return Consumer<UnconfirmedFundsController>(builder: (_, notifier, __) {
       return Scaffold(
@@ -42,10 +42,7 @@ class ScreenDashboard extends StatelessWidget {
             builder: (ctx) {
               return IconButton(
                 icon: const Icon(Icons.login_outlined),
-                onPressed: () => logout(
-                  context,
-                  (e) => showSnackbar(context: ctx, message: e.message),
-                ),
+                onPressed: () => logout(context),
               );
             },
           )

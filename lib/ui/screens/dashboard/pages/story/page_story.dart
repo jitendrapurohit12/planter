@@ -2,21 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/constant/constant.dart';
-import 'package:gmt_planter/internationalization/app_localization.dart';
-import 'package:gmt_planter/router/router.dart';
-import 'package:gmt_planter/ui/common_widget/custom_button.dart';
-import 'package:gmt_planter/ui/common_widget/image_picker_ui.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:velocity_x/velocity_x.dart';
-
+import 'package:gmt_planter/controllers/caption_controller.dart';
 import 'package:gmt_planter/controllers/project_list_controller.dart';
 import 'package:gmt_planter/controllers/story_controller.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/helper/platform_widgets.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
+import 'package:gmt_planter/router/router.dart';
+import 'package:gmt_planter/ui/common_widget/custom_button.dart';
 import 'package:gmt_planter/ui/common_widget/custom_dropdown_button.dart';
+import 'package:gmt_planter/ui/common_widget/image_picker_ui.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../../helper/method_helper.dart';
 
@@ -33,13 +32,32 @@ class PageStoryContent extends StatelessWidget {
     final ph = context.percentHeight;
     final projectsController = Provider.of<ProjectListController>(context, listen: false);
     final projects = getProjectNames(projectsController.model);
-    final localizer = AppLocalizations.of(context).model;
-    final captions = getCaptions(localizer);
 
-    return Consumer<StoryController>(
-      builder: (ctx, storyController, __) {
+    return Consumer2<StoryController, CaptionController>(
+      builder: (ctx, storyController, captionController, __) {
+        switch (captionController.state) {
+          case NotifierState.initial:
+            captionController.fetchCaptions(context);
+            break;
+          case NotifierState.fetching:
+            return getPlatformProgress();
+          case NotifierState.loaded:
+            break;
+          case NotifierState.noData:
+            break;
+          case NotifierState.error:
+            showSnackbar(context: context, message: captionController.error.message);
+            return getErrorUI(context: context);
+        }
+        if (captionController.state == NotifierState.initial) {}
         return SingleChildScrollView(
           child: VStack([
+            // RaisedButton(
+            //     onPressed: () => Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => ImageScreen(path: storyController.file.path),
+            //         ))),
             HeightBox(ph * 2),
             ImagePickerUI(
                 file: storyController.file,
@@ -56,6 +74,7 @@ class PageStoryContent extends StatelessWidget {
                           });
                         } else if (ImageSource.gallery == source) {
                           final image = await ImagePicker().getImage(source: source);
+                          print(image.path);
                           if (image != null) {
                             storyController.changeImage(File(image.path));
                           }
@@ -78,10 +97,10 @@ class PageStoryContent extends StatelessWidget {
             _getDropdownTitle(title: 'Select Caption'),
             CustomDropdownButton(
               hint: 'Select a Caption',
-              options: captions.keys.toList(),
-              value: getValueFromMap(storyController.model.caption, captions),
+              options: captionController.captions.keys.toList(),
+              value: getValueFromMap(storyController.model.caption, captionController.captions),
               onChanged: (value) {
-                storyController.model.caption = captions[value];
+                storyController.model.caption = captionController.captions[value];
                 storyController.refresh();
               },
             ),

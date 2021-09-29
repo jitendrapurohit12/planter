@@ -12,9 +12,9 @@ const kImageMessage = '$imageBasePath/ic_message.svg';
 const kImageProject = '$imageBasePath/ic_project.svg';
 const kImageFlagId = '$imageBasePath/flag_id.png';
 const kImageFlagEn = '$imageBasePath/flag_en.png';
+const kImageWatermark = '$imageBasePath/watermark.png';
 const kImageHomeInacitve = '$imageBasePath/ic_home_inactive.svg';
 const kImageNotification = '$imageBasePath/ic_notification.svg';
-const kImageMessageInacitve = '$imageBasePath/ic_message_inactive.svg';
 const kImageProjectInactive = '$imageBasePath/ic_project_inactive.svg';
 
 // FCM Topics
@@ -30,6 +30,7 @@ const kButtonYes = 'Yes';
 const kButtonNo = 'No';
 const kButtonUpdate = 'Update';
 const kButtonRetry = 'Retry';
+const kButtonLogout = 'Logout';
 const kButtonOpenSettings = 'Open Settings';
 const kButtonGrantPermission = 'Grant Permission';
 
@@ -86,7 +87,8 @@ const kTitleUpdateApp = 'Update App';
 const kDescriptionCameraPermissionDenied = 'Enable Camera permission from settings to use the app!';
 const kDescriptionMicrohonePermissionDenied =
     'Enable Microphone permission from settings to use the app!';
-const kDescriptionUpdateApp = 'Please update to latest version to continue using the Planter App!';
+const kDescriptionUpdateApp =
+    'Please update to latest version to continue using the Super Planter App!';
 
 //Regex
 const kRegexEmail = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
@@ -109,6 +111,11 @@ List<BottomNavigationBarItem> kArrayDashboardBottomNavigationItems() => [
         icon: getSvgImage(path: kImageProjectInactive),
         title: 'Project',
         activeIcon: getSvgImage(path: kImageProject),
+      ),
+      getBottomNavigationBarItem(
+        icon: getSvgImage(path: kImageMessage, width: 20, height: 20),
+        title: 'Contact Us',
+        activeIcon: getSvgImage(path: kImageMessage, color: Colors.cyan, width: 20, height: 20),
       ),
     ];
 

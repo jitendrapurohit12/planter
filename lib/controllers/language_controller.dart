@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gmt_planter/constant/constant.dart';
+import 'package:gmt_planter/controllers/caption_controller.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
+import 'package:provider/provider.dart';
 
 class LanguageNotifier extends ChangeNotifier {
   Locale _appLocale = kLocaleEn;
@@ -39,6 +41,7 @@ class LanguageNotifier extends ChangeNotifier {
     final countryCode = isArLocale ? kCountryEn : kCountryIn;
     await saveLanguageCode(value: languageCode);
     await saveCountryCode(value: countryCode);
+    await Provider.of<CaptionController>(context, listen: false).initCaptions();
     refresh();
   }
 }

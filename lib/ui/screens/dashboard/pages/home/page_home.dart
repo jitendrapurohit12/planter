@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/controllers/project_list_controller.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/helper/platform_widgets.dart';
@@ -6,6 +7,7 @@ import 'package:gmt_planter/helper/ui_helper.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
 import 'package:gmt_planter/router/router.dart';
+import 'package:gmt_planter/service/api_service.dart';
 import 'package:gmt_planter/style/text_styles.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -28,10 +30,14 @@ class PageHome extends StatelessWidget {
           case NotifierState.noData:
             return getNoDataUI(context: context);
           case NotifierState.error:
+            final isUnauth =
+                value.error.message != null && value.error.message == 'Unauthenticated.';
             showSnackbar(context: ctx, message: value.error.message);
             return getErrorUI(
               context: context,
-              callback: () => value.getProjects(context: context),
+              message: value.error.message,
+              action: isUnauth ? kButtonLogout : null,
+              callback: () => isUnauth ? logout(context) : value.getProjects(context: context),
             );
         }
       },

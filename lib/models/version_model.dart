@@ -11,6 +11,7 @@ class VersionModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
+        if (v == null) return;
         data.add(Data.fromJson(v as Map<String, dynamic>));
       });
     }
