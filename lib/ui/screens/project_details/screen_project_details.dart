@@ -17,13 +17,10 @@ class ScreenProjectDetails extends StatelessWidget {
     return Scaffold(
       appBar: customAppbar(title: projectName),
       body: Consumer<ProjectDetailController>(
-        // ignore: missing_return
         builder: (_, notifier, __) {
           switch (notifier.state) {
             case NotifierState.initial:
               notifier.getProjectDetails(context: context, id: projectId);
-              return getPlatformProgress();
-            case NotifierState.fetching:
               return getPlatformProgress();
             case NotifierState.loaded:
               return VStack([
@@ -48,6 +45,8 @@ class ScreenProjectDetails extends StatelessWidget {
                 callback: () => notifier.getProjectDetails(context: context, id: projectId),
               );
               break;
+            default:
+              return getPlatformProgress();
           }
         },
       ),

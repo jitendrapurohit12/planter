@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/controllers/caption_controller.dart';
+import 'package:gmt_planter/controllers/fund_history_notifier.dart';
 import 'package:gmt_planter/controllers/language_controller.dart';
 import 'package:gmt_planter/controllers/login_controller.dart';
 import 'package:gmt_planter/controllers/notification_controller.dart';
@@ -107,6 +106,14 @@ Map<String, int> getCaptions(CaptionModel model, String languageCode) {
   return value;
 }
 
+Future fixExifRotation(String imagePath, int rotation) async {
+  final originalFile = File(imagePath);
+  final List<int> imageBytes = await originalFile.readAsBytes();
+  final originalImage = ui.decodeImage(imageBytes);
+  final fixedImage = ui.copyRotate(originalImage, rotation);
+  await originalFile.writeAsBytes(ui.encodeJpg(fixedImage));
+}
+
 String getValueFromMap(int value, Map<String, int> map) {
   String result;
   map.forEach((k, v) {
@@ -153,10 +160,11 @@ Future<List<int>> addWatermark(File file) async {
 Future<File> addWatermarkGetFile(File file) async {
   final compressedFile = await compressFile(file);
   final originalImage = ui.decodeImage(await compressedFile.readAsBytes());
+  final orientedImage = ui.bakeOrientation(originalImage);
   final assetWm = await getImageFileFromAssets(kImageWatermark);
   final watermarkImage = ui.decodeImage(await assetWm.readAsBytes());
-  final originalWidth = originalImage.width;
-  final originalHeight = originalImage.height;
+  final originalWidth = orientedImage.width;
+  final originalHeight = orientedImage.height;
   final isLandscape = originalWidth > originalHeight;
   double wmHeight, wmWidth;
   if (isLandscape) {
@@ -168,10 +176,10 @@ Future<File> addWatermarkGetFile(File file) async {
   }
   final blankImage = ui.Image(wmWidth.toInt(), wmHeight.toInt());
   ui.drawImage(blankImage, watermarkImage);
-  ui.copyInto(originalImage, blankImage,
-      dstX: originalImage.width - wmWidth.toInt() - 75,
-      dstY: originalImage.height - wmHeight.toInt() - 75);
-  final wmImage = ui.encodePng(originalImage);
+  ui.copyInto(orientedImage, blankImage,
+      dstX: orientedImage.width - wmWidth.toInt() - 75,
+      dstY: orientedImage.height - wmHeight.toInt() - 75);
+  final wmImage = ui.encodePng(orientedImage);
   final dir = await getApplicationDocumentsDirectory();
   final f = File('${dir.path}/wmarked.png');
   await f.writeAsBytes(wmImage);
@@ -245,6 +253,7 @@ final providers = [
   ChangeNotifierProvider(create: (_) => CaptionController()),
   ChangeNotifierProvider(create: (_) => ProfileController()),
   ChangeNotifierProvider(create: (_) => ReceiptController()),
+  ChangeNotifierProvider(create: (_) => FundHistoryNotifier()),
   ChangeNotifierProvider(create: (_) => ProjectListController()),
   ChangeNotifierProvider(create: (_) => ProjectDetailController()),
   ChangeNotifierProvider(create: (_) => UnconfirmedFundsController()),

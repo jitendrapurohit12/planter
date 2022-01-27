@@ -3,36 +3,37 @@ description: A new Flutter project.
 
 publish_to: "none"
 
-version: 1.0.4+14
+version: 1.0.6+16
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  cached_network_image: 3.1.0
-  camera: 0.9.3+1
+  cached_network_image: 3.1.0+1
+  camera: 0.9.4+3
   connectivity: 3.0.6
-  cupertino_icons: 1.0.3
-  dio: 4.0.0
-  firebase_core: 1.6.0
-  firebase_messaging: 10.0.7
+  cupertino_icons: 1.0.4
+  dio: 4.0.1
+  firebase_core: 1.10.0
+  firebase_messaging: 11.1.0
   flutter:
     sdk: flutter
-  flutter_hooks: 0.18.0
-  flutter_local_notifications: 8.2.0
+  flutter_hooks: 0.18.1
+  flutter_local_notifications: 9.1.0
+  exif: 3.0.1
   flutter_localizations:
     sdk: flutter
   flutter_native_image: 0.0.6+1
-  flutter_platform_widgets: 1.9.5
-  flutter_svg: 0.22.0
-  image: 3.0.4
-  image_picker: 0.8.4+2
+  flutter_platform_widgets: 1.10.0
+  flutter_svg: 0.23.0+1
+  image: 3.0.8
+  image_picker: 0.8.4+4
   package_info: 2.0.2
-  path_provider: 2.0.5
-  permission_handler: 8.1.6
-  provider: 6.0.0
+  path_provider: 2.0.6
+  permission_handler: 8.2.6
+  provider: 6.0.1
   shared_preferences: 2.0.8
-  url_launcher: 6.0.11
+  url_launcher: 6.0.12
   velocity_x: 3.3.0
 
 dev_dependencies:

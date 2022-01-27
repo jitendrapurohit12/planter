@@ -10,6 +10,9 @@ class ProjectDetailController extends ChangeNotifier {
   ProjectDetailsModel _model;
   Failure _error;
   NotifierState _state = NotifierState.initial;
+  num totalQty = 0;
+  num boughtQty = 0;
+  String completion;
 
   ProjectDetailsModel get model => _model;
   Failure get error => _error;
@@ -18,6 +21,9 @@ class ProjectDetailController extends ChangeNotifier {
   void reset() {
     _model = null;
     _error = null;
+    totalQty = 0;
+    boughtQty = 0;
+    completion = null;
     _state = NotifierState.initial;
   }
 
@@ -32,9 +38,7 @@ class ProjectDetailController extends ChangeNotifier {
     _state = NotifierState.fetching;
     notifyListeners();
 
-    Provider.of<ApiService>(context, listen: false)
-        .getProjectDetails(id: id)
-        .then((value) {
+    Provider.of<ApiService>(context, listen: false).getProjectDetails(id: id).then((value) {
       _model = value;
       _state = NotifierState.loaded;
       notifyListeners();

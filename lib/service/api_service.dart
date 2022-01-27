@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/models/auth_model.dart';
 import 'package:gmt_planter/models/failure.dart';
+import 'package:gmt_planter/models/fund_history_model.dart';
 import 'package:gmt_planter/models/project_details_model.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
 import 'package:gmt_planter/models/receipt_model.dart';
@@ -16,7 +17,9 @@ import 'package:gmt_planter/models/user_profile_model.dart';
 import 'package:gmt_planter/models/version_model.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
 
-const kBaseUrl = 'https://staging.handprint.tech/pltr/api/v1/';
+const kBaseUrl = kReleaseMode
+    ? 'https://dashboard.handprint.tech/pltr/api/v1/'
+    : 'https://staging.handprint.tech/pltr/api/v1/';
 
 const kLoginUrl = 'planter-login';
 const kProjectList = 'project-list';
@@ -29,6 +32,7 @@ const kStoryCaptions = 'project-story-caption';
 const kUploadPlanterStory = 'project-story-save';
 const kUploadRecipt = 'project-fund-update';
 const kLogout = 'user-logout';
+const kFundDeliveryList = 'fund-delivery-list';
 
 final loginHeader = {
   'X-Requested-With': 'XMLHttpRequest',
@@ -86,6 +90,18 @@ class ApiService {
         .catchError((e) => throw getFailure(e));
     final model = ProjectDetailsModel.fromJson(res.data as Map<String, dynamic>);
     return model;
+  }
+
+  Future<FundHistoryModel> getFundHistory() async {
+    try {
+      final headers = await getAuthApiHeader();
+
+      final res = await _dio.get('$kBaseUrl$kFundDeliveryList', options: Options(headers: headers));
+      final model = FundHistoryModel.fromJson(res.data['data'] as Map<String, dynamic>);
+      return model;
+    } catch (e) {
+      throw getFailure(e);
+    }
   }
 
   Future<UserProfileModel> getUserProfile() async {
@@ -151,16 +167,17 @@ class ApiService {
     final data = model.toJson();
 
     if (file != null) {
-      final wmImage = await addWatermark(file);
+      //final wmImage = await addWatermark(file);
+      final bytes = await file.readAsBytes();
       data['pic'] = MultipartFile.fromBytes(
-        wmImage,
+        bytes,
         filename: 'project_story_${model.caption}',
       );
     }
 
     final formData = FormData.fromMap(data);
 
-    await _dio
+    final res = await _dio
         .post(
           '$kBaseUrl$kUploadPlanterStory',
           options: Options(
@@ -170,6 +187,8 @@ class ApiService {
           data: formData,
         )
         .catchError((e) => throw getFailure(e));
+
+    print(res);
   }
 
   Future<UnconfirmedFundsModel> getUnconfirmedFunds() async {

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gmt_planter/prefs/shared_prefs.dart';
+import 'package:gmt_planter/router/router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -24,17 +25,19 @@ class ScreenProfile extends StatelessWidget {
     return Consumer<ProfileController>(
       builder: (_, profileController, __) {
         return Scaffold(
-          appBar: customAppbar(
-              title: 'Profile',
-              actions: profileController.model == null
-                  ? null
-                  : [
-                      IconButton(
-                        icon: Icon(profileController.isEditing ? Icons.close : Icons.edit),
-                        onPressed: () =>
-                            profileController.setIsEditing(value: !profileController.isEditing),
-                      )
-                    ]),
+          appBar: customAppbar(title: 'Profile', actions: [
+            profileController.model == null
+                ? Container()
+                : IconButton(
+                    icon: Icon(profileController.isEditing ? Icons.close : Icons.edit),
+                    onPressed: () =>
+                        profileController.setIsEditing(value: !profileController.isEditing),
+                  ),
+            IconButton(
+              icon: const Icon(Icons.history),
+              onPressed: () => launchundHistory(context: context),
+            )
+          ]),
           body: Builder(
             builder: (ctx) => getBody(
               ctx,

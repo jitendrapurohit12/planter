@@ -20,7 +20,6 @@ class NotificationNotifier {
     final channel = AndroidNotificationChannel(
       channelId,
       channelName,
-      channelDescription,
       importance: Importance.high,
     );
 
@@ -53,7 +52,7 @@ class NotificationNotifier {
   }
 
   Future sendNotification(String title, String body) async {
-    final details = AndroidNotificationDetails(channelId, channelName, channelDescription);
+    final details = AndroidNotificationDetails(channelId, channelName);
     final platformChannelSpecifics = NotificationDetails(android: details);
 
     await flutterLocalNotificationsPlugin.show(

@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/helper/dialog_helper.dart';
+import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
+import 'package:gmt_planter/router/router.dart';
 import 'package:gmt_planter/ui/common_widget/action_error.dart';
 import 'package:gmt_planter/ui/screens/camera/shutter_button_ui.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -50,13 +55,14 @@ class _ScreenCameraState extends State<ScreenCamera> with WidgetsBindingObserver
         ResolutionPreset.ultraHigh,
         imageFormatGroup: ImageFormatGroup.bgra8888,
       );
-      controller.initialize().then((_) {
+      controller.initialize().then((_) async {
         if (!mounted) {
           return;
         }
         setState(() {});
       });
     } else {
+      await controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
       final result = await showActionDialog(
         context: context,
         title:
@@ -97,6 +103,7 @@ class _ScreenCameraState extends State<ScreenCamera> with WidgetsBindingObserver
     if (!controller.value.isInitialized) {
       return Container();
     }
+
     return ZStack(
       [
         AspectRatio(aspectRatio: controller.value.aspectRatio, child: CameraPreview(controller)),
@@ -106,14 +113,15 @@ class _ScreenCameraState extends State<ScreenCamera> with WidgetsBindingObserver
           alignment: Alignment.bottomCenter,
           child: HStack(
             [
-              const SizedBox(
-                width: 36,
-                height: 36,
-              ),
+              const SizedBox(width: 36, height: 36),
               ShutterButtonUI(
                 () async {
                   final file = await controller.takePicture();
                   if (file != null) {
+                    final copiedFile = await File(file.path).copy('${file.path}_copied');
+                    final rotation =
+                        await launchScreenRotate(context: context, path: copiedFile.path);
+                    await fixExifRotation(file.path, rotation);
                     Navigator.pop(context, file.path);
                   }
                 },
@@ -123,15 +131,15 @@ class _ScreenCameraState extends State<ScreenCamera> with WidgetsBindingObserver
                 color: isTreeToggleOn ? Colors.green : Colors.grey,
                 height: 36,
                 width: 36,
-              ).onTap(() {
+              ).centered().onTap(() {
                 isTreeToggleOn = !isTreeToggleOn;
                 setState(() {});
               })
             ],
             axisSize: MainAxisSize.max,
             alignment: MainAxisAlignment.spaceEvenly,
-          ),
-        ).pOnly(bottom: 24),
+          ).h(90),
+        ).pOnly(bottom: 24)
       ],
       fit: StackFit.expand,
     );

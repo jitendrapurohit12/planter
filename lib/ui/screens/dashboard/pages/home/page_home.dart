@@ -125,8 +125,7 @@ class ProjectUnit extends StatelessWidget {
             ).elevation(8).clip(Clip.antiAlias).rounded.make().p8().onTap(
                   () => launchProjectDetails(
                     context: context,
-                    projectId: project.id,
-                    projectName: project.name,
+                    model: project,
                   ),
                 ),
           )
