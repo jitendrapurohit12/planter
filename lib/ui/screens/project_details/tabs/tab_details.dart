@@ -28,7 +28,7 @@ class TabDetails extends HookWidget {
     Future.delayed(const Duration(milliseconds: 500), () => controller.add(fundsRatio));
 
     return VStack([
-      TitleValueRow(title: 'Fund Raised', value: fundsRatioString),
+      TitleValueRow(title: 'Impact Inventory', value: fundsRatioString),
       AnimatedProgress(controller: controller),
       const HeightBox(16),
       TitleValueColumn(

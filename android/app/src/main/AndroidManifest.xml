@@ -7,7 +7,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Super Planter"
+        android:label="Handprint for Partners"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">
         <activity

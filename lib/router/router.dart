@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmt_planter/controllers/fund_history_notifier.dart';
 import 'package:gmt_planter/controllers/profile_controller.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
 import 'package:gmt_planter/controllers/receipt_controller.dart';
@@ -130,6 +131,7 @@ Future<String> launchCamera({@required BuildContext context}) async {
 
 Future launchundHistory({@required BuildContext context}) async {
   assert(context != null);
+  await Provider.of<FundHistoryNotifier>(context, listen: false).reset();
 
   await Navigator.pushNamed(context, ScreenFundHistory.id);
 }

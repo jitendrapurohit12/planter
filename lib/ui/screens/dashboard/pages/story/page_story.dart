@@ -31,7 +31,7 @@ class PageStoryContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final ph = context.percentHeight;
     final projectsController = Provider.of<ProjectListController>(context, listen: false);
-    final projects = getProjectNames(projectsController.model);
+    final projects = getProjectNames(projectsController.list);
 
     return Consumer2<StoryController, CaptionController>(
       builder: (ctx, storyController, captionController, __) {
@@ -41,6 +41,7 @@ class PageStoryContent extends StatelessWidget {
             break;
           case NotifierState.fetching:
             return getPlatformProgress();
+          case NotifierState.fetchingMore:
           case NotifierState.loaded:
             break;
           case NotifierState.noData:
@@ -128,6 +129,7 @@ class PageStoryContent extends StatelessWidget {
         return _button(context: context, storyController: storyController);
       case NotifierState.fetching:
         return getPlatformProgress();
+      case NotifierState.fetchingMore:
       case NotifierState.loaded:
         increasePostStoryCounter();
         showSnackbar(

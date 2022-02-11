@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/models/auth_model.dart';
 import 'package:gmt_planter/models/failure.dart';
 import 'package:gmt_planter/models/fund_history_model.dart';
@@ -76,7 +74,7 @@ class ApiService {
     final res = await _dio
         .get('$kBaseUrl$kProjectList', options: Options(headers: headers))
         .catchError((e) => throw getFailure(e));
-    final model = ProjectListModel.fromJson(res.data as Map<String, dynamic>);
+    final model = ProjectListModel.fromJson(res.data['data'] as Map<String, dynamic>);
     return model;
   }
 
@@ -92,11 +90,15 @@ class ApiService {
     return model;
   }
 
-  Future<FundHistoryModel> getFundHistory() async {
+  Future<FundHistoryModel> getFundHistory({int page = 1}) async {
     try {
       final headers = await getAuthApiHeader();
-
-      final res = await _dio.get('$kBaseUrl$kFundDeliveryList', options: Options(headers: headers));
+      final params = {'page': page};
+      final res = await _dio.get(
+        '$kBaseUrl$kFundDeliveryList',
+        queryParameters: params,
+        options: Options(headers: headers),
+      );
       final model = FundHistoryModel.fromJson(res.data['data'] as Map<String, dynamic>);
       return model;
     } catch (e) {

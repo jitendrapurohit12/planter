@@ -1,1 +1,1 @@
-enum NotifierState { initial, fetching, loaded, noData, error }
+enum NotifierState { initial, fetching, loaded, noData, error, fetchingMore }

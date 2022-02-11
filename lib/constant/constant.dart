@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gmt_planter/helper/ui_helper.dart';
+import 'package:intl/intl.dart';
 
 const imageBasePath = 'assets/images';
 const kImageTree = '$imageBasePath/tree.svg';
@@ -20,6 +21,9 @@ const kImageProjectInactive = '$imageBasePath/ic_project_inactive.svg';
 // FCM Topics
 const kTopicDev = 'planter_dev';
 const kTopicProd = 'planter_prod';
+
+// Date Formats
+final fundFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
 
 // Button Labels
 const kButtonSubmit = 'Submit';

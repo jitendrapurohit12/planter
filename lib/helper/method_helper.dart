@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
@@ -61,6 +60,7 @@ Future initateLogout(BuildContext context) async {
   Provider.of<ReceiptController>(context, listen: false).reset();
   Provider.of<StoryController>(context, listen: false).reset();
   Provider.of<UnconfirmedFundsController>(context, listen: false).reset();
+  Provider.of<FundHistoryNotifier>(context, listen: false).reset();
   Provider.of<LoginController>(context, listen: false).reset();
   Navigator.pop(context);
   launchLogin(context: context);
@@ -78,21 +78,12 @@ Future<void> printToken() async {
   //print(await getToken());
 }
 
-Map<String, int> getProjectNames(ProjectListModel model) {
+Map<String, int> getProjectNames(List<ProjectModel> list) {
   final value = <String, int>{};
 
-  for (final project in model.data.activeFundingProjects) {
+  for (final project in list) {
     value[project.name] = project.id;
   }
-
-  for (final project in model.data.activeManagementProjects) {
-    value[project.name] = project.id;
-  }
-
-  for (final project in model.data.notDeployedProjects) {
-    value[project.name] = project.id;
-  }
-
   return value;
 }
 
@@ -258,3 +249,29 @@ final providers = [
   ChangeNotifierProvider(create: (_) => ProjectDetailController()),
   ChangeNotifierProvider(create: (_) => UnconfirmedFundsController()),
 ];
+
+Color getStatusColor(String status) {
+  switch (status) {
+    case 'Accepted':
+      return Colors.green;
+    case 'Rejected':
+      return Colors.red;
+    case 'Pending_confirmation':
+      return Colors.yellow;
+    default:
+      return Colors.blue;
+  }
+}
+
+IconData getStatusIcon(String status) {
+  switch (status) {
+    case 'Accepted':
+      return Icons.check;
+    case 'Rejected':
+      return Icons.clear;
+    case 'Pending_confirmation':
+      return Icons.schedule;
+    default:
+      return Icons.help;
+  }
+}
