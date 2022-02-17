@@ -50,15 +50,8 @@ class PageStoryContent extends StatelessWidget {
             showSnackbar(context: context, message: captionController.error.message);
             return getErrorUI(context: context);
         }
-        if (captionController.state == NotifierState.initial) {}
         return SingleChildScrollView(
           child: VStack([
-            // RaisedButton(
-            //     onPressed: () => Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => ImageScreen(path: storyController.file.path),
-            //         ))),
             HeightBox(ph * 2),
             ImagePickerUI(
                 file: storyController.file,
@@ -75,7 +68,6 @@ class PageStoryContent extends StatelessWidget {
                           });
                         } else if (ImageSource.gallery == source) {
                           final image = await ImagePicker().getImage(source: source);
-                          print(image.path);
                           if (image != null) {
                             storyController.changeImage(File(image.path));
                           }
