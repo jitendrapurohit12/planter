@@ -25,19 +25,27 @@ class ScreenProfile extends StatelessWidget {
     return Consumer<ProfileController>(
       builder: (_, profileController, __) {
         return Scaffold(
-          appBar: customAppbar(title: 'Profile', actions: [
-            profileController.model == null
-                ? Container()
-                : IconButton(
-                    icon: Icon(profileController.isEditing ? Icons.close : Icons.edit),
-                    onPressed: () =>
-                        profileController.setIsEditing(value: !profileController.isEditing),
-                  ),
-            IconButton(
-              icon: const Icon(Icons.history),
-              onPressed: () => launchundHistory(context: context),
-            )
-          ]),
+          appBar: customAppbar(
+            title: 'Profile',
+            actions: [
+              if (profileController.model == null)
+                Container()
+              else
+                IconButton(
+                  icon: Icon(profileController.isEditing ? Icons.close : Icons.edit),
+                  onPressed: () =>
+                      profileController.setIsEditing(value: !profileController.isEditing),
+                ),
+              IconButton(
+                onPressed: () => launchProjectStoryList(context: context),
+                icon: const Icon(Icons.list_rounded),
+              ),
+              IconButton(
+                icon: const Icon(Icons.history),
+                onPressed: () => launchFundHistory(context: context),
+              )
+            ],
+          ),
           body: Builder(
             builder: (ctx) => getBody(
               ctx,
@@ -210,20 +218,21 @@ class _ProfilePicUI extends StatelessWidget {
     final ph = context.percentHeight;
     final notifier = Provider.of<ProfileController>(context, listen: false);
     return VxBox(
-        child: FutureBuilder<String>(
-      future: getProfileImage(),
-      builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return Icon(
-            Icons.person,
-            size: ph * 10,
-            color: Colors.white,
-          ).centered();
-        } else {
-          return VxCard(Image.file(File(snapshot.data), fit: BoxFit.cover)).circular.make().p1();
-        }
-      },
-    )).roundedFull.width(ph * 15).height(ph * 15).color(kColorPrimaryDark).makeCentered().onTap(() {
+      child: FutureBuilder<String>(
+        future: getProfileImage(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return Icon(
+              Icons.person,
+              size: ph * 10,
+              color: Colors.white,
+            ).centered();
+          } else {
+            return VxCard(Image.file(File(snapshot.data), fit: BoxFit.cover)).circular.make().p1();
+          }
+        },
+      ),
+    ).roundedFull.width(ph * 15).height(ph * 15).color(kColorPrimaryDark).makeCentered().onTap(() {
       if (!notifier.isEditing) return;
       showImageSourceBottomSheet(
         context: context,
@@ -259,7 +268,3 @@ class _CounterUI extends StatelessWidget {
     );
   }
 }
-
-// total tree
-// planning
-//

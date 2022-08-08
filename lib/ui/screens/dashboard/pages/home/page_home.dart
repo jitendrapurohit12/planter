@@ -93,6 +93,7 @@ class ProjectUnit extends StatelessWidget {
   const ProjectUnit({@required this.project});
   @override
   Widget build(BuildContext context) {
+    print(project.thumbnailUrl);
     return SizedBox(
       height: context.percentHeight * 27,
       width: double.infinity,

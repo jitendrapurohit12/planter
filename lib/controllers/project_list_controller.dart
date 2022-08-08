@@ -5,6 +5,7 @@ import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/models/failure.dart';
 import 'package:gmt_planter/models/fund_history_model.dart';
+import 'package:gmt_planter/models/pagination.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
 import 'package:gmt_planter/service/api_service.dart';
 import 'package:provider/provider.dart';

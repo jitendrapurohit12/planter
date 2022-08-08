@@ -109,6 +109,7 @@ class ScreenLogin extends HookWidget {
                             return getPlatformProgress();
                           case NotifierState.loaded:
                             saveToken(value: value.model.data.token);
+                            saveId(value: value.model.data.id);
                             savePassword(value: _password);
                             performAfterDelay(callback: () => launchDashboard(context: context));
                             return Container();

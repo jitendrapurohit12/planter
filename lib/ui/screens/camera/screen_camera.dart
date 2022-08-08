@@ -119,10 +119,8 @@ class _ScreenCameraState extends State<ScreenCamera> with WidgetsBindingObserver
                   final file = await controller.takePicture();
                   if (file != null) {
                     final copiedFile = await File(file.path).copy('${file.path}_copied');
-                    final rotation =
-                        await launchScreenRotate(context: context, path: copiedFile.path);
-                    await fixExifRotation(file.path, rotation);
-                    Navigator.pop(context, file.path);
+                    final editedFile = await getEditedFile(copiedFile);
+                    Navigator.pop(context, editedFile.path);
                   }
                 },
               ),

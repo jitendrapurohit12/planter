@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +8,7 @@ import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/style/decorations.dart';
 import 'package:gmt_planter/ui/common_widget/custom_button.dart';
 import 'package:gmt_planter/ui/common_widget/image_option_ui.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -89,9 +92,33 @@ Widget getCachedImage({@required String path}) {
     errorWidget: (_, __, ___) => const Icon(
       Icons.error,
       color: Colors.red,
-      size: 30,
+      size: 56,
     ),
   );
+}
+
+Future<File> getEditedFile(File file) async {
+  final editedFile = await ImageCropper().cropImage(
+    sourcePath: file.path,
+    aspectRatioPresets: [
+      CropAspectRatioPreset.square,
+      CropAspectRatioPreset.ratio3x2,
+      CropAspectRatioPreset.original,
+      CropAspectRatioPreset.ratio4x3,
+      CropAspectRatioPreset.ratio16x9
+    ],
+    androidUiSettings: const AndroidUiSettings(
+      lockAspectRatio: false,
+      toolbarTitle: 'Edit Image',
+      toolbarColor: kColorPrimary,
+      toolbarWidgetColor: Colors.white,
+      initAspectRatio: CropAspectRatioPreset.original,
+    ),
+    iosUiSettings: const IOSUiSettings(minimumAspectRatio: 1.0),
+  );
+
+  if (editedFile == null) return file;
+  return editedFile;
 }
 
 Widget getErrorUI({

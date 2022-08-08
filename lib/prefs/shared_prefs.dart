@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+const kSharedId = 'id';
 const kSharedName = 'name';
 const kSharedToken = 'token';
 const kSharedCounter = 'counter';
@@ -34,6 +35,18 @@ Future<void> saveName({
 Future<String> getName() async {
   final prefs = await getPrefs();
   return prefs.getString(kSharedName);
+}
+
+Future<void> saveId({
+  @required int value,
+}) async {
+  final prefs = await getPrefs();
+  prefs.setInt(kSharedId, value);
+}
+
+Future<int> getId() async {
+  final prefs = await getPrefs();
+  return prefs.getInt(kSharedId);
 }
 
 Future<void> saveRefreshToken({

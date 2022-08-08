@@ -1,18 +1,19 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:gmt_planter/constant/constant.dart';
 import 'package:gmt_planter/controllers/caption_controller.dart';
 import 'package:gmt_planter/controllers/fund_history_notifier.dart';
 import 'package:gmt_planter/controllers/language_controller.dart';
 import 'package:gmt_planter/controllers/login_controller.dart';
 import 'package:gmt_planter/controllers/notification_controller.dart';
+import 'package:gmt_planter/controllers/planter_stories_notifier.dart';
 import 'package:gmt_planter/controllers/profile_controller.dart';
 import 'package:gmt_planter/controllers/project_detail_controller.dart';
 import 'package:gmt_planter/controllers/project_list_controller.dart';
 import 'package:gmt_planter/controllers/receipt_controller.dart';
 import 'package:gmt_planter/controllers/story_controller.dart';
+import 'package:gmt_planter/controllers/story_update_controller.dart';
 import 'package:gmt_planter/controllers/unconfirmed_funds_controller.dart';
 import 'package:gmt_planter/controllers/version_controller.dart';
 import 'package:gmt_planter/helper/dialog_helper.dart';
@@ -97,14 +98,6 @@ Map<String, int> getCaptions(CaptionModel model, String languageCode) {
   return value;
 }
 
-Future fixExifRotation(String imagePath, int rotation) async {
-  final originalFile = File(imagePath);
-  final List<int> imageBytes = await originalFile.readAsBytes();
-  final originalImage = ui.decodeImage(imageBytes);
-  final fixedImage = ui.copyRotate(originalImage, rotation);
-  await originalFile.writeAsBytes(ui.encodeJpg(fixedImage));
-}
-
 String getValueFromMap(int value, Map<String, int> map) {
   String result;
   map.forEach((k, v) {
@@ -117,69 +110,6 @@ String getValueFromMap(int value, Map<String, int> map) {
 double getFileSize(File file) {
   final bytes = file.readAsBytesSync().lengthInBytes;
   return bytes / 1000000;
-}
-
-Future<List<int>> addWatermark(File file) async {
-  final compressedFile = await compressFile(file);
-  final originalImage = ui.decodeImage(await compressedFile.readAsBytes());
-  final assetWm = await getImageFileFromAssets(kImageWatermark);
-  final watermarkImage = ui.decodeImage(await assetWm.readAsBytes());
-  final originalWidth = originalImage.width;
-  final originalHeight = originalImage.height;
-  final isLandscape = originalWidth > originalHeight;
-  double wmHeight, wmWidth;
-  int padding;
-
-  if (isLandscape) {
-    wmHeight = originalHeight * 0.1;
-    wmWidth = 172 * wmHeight / 54;
-    padding = 75;
-  } else {
-    wmWidth = originalWidth * 0.3;
-    wmHeight = 54 * wmWidth / 172;
-    padding = 25;
-  }
-  final blankImage = ui.Image(wmWidth.toInt(), wmHeight.toInt());
-  ui.drawImage(blankImage, watermarkImage);
-  ui.copyInto(originalImage, blankImage,
-      dstX: originalImage.width - wmWidth.toInt() - padding,
-      dstY: originalImage.height - wmHeight.toInt() - padding);
-  final wmImage = ui.encodePng(originalImage);
-  return wmImage;
-}
-
-Future<File> addWatermarkGetFile(File file) async {
-  final compressedFile = await compressFile(file);
-  final originalImage = ui.decodeImage(await compressedFile.readAsBytes());
-  final orientedImage = ui.bakeOrientation(originalImage);
-  final assetWm = await getImageFileFromAssets(kImageWatermark);
-  final watermarkImage = ui.decodeImage(await assetWm.readAsBytes());
-  final originalWidth = orientedImage.width;
-  final originalHeight = orientedImage.height;
-  final isLandscape = originalWidth > originalHeight;
-  double wmHeight, wmWidth;
-  if (isLandscape) {
-    wmHeight = originalHeight * 0.1;
-    wmWidth = 172 * wmHeight / 54;
-  } else {
-    wmWidth = originalWidth * 0.3;
-    wmHeight = 54 * wmWidth / 172;
-  }
-  final blankImage = ui.Image(wmWidth.toInt(), wmHeight.toInt());
-  ui.drawImage(blankImage, watermarkImage);
-  ui.copyInto(orientedImage, blankImage,
-      dstX: orientedImage.width - wmWidth.toInt() - 75,
-      dstY: orientedImage.height - wmHeight.toInt() - 75);
-  final wmImage = ui.encodePng(orientedImage);
-  final dir = await getApplicationDocumentsDirectory();
-  final f = File('${dir.path}/wmarked.png');
-  await f.writeAsBytes(wmImage);
-  return f;
-}
-
-Future<File> compressFile(File file) async {
-  final compressedFile = await FlutterNativeImage.compressImage(file.path, quality: 100);
-  return compressedFile;
 }
 
 Future<File> getImageFileFromAssets(String path) async {
@@ -245,8 +175,10 @@ final providers = [
   ChangeNotifierProvider(create: (_) => ProfileController()),
   ChangeNotifierProvider(create: (_) => ReceiptController()),
   ChangeNotifierProvider(create: (_) => FundHistoryNotifier()),
+  ChangeNotifierProvider(create: (_) => StoryUpdateController()),
   ChangeNotifierProvider(create: (_) => ProjectListController()),
   ChangeNotifierProvider(create: (_) => ProjectDetailController()),
+  ChangeNotifierProvider(create: (_) => ProjectStroyListNotifier()),
   ChangeNotifierProvider(create: (_) => UnconfirmedFundsController()),
 ];
 

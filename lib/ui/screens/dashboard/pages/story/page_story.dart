@@ -17,8 +17,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../../../../helper/method_helper.dart';
-
 class PageStory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -54,26 +52,28 @@ class PageStoryContent extends StatelessWidget {
           child: VStack([
             HeightBox(ph * 2),
             ImagePickerUI(
-                file: storyController.file,
-                callback: (_) async {
-                  showImageSourceBottomSheet(
-                      context: context,
-                      callback: (source) async {
-                        if (ImageSource.camera == source) {
-                          performAfterDelay(callback: () async {
-                            final path = await launchCamera(context: context);
-                            if (path != null) {
-                              storyController.changeImage(File(path));
-                            }
-                          });
-                        } else if (ImageSource.gallery == source) {
-                          final image = await ImagePicker().getImage(source: source);
-                          if (image != null) {
-                            storyController.changeImage(File(image.path));
+              file: storyController.file,
+              callback: (_) async {
+                showImageSourceBottomSheet(
+                  context: context,
+                  callback: (source) async {
+                    if (ImageSource.camera == source) {
+                      performAfterDelay(
+                        callback: () async {
+                          final path = await launchCamera(context: context);
+                          if (path != null) {
+                            storyController.changeImage(File(path));
                           }
-                        }
-                      });
-                }),
+                        },
+                      );
+                    } else if (ImageSource.gallery == source) {
+                      final image = await ImagePicker().pickImage(source: source);
+                      if (image != null) storyController.changeImage(File(image.path));
+                    }
+                  },
+                );
+              },
+            ),
             HeightBox(ph * 6),
             _getDropdownTitle(title: 'Select My Project'),
             CustomDropdownButton(
@@ -169,21 +169,3 @@ class PageStoryContent extends StatelessWidget {
         title: kButtonSubmit,
       );
 }
-
-// showImageSourceBottomSheet(
-//                       context: context,
-//                       callback: (source) async {
-//                         if (source != null) {
-//                           File file;
-//                           if (source == ImageSource.gallery) {
-//                             final image = await ImagePicker().getImage(source: source);
-//                             if (image != null) file = File(image.path);
-//                           } else {
-//                             final path = await launchCamera(context: context);
-//                             if (path != null) file = File(path);
-//                           }
-//                           if (file != null) {
-//                             storyController.changeImage(file);
-//                           }
-//                         }
-//                       });

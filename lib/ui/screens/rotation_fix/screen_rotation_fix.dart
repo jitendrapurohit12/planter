@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ScreenRotationFix extends StatefulWidget {
@@ -13,72 +16,35 @@ class ScreenRotationFix extends StatefulWidget {
 }
 
 class _ScreenRotationFixState extends State<ScreenRotationFix> {
-  int rotation = 0;
+  final GlobalKey editorKey = GlobalKey();
+  bool _cropping = false;
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context).settings.arguments as Map<String, String>;
     final path = args['path'];
 
-    void _rotateRight() {
-      rotation += 90;
-      setState(() {});
-    }
-
-    void _rotateLeft() {
-      rotation -= 90;
-      setState(() {});
-    }
-
     return Scaffold(
-      body: RotatedBox(
-        quarterTurns: (rotation ~/ 90).abs(),
-        child: Image.file(
-          File(path),
-          fit: BoxFit.contain,
-        ),
-      ).centered(),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.amber,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-        iconSize: 36,
-        items: [
-          getItem('Rotate Left', Icons.rotate_left),
-          getItem('Rotate Right', Icons.rotate_right),
-        ],
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              _rotateLeft();
-              break;
-            case 1:
-              _rotateRight();
-              break;
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          Navigator.pop(context, rotation);
-        },
-        label: 'Save'.text.make(),
-        icon: const Icon(Icons.check),
-      ),
+      body: Container(),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.crop),
+          onPressed: () {
+            cropImage();
+          }),
     );
   }
-}
 
-// VxBox(
-//         child: HStack(
-//           [
-//             IconButton(onPressed: () => _rotateLeft(), icon: const Icon(Icons.rotate_left)),
-//             IconButton(onPressed: () => _rotateRight(), icon: const Icon(Icons.rotate_right)),
-//           ],
-//           axisSize: MainAxisSize.max,
-//           alignment: MainAxisAlignment.spaceEvenly,
-//         ).py8(),
-//       ).amber300.make()
+  Future<void> cropImage() async {
+    if (_cropping) {
+      return;
+    }
 
-BottomNavigationBarItem getItem(String title, IconData icon) {
-  return BottomNavigationBarItem(icon: Icon(icon), label: title);
+    editorKey.currentState;
+    // final Uint8List fileData = Uint8List.fromList(await cropImageDataWithNativeLibrary(
+    //         state: editorKey.currentState) as List<int>);
+    // final String fileFath =
+    //     await ImageSaver.save('extended_image_cropped_image.jpg', fileData);
+
+    // showToast('save image : $fileFath');
+    // _cropping = false;
+  }
 }

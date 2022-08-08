@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gmt_planter/helper/ui_helper.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ImagePickerUI extends StatelessWidget {
   final File file;
-  final String subtitle;
+  final String subtitle, url;
   final bool infiniteHeight;
   final double elevation;
   final Function(BuildContext context) callback;
@@ -13,6 +14,7 @@ class ImagePickerUI extends StatelessWidget {
   const ImagePickerUI({
     @required this.file,
     this.subtitle,
+    this.url,
     this.infiniteHeight = false,
     @required this.callback,
     this.elevation = 8.0,
@@ -35,18 +37,29 @@ class ImagePickerUI extends StatelessWidget {
       crossAlignment: CrossAxisAlignment.center,
     ).centered();
 
-    return VxCard(
-      file == null
-          ? VxBox(child: pickimagePH)
-              .width(double.maxFinite)
-              .height(infiniteHeight ? null : ph * 25)
-              .make()
-          : Image.file(
-              file,
-              height: infiniteHeight ? null : ph * 25,
-              width: double.maxFinite,
-              fit: BoxFit.cover,
-            ),
-    ).roundedSM.elevation(elevation).clip(Clip.antiAlias).make().onTap(() => callback(context));
+    Widget ui;
+
+    if (file != null) {
+      ui = Image.file(
+        file,
+        height: infiniteHeight ? null : ph * 25,
+        width: double.maxFinite,
+        fit: BoxFit.cover,
+      );
+    } else if (url != null) {
+      ui = getCachedImage(path: url).w(double.maxFinite).h(infiniteHeight ? null : ph * 25);
+    } else {
+      ui = VxBox(child: pickimagePH)
+          .width(double.maxFinite)
+          .height(infiniteHeight ? null : ph * 25)
+          .make();
+    }
+
+    return VxCard(ui)
+        .roundedSM
+        .elevation(elevation)
+        .clip(Clip.antiAlias)
+        .make()
+        .onTap(() => callback(context));
   }
 }

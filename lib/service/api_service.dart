@@ -7,8 +7,10 @@ import 'package:gmt_planter/models/failure.dart';
 import 'package:gmt_planter/models/fund_history_model.dart';
 import 'package:gmt_planter/models/project_details_model.dart';
 import 'package:gmt_planter/models/project_list_model.dart';
+import 'package:gmt_planter/models/project_story_list_model.dart';
 import 'package:gmt_planter/models/receipt_model.dart';
 import 'package:gmt_planter/models/story_model.dart';
+import 'package:gmt_planter/models/story_update_model.dart';
 import 'package:gmt_planter/models/translation_model.dart';
 import 'package:gmt_planter/models/unconfirmed_funds_model.dart';
 import 'package:gmt_planter/models/user_profile_model.dart';
@@ -30,7 +32,9 @@ const kStoryCaptions = 'project-story-caption';
 const kUploadPlanterStory = 'project-story-save';
 const kUploadRecipt = 'project-fund-update';
 const kLogout = 'user-logout';
+const kGetUserStories = 'get-user-stories';
 const kFundDeliveryList = 'fund-delivery-list';
+const kUpdateProjectStory = 'project-story-update';
 
 final loginHeader = {
   'X-Requested-With': 'XMLHttpRequest',
@@ -106,6 +110,23 @@ class ApiService {
     }
   }
 
+  Future<ProjectStoryListmodel> getProjectStories({int page = 1}) async {
+    try {
+      final params = {'impact_partner_id': await getId()};
+      final headers = await getAuthApiHeader();
+      final queryParams = {'page': page};
+      final res = await _dio.post(
+        '$kBaseUrl$kGetUserStories',
+        queryParameters: queryParams,
+        options: Options(headers: headers, extra: params),
+      );
+      final model = ProjectStoryListmodel.fromJson(res.data['data'] as Map<String, dynamic>);
+      return model;
+    } catch (e) {
+      throw getFailure(e);
+    }
+  }
+
   Future<UserProfileModel> getUserProfile() async {
     final headers = await getAuthApiHeader();
 
@@ -170,6 +191,37 @@ class ApiService {
 
     if (file != null) {
       //final wmImage = await addWatermark(file);
+      final ext = file.path.split('/').last.split('.').last;
+      final bytes = await file.readAsBytes();
+      data['pic'] = MultipartFile.fromBytes(
+        bytes,
+        filename: 'project_story_${model.caption}.$ext',
+      );
+    }
+
+    final formData = FormData.fromMap(data);
+
+    final res = await _dio
+        .post(
+          '$kBaseUrl$kUploadPlanterStory',
+          options: Options(
+            headers: headers,
+            contentType: Headers.formUrlEncodedContentType,
+          ),
+          data: formData,
+        )
+        .catchError((e) => throw getFailure(e));
+
+    print(res);
+  }
+
+  Future<void> updateProjectStory({@required StoryUpdateModel model, @required File file}) async {
+    assert(model != null);
+    final headers = await getAuthApiHeader();
+
+    final data = model.toJson();
+
+    if (file != null) {
       final bytes = await file.readAsBytes();
       data['pic'] = MultipartFile.fromBytes(
         bytes,
@@ -181,7 +233,7 @@ class ApiService {
 
     final res = await _dio
         .post(
-          '$kBaseUrl$kUploadPlanterStory',
+          '$kBaseUrl$kUpdateProjectStory',
           options: Options(
             headers: headers,
             contentType: Headers.formUrlEncodedContentType,
@@ -221,7 +273,7 @@ class ApiService {
 
     final formData = FormData.fromMap(data);
 
-    await _dio
+    final res = await _dio
         .post(
           '$kBaseUrl$kUploadRecipt',
           options: Options(
@@ -231,6 +283,8 @@ class ApiService {
           data: formData,
         )
         .catchError((e) => throw getFailure(e));
+
+    print(res);
   }
 
   Future<bool> logout() async {

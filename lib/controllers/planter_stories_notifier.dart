@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:gmt_planter/helper/method_helper.dart';
 import 'package:gmt_planter/models/enums/notifier_state.dart';
 import 'package:gmt_planter/models/failure.dart';
-import 'package:gmt_planter/models/fund_history_model.dart';
 import 'package:gmt_planter/models/pagination.dart';
+import 'package:gmt_planter/models/project_story_list_model.dart';
 import 'package:gmt_planter/service/api_service.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class FundHistoryNotifier extends ChangeNotifier {
+class ProjectStroyListNotifier extends ChangeNotifier {
   Failure error;
   int pageNo = 0;
   Pagination pagination;
-  List<Items> items = [];
+  List<Story> items = [];
   bool allFetched = false, canFetch = true;
   NotifierState state = NotifierState.initial;
 
@@ -30,14 +30,14 @@ class FundHistoryNotifier extends ChangeNotifier {
 
   Future resfresh(BuildContext context) async {
     await reset();
-    await fetchFundHIstory(context, changeState: false);
+    await fetchProjectStories(context, changeState: false);
   }
 
   Future fetchMore(BuildContext context) async {
     if (!allFetched && state != NotifierState.fetchingMore && canFetch) {
       canFetch = false;
       final nextPage = pageNo + 1;
-      fetchFundHIstory(
+      fetchProjectStories(
         context,
         page: nextPage,
         changedState: NotifierState.fetchingMore,
@@ -47,7 +47,7 @@ class FundHistoryNotifier extends ChangeNotifier {
     }
   }
 
-  Future fetchFundHIstory(
+  Future fetchProjectStories(
     BuildContext context, {
     int page = 1,
     bool changeState = true,
@@ -61,7 +61,7 @@ class FundHistoryNotifier extends ChangeNotifier {
 
     try {
       final model =
-          await Provider.of<ApiService>(context, listen: false).getFundHistory(page: page);
+          await Provider.of<ApiService>(context, listen: false).getProjectStories(page: page);
       allFetched = model.pagination.currentPage == model.pagination.lastPage;
       pagination = model.pagination;
       pageNo++;

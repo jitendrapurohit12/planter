@@ -1,4 +1,5 @@
 import 'package:gmt_planter/models/fund_history_model.dart';
+import 'package:gmt_planter/models/pagination.dart';
 
 class ProjectListModel {
   List<ProjectModel> activeFundingProjects;
